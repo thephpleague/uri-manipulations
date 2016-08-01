@@ -9,17 +9,14 @@
  * @version   4.2.0
  * @link      https://github.com/thephpleague/uri/
  */
-namespace League\Uri;
+namespace League\Uri\Manipulations;
 
 use InvalidArgumentException;
 use League\Uri\Components\Host;
 use League\Uri\Components\Port;
 use League\Uri\Components\Query;
-use League\Uri\Interfaces\Host as HostInterface;
-use League\Uri\Interfaces\Query as QueryInterface;
+use League\Uri\Interfaces\Component;
 use League\Uri\Interfaces\Uri;
-use League\Uri\Interfaces\UriPart;
-use League\Uri\Schemes\Generic\UriBuilderTrait;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -31,8 +28,6 @@ use Psr\Http\Message\UriInterface;
  */
 class Formatter
 {
-    use UriBuilderTrait;
-
     const HOST_AS_UNICODE = 1;
 
     const HOST_AS_ASCII   = 2;
@@ -43,20 +38,6 @@ class Formatter
      * @var int
      */
     protected $hostEncoding = self::HOST_AS_UNICODE;
-
-    /**
-     * query encoding property
-     *
-     * @var int
-     */
-    protected $queryEncoding = PHP_QUERY_RFC3986;
-
-    /**
-     * Query Parser object
-     *
-     * @var QueryParser
-     */
-    protected $queryParser;
 
     /**
      * query separator property
@@ -80,14 +61,6 @@ class Formatter
     protected $preserveFragment = false;
 
     /**
-     * New Instance
-     */
-    public function __construct()
-    {
-        $this->queryParser = new QueryParser();
-    }
-
-    /**
      * Host encoding setter
      *
      * @param int $encode a predefined constant value
@@ -101,47 +74,6 @@ class Formatter
     }
 
     /**
-     * Host encoding getter
-     *
-     * DEPRECATION WARNING! This method will be removed in the next major point release
-     *
-     * @deprecated deprecated since version 4.1
-     *
-     * @return int
-     */
-    public function getHostEncoding()
-    {
-        return $this->hostEncoding;
-    }
-
-    /**
-     * Query encoding setter
-     *
-     * @param int $encode a predefined constant value
-     */
-    public function setQueryEncoding($encode)
-    {
-        if (!in_array($encode, [PHP_QUERY_RFC3986, PHP_QUERY_RFC1738])) {
-            throw new InvalidArgumentException('Unknown Query encoding rule');
-        }
-        $this->queryEncoding = $encode;
-    }
-
-    /**
-     * Query encoding getter
-     *
-     * DEPRECATION WARNING! This method will be removed in the next major point release
-     *
-     * @deprecated deprecated since version 4.1
-     *
-     * @return int
-     */
-    public function getQueryEncoding()
-    {
-        return $this->queryEncoding;
-    }
-
-    /**
      * Query separator setter
      *
      * @param string $separator
@@ -151,20 +83,6 @@ class Formatter
         $separator = filter_var($separator, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
         $this->querySeparator = trim($separator);
-    }
-
-    /**
-     * Query separator getter
-     *
-     * DEPRECATION WARNING! This method will be removed in the next major point release
-     *
-     * @deprecated deprecated since version 4.1
-     *
-     * @return string
-     */
-    public function getQuerySeparator()
-    {
-        return $this->querySeparator;
     }
 
     /**
@@ -198,35 +116,21 @@ class Formatter
     /**
      * Format an object
      *
-     * @see Formatter::format
+     * Format an object according to the formatter properties.
+     * The object must implement one of the following interface:
+     * <ul>
+     * <li>League\Uri\Interfaces\Uri
+     * <li>League\Uri\Interfaces\UriPartInterface
+     * <li>Psr\Http\Message\UriInterface
+     * </ul>
      *
-     * @param UriPart|Uri|UriInterface $input
+     * @param Component|Uri|UriInterface $input
      *
      * @return string
      */
     public function __invoke($input)
     {
-        return $this->format($input);
-    }
-
-    /**
-     * Format an object
-     *
-     * Format an object according to the formatter properties.
-     * The object must implement one of the following interface:
-     * <ul>
-     * <li>League\Uri\Interfaces\Uri
-     * <li>League\Uri\Interfaces\UriPart
-     * <li>Psr\Http\Message\UriInterface
-     * </ul>
-     *
-     * @param UriPart|Uri|UriInterface $input
-     *
-     * @return string
-     */
-    public function format($input)
-    {
-        if ($input instanceof UriPart) {
+        if ($input instanceof Component) {
             return $this->formatUriPart($input);
         }
 
@@ -235,44 +139,44 @@ class Formatter
         }
 
         throw new InvalidArgumentException(
-            'input must be an URI object or a League UriPart object'
+            'input must be an URI object or a League UriPartInterface object'
         );
     }
 
     /**
-     * Format a UriPart implemented object according to the Formatter properties
+     * Format a UriPartInterface implemented object according to the Formatter properties
      *
-     * @param UriPart $part
+     * @param Component $part
      *
      * @return string
      */
-    protected function formatUriPart(UriPart $part)
+    protected function formatUriPart(Component $part)
     {
-        if ($part instanceof QueryInterface) {
-            return $this->queryParser->build($part->toArray(), $this->querySeparator, $this->queryEncoding);
+        if ($part instanceof Query) {
+            return Query::build($part->getPairs(), $this->querySeparator);
         }
 
-        if ($part instanceof HostInterface) {
+        if ($part instanceof Host) {
             return $this->formatHost($part);
         }
 
-        return $part->__toString();
+        return (string) $part;
     }
 
     /**
      * Format a Host according to the Formatter properties
      *
-     * @param HostInterface $host
+     * @param Host $host
      *
      * @return string
      */
-    protected function formatHost(HostInterface $host)
+    protected function formatHost(Host $host)
     {
         if (self::HOST_AS_ASCII === $this->hostEncoding) {
-            return $host->toAscii()->__toString();
+            return (string) $host->toAscii();
         }
 
-        return $host->toUnicode()->__toString();
+        return (string) $host->toUnicode();
     }
 
     /**
@@ -306,21 +210,19 @@ class Formatter
      */
     protected function formatAuthority($uri)
     {
-        if ('' === $uri->getHost()) {
+        if ('' === $uri->getAuthority()) {
             return '';
         }
 
-        static $parser;
-        if (!$parser) {
-            $parser = new UriParser();
+        $userInfo = $uri->getUserInfo();
+        if ('' !== $userInfo) {
+            $userInfo .= '@';
         }
 
-        $components = $parser((string) $uri);
-
         return '//'
-            .$this->buildUserInfo($components['user'], $components['pass'])
-            .$this->formatHost(new Host($components['host']))
-            .$this->formatPort($components['port'])
+            .$userInfo
+            .$this->formatHost(new Host($uri->getHost()))
+            .$this->formatPort($uri->getPort())
         ;
     }
 

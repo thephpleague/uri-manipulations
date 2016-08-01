@@ -1,11 +1,12 @@
 <?php
 
-namespace League\Uri\Test;
+namespace LeagueTest\Uri\Manipulations;
 
 use InvalidArgumentException;
-use League\Uri;
+use League\Uri\Components\Host;
+use League\Uri\Components\Query;
 use League\Uri\Components\Scheme;
-use League\Uri\Formatter;
+use League\Uri\Manipulations\Formatter;
 use League\Uri\Schemes\Data as DataUri;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;
@@ -35,10 +36,8 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testFormatHostAscii()
     {
-        $this->assertSame(Formatter::HOST_AS_UNICODE, $this->formatter->getHostEncoding());
         $this->formatter->setHostEncoding(Formatter::HOST_AS_ASCII);
-        $this->assertSame(Formatter::HOST_AS_ASCII, $this->formatter->getHostEncoding());
-        $this->assertSame('xn--gwd-hna98db.pl', $this->formatter->__invoke($this->uri->host));
+        $this->assertSame('xn--gwd-hna98db.pl', $this->formatter->__invoke(new Host('gwóźdź.pl')));
     }
 
     /**
@@ -47,14 +46,6 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     public function testInvalidHostEncoding()
     {
         $this->formatter->setHostEncoding('toto');
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidQueryEncoding()
-    {
-        $this->formatter->setQueryEncoding('toto');
     }
 
     public function testFormatWithSimpleString()
@@ -78,35 +69,27 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     public function testFormatComponent()
     {
         $scheme = new Scheme('ftp');
-        $this->assertSame($scheme->__toString(), $this->formatter->format($scheme));
+        $this->assertSame($scheme->__toString(), $this->formatter->__invoke($scheme));
     }
 
     public function testFormatHostUnicode()
     {
         $this->formatter->setHostEncoding(Formatter::HOST_AS_UNICODE);
-        $this->assertSame('gwóźdź.pl', $this->formatter->__invoke($this->uri->host));
-    }
-
-    public function testFormatQueryRFC1738()
-    {
-        $this->assertSame(PHP_QUERY_RFC3986, $this->formatter->getQueryEncoding());
-        $this->formatter->setQueryEncoding(PHP_QUERY_RFC1738);
-        $this->assertSame(PHP_QUERY_RFC1738, $this->formatter->getQueryEncoding());
-        $this->assertSame('kingkong=toto&foo=bar%2Bbaz', $this->formatter->__invoke($this->uri->query));
+        $this->assertSame('gwóźdź.pl', $this->formatter->__invoke(new Host('gwóźdź.pl')));
     }
 
     public function testFormatQueryRFC3986()
     {
-        $this->formatter->setQueryEncoding(PHP_QUERY_RFC3986);
-        $this->assertSame('kingkong=toto&foo=bar+baz', $this->formatter->__invoke($this->uri->query));
+        $this->assertSame('kingkong=toto&foo=bar+baz', $this->formatter->__invoke(new Query('kingkong=toto&foo=bar+baz')));
     }
 
     public function testFormatQueryWithSeparator()
     {
-        $this->assertSame('&', $this->formatter->getQuerySeparator());
         $this->formatter->setQuerySeparator('&amp;');
-        $this->assertSame('&amp;', $this->formatter->getQuerySeparator());
-        $this->assertSame('kingkong=toto&amp;foo=bar+baz', $this->formatter->__invoke($this->uri->query));
+        $this->assertSame(
+            'kingkong=toto&amp;foo=bar+baz',
+            $this->formatter->__invoke(new Query('kingkong=toto&foo=bar+baz'))
+        );
     }
 
     public function testFormat()
@@ -125,11 +108,10 @@ class FormatterTest extends PHPUnit_Framework_TestCase
         $this->assertSame($uri->__toString(), $this->formatter->__invoke($uri));
     }
 
-
     public function testFormatWithoutAuthority()
     {
         $expected = '/test/query.php?kingkong=toto&amp;foo=bar+baz#doc3';
-        $uri = $this->uri->withScheme('')->withPort(null)->withUserInfo('')->withHost('');
+        $uri = HttpUri::createFromString('/test/query.php?kingkong=toto&foo=bar+baz#doc3');
         $this->formatter->setQuerySeparator('&amp;');
         $this->formatter->setHostEncoding(Formatter::HOST_AS_ASCII);
         $this->assertSame($expected, $this->formatter->__invoke($uri));
