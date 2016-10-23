@@ -1,12 +1,12 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Components\Host;
 use League\Uri\Components\Query;
 use League\Uri\Components\Scheme;
-use League\Uri\Manipulations\Formatter;
+use League\Uri\Modifiers\Formatter;
 use League\Uri\Schemes\Data as DataUri;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;

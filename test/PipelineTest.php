@@ -1,10 +1,10 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Manipulations\Pipeline;
-use League\Uri\Manipulations\RemoveDotSegments;
+use League\Uri\Modifiers\Pipeline;
+use League\Uri\Modifiers\RemoveDotSegments;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase as TestCase;
 use RuntimeException;

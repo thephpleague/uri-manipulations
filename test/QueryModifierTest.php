@@ -1,13 +1,13 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Components\Query;
-use League\Uri\Manipulations\FilterQuery;
-use League\Uri\Manipulations\KsortQuery;
-use League\Uri\Manipulations\MergeQuery;
-use League\Uri\Manipulations\RemoveQueryKeys;
+use League\Uri\Modifiers\FilterQuery;
+use League\Uri\Modifiers\KsortQuery;
+use League\Uri\Modifiers\MergeQuery;
+use League\Uri\Modifiers\RemoveQueryKeys;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use PHPUnit_Framework_TestCase as TestCase;
 

@@ -2,14 +2,15 @@
 /**
  * League.Uri (http://uri.thephpleague.com)
  *
- * @package   League.uri
- * @author    Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @copyright 2013-2015 Ignace Nyamagana Butera
- * @license   https://github.com/thephpleague/uri/blob/master/LICENSE (MIT License)
- * @version   4.2.0
- * @link      https://github.com/thephpleague/uri/
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @copyright  2016 Ignace Nyamagana Butera
+ * @license    https://github.com/thephpleague/uri-components/blob/master/LICENSE (MIT License)
+ * @version    1.0.0
+ * @link       https://github.com/thephpleague/uri-components
  */
-namespace League\Uri\Manipulations;
+namespace League\Uri\Modifiers;
 
 use League\Uri\Components\Path;
 
@@ -20,7 +21,7 @@ use League\Uri\Components\Path;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.0.0
  */
-class RemoveEmptySegments extends PathManipulator
+class RemoveEmptySegments extends ManipulatePath
 {
     /**
      * Modify a URI part

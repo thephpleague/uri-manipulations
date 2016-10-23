@@ -1,26 +1,26 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Components\DataPath;
 use League\Uri\Components\Path;
-use League\Uri\Manipulations\AddLeadingSlash;
-use League\Uri\Manipulations\AddTrailingSlash;
-use League\Uri\Manipulations\AppendSegment;
-use League\Uri\Manipulations\DataUriParameters;
-use League\Uri\Manipulations\DataUriToAscii;
-use League\Uri\Manipulations\DataUriToBinary;
-use League\Uri\Manipulations\Extension;
-use League\Uri\Manipulations\FilterSegments;
-use League\Uri\Manipulations\PrependSegment;
-use League\Uri\Manipulations\RemoveDotSegments;
-use League\Uri\Manipulations\RemoveEmptySegments;
-use League\Uri\Manipulations\RemoveLeadingSlash;
-use League\Uri\Manipulations\RemoveSegments;
-use League\Uri\Manipulations\RemoveTrailingSlash;
-use League\Uri\Manipulations\ReplaceSegment;
-use League\Uri\Manipulations\Typecode;
+use League\Uri\Modifiers\AddLeadingSlash;
+use League\Uri\Modifiers\AddTrailingSlash;
+use League\Uri\Modifiers\AppendSegment;
+use League\Uri\Modifiers\DataUriParameters;
+use League\Uri\Modifiers\DataUriToAscii;
+use League\Uri\Modifiers\DataUriToBinary;
+use League\Uri\Modifiers\Extension;
+use League\Uri\Modifiers\FilterSegments;
+use League\Uri\Modifiers\PrependSegment;
+use League\Uri\Modifiers\RemoveDotSegments;
+use League\Uri\Modifiers\RemoveEmptySegments;
+use League\Uri\Modifiers\RemoveLeadingSlash;
+use League\Uri\Modifiers\RemoveSegments;
+use League\Uri\Modifiers\RemoveTrailingSlash;
+use League\Uri\Modifiers\ReplaceSegment;
+use League\Uri\Modifiers\Typecode;
 use League\Uri\Schemes\Data as DataUri;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;

@@ -2,7 +2,18 @@
     "name": "league/uri-manipulations",
     "type": "library",
     "description" : "URI manipulation library",
-    "keywords": ["url", "uri", "rfc3986", "psr-7", "Manipulations", "manipulation"],
+    "keywords": [
+        "url",
+        "uri",
+        "rfc3986",
+        "psr-7",
+        "Manipulations",
+        "manipulation",
+        "modifiers",
+        "middlewares",
+        "formatter",
+        "references"
+    ],
     "license": "MIT",
     "homepage": "http://url.thephpleague.com",
     "authors": [
@@ -30,13 +41,13 @@
     },
     "autoload": {
         "psr-4": {
-            "League\\Uri\\Manipulations\\": "src"
+            "League\\Uri\\Modifiers\\": "src"
         },
         "files": ["src/functions_include.php"]
     },
     "autoload-dev": {
         "psr-4": {
-            "LeagueTest\\Uri\\Manipulations\\": "test"
+            "LeagueTest\\Uri\\Modifiers\\": "test"
         }
     },
     "scripts": {

@@ -37,7 +37,7 @@ All functions and classes are located under the following namespace : `League\Ur
 ```php
 <?php
 
-function League\Uri\Manipulations\uri_reference(mixed $uri [, mixed $base_uri]): array
+function League\Uri\Modifiers\uri_reference(mixed $uri [, mixed $base_uri]): array
 ```
 
 This function analyzes the submitted URI object and returns an associative array containing information regarding the URI-reference as per [RFC3986](https://tools.ietf.org/html/rfc3986#section-4.1).
@@ -63,7 +63,7 @@ An associative array is returned. The following keys are always present within t
 <?php
 
 use League\Uri\Schemes\Http as HttpUri;
-use function League\Uri\Manipulations\uri_reference;
+use function League\Uri\Modifiers\uri_reference;
 
 $uri = HttpUri::createFromString("//스타벅스코리아.com/how/are/you?foo=baz");
 $alt_uri = HttpUri::createFromString("//xn--oy2b35ckwhba574atvuzkc.com/how/are/you?foo=baz#bar");
@@ -128,7 +128,6 @@ $formatter->setHostEncoding(Formatter::HOST_AS_ASCII);
 $formatter->setQuerySeparator('&amp;');
 $formatter->preserveFragment(true);
 
-echo $formatter->format(HttpUri::createFromString('https://рф.ru:81?foo=ba%20r&baz=bar'));
 echo $formatter(HttpUri::createFromString('https://рф.ru:81?foo=ba%20r&baz=bar'));
 //displays https://xn--p1ai.ru:81?foo=ba%20r&amp;baz=bar#
 ```
@@ -141,7 +140,7 @@ Technically speaking, an URI middleware:
 - expects its single argument to be an URI object which implements either:
 
     - `Psr\Http\Message\UriInteface`;
-    - `League\Uri\Schemes\Uri`;
+    - `League\Uri\Interfaces\Uri`;
 
 - must return a instance of the submitted object.
 - must be an immutable value object if it is an object.
@@ -154,7 +153,7 @@ Here's a the URI middleware signature
 
 function(Psr\Http\Message\UriInteface $uri): Psr\Http\Message\UriInteface
 //or
-function(League\Uri\Schemes\Uri $uri): League\Uri\Schemes\Uri
+function(League\Uri\Interfaces\Uri $uri): League\Uri\Interfaces\Uri
 ```
 
 ### Path Middlewares :

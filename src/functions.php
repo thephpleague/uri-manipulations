@@ -9,7 +9,7 @@
  * @version   4.2.0
  * @link      https://github.com/thephpleague/uri/
  */
-namespace League\Uri\Manipulations;
+namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Interfaces\Uri;

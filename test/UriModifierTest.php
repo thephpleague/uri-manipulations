@@ -1,11 +1,11 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Manipulations\Normalize;
-use League\Uri\Manipulations\Relativize;
-use League\Uri\Manipulations\Resolve;
+use League\Uri\Modifiers\Normalize;
+use League\Uri\Modifiers\Relativize;
+use League\Uri\Modifiers\Resolve;
 use League\Uri\Schemes\Data as DataUri;
 use League\Uri\Schemes\Ftp as FtpUri;
 use League\Uri\Schemes\Http as HttpUri;

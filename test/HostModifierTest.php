@@ -1,17 +1,17 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Components\Host;
-use League\Uri\Manipulations\AppendLabel;
-use League\Uri\Manipulations\FilterLabels;
-use League\Uri\Manipulations\HostToAscii;
-use League\Uri\Manipulations\HostToUnicode;
-use League\Uri\Manipulations\PrependLabel;
-use League\Uri\Manipulations\RemoveLabels;
-use League\Uri\Manipulations\RemoveZoneIdentifier;
-use League\Uri\Manipulations\ReplaceLabel;
+use League\Uri\Modifiers\AppendLabel;
+use League\Uri\Modifiers\FilterLabels;
+use League\Uri\Modifiers\HostToAscii;
+use League\Uri\Modifiers\HostToUnicode;
+use League\Uri\Modifiers\PrependLabel;
+use League\Uri\Modifiers\RemoveLabels;
+use League\Uri\Modifiers\RemoveZoneIdentifier;
+use League\Uri\Modifiers\ReplaceLabel;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;
 

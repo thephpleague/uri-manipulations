@@ -1,10 +1,10 @@
 <?php
 
-namespace LeagueTest\Uri\Manipulations;
+namespace LeagueTest\Uri\Modifiers;
 
-use League\Uri\Manipulations;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;
+use function League\Uri\Modifiers\uri_reference;
 
 /**
  * @group functions
@@ -16,7 +16,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
      */
     public function testStat($uri, $base_uri, $infos)
     {
-        $this->assertSame($infos, Manipulations\uri_reference($uri, $base_uri));
+        $this->assertSame($infos, uri_reference($uri, $base_uri));
     }
 
     public function uriProvider()
@@ -86,7 +86,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
      */
     public function testStatThrowsInvalidArgumentException($uri, $base_uri)
     {
-        Manipulations\uri_reference($uri, $base_uri);
+        uri_reference($uri, $base_uri);
     }
 
     public function failedUriProvider()

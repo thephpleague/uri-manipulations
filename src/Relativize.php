@@ -9,7 +9,7 @@
  * @version   4.2.0
  * @link      https://github.com/thephpleague/uri/
  */
-namespace League\Uri\Manipulations;
+namespace League\Uri\Modifiers;
 
 use League\Uri\Schemes\Uri;
 use Psr\Http\Message\UriInterface;
@@ -22,7 +22,7 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.2.0
  */
-class Relativize extends UriManipulator
+class Relativize extends ManipulateUri
 {
     /**
      * Base URI
