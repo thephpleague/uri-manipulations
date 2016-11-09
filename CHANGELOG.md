@@ -1,6 +1,6 @@
 # Changelog
 
-All Notable changes to `League\Uri\Components` will be documented in this file
+All Notable changes to `uri-manipulations` will be documented in this file
 
 ## 0.1.0 - 2016-10-18
 
@@ -10,9 +10,7 @@ All Notable changes to `League\Uri\Components` will be documented in this file
 
 ### Fixed
 
-- Moved classes from `League\Uri\Modifiers` to `League\Uri\Manipulations`
-- Moved `League\Uri\Formatter` to `League\Uri\Manipulations\Formatter`
-- Moved function `League\Uri\Modifiers\uri_reference` to `League\Uri\Manipulations\uri_reference`
+- Moved `League\Uri\Formatter` to `League\Uri\Modifier\Formatter`
 
 ### Deprecated
 
