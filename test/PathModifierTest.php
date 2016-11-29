@@ -20,7 +20,6 @@ use League\Uri\Modifiers\RemoveLeadingSlash;
 use League\Uri\Modifiers\RemoveSegments;
 use League\Uri\Modifiers\RemoveTrailingSlash;
 use League\Uri\Modifiers\ReplaceSegment;
-use League\Uri\Modifiers\Typecode;
 use League\Uri\Schemes\Data as DataUri;
 use League\Uri\Schemes\Http as HttpUri;
 use PHPUnit_Framework_TestCase;
@@ -228,40 +227,6 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider validTypeProvider
-     *
-     * @param int    $type
-     * @param string $expected
-     */
-    public function testTypecodeProcess($uri, $type, $expected)
-    {
-        $modifier = new Typecode($type);
-
-        $this->assertSame($expected, (string) $modifier(HttpUri::createFromString($uri)));
-    }
-
-    public function validTypeProvider()
-    {
-        return [
-            'no modification (1)' => ['/foo/bar', Typecode::FTP_TYPE_EMPTY, '/foo/bar'],
-            'no modification (2)' => ['/foo;type=a/bar', Typecode::FTP_TYPE_DIRECTORY, '/foo;type=a/bar;type=d'],
-            'adding' => ['/foo/bar', Typecode::FTP_TYPE_ASCII, '/foo/bar;type=a'],
-            'adding to empty path' => ['/', Typecode::FTP_TYPE_DIRECTORY, '/;type=d'],
-            'replacing' => ['/foo/bar;type=i', Typecode::FTP_TYPE_ASCII, '/foo/bar;type=a'],
-            'removing' => ['/foo/bar;type=d', Typecode::FTP_TYPE_EMPTY, '/foo/bar'],
-            'unable to typecode' => ['/foo/bar;type=A', Typecode::FTP_TYPE_EMPTY, '/foo/bar;type=A'],
-        ];
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testWithTypecodeFailsWithInvalidTypecode()
-    {
-        new Typecode('Z');
-    }
-
     public function testWithTrailingSlashProcess()
     {
         $modifier = new AddTrailingSlash();
@@ -370,14 +335,6 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testExtensionProcessFailed()
     {
         new Extension('to/to');
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testTypecodeProcessFailed()
-    {
-        new Typecode('toto');
     }
 
     /**

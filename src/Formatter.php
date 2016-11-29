@@ -13,9 +13,11 @@
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
+use League\Uri\Components\Fragment;
 use League\Uri\Components\Host;
-use League\Uri\Components\Port;
+use League\Uri\Components\Path;
 use League\Uri\Components\Query;
+use League\Uri\Components\UserInfo;
 use League\Uri\Interfaces\Component;
 use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
@@ -29,49 +31,49 @@ use Psr\Http\Message\UriInterface;
  */
 class Formatter
 {
-    const HOST_AS_UNICODE = 1;
+    const RFC3986 = Component::RFC3986;
 
-    const HOST_AS_ASCII   = 2;
+    const RFC3987 = Component::RFC3987;
 
     /**
      * host encoding property
      *
      * @var int
      */
-    protected $hostEncoding = self::HOST_AS_UNICODE;
+    protected $enc_type = self::RFC3986;
 
     /**
      * query separator property
      *
      * @var string
      */
-    protected $querySeparator = '&';
+    protected $query_separator = '&';
 
     /**
      * Should the query component be preserved
      *
      * @var bool
      */
-    protected $preserveQuery = false;
+    protected $preserve_query = false;
 
     /**
      * Should the fragment component string be preserved
      *
      * @var bool
      */
-    protected $preserveFragment = false;
+    protected $preserve_fragment = false;
 
     /**
      * Host encoding setter
      *
      * @param int $encode a predefined constant value
      */
-    public function setHostEncoding($encode)
+    public function setEncoding($enc_type)
     {
-        if (!in_array($encode, [self::HOST_AS_UNICODE, self::HOST_AS_ASCII])) {
-            throw new InvalidArgumentException('Unknown Host encoding rule');
+        if (!in_array($enc_type, [self::RFC3987, self::RFC3986])) {
+            throw new InvalidArgumentException('Unknown encoding rule');
         }
-        $this->hostEncoding = $encode;
+        $this->enc_type = $enc_type;
     }
 
     /**
@@ -83,7 +85,7 @@ class Formatter
     {
         $separator = filter_var($separator, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
-        $this->querySeparator = trim($separator);
+        $this->query_separator = trim($separator);
     }
 
     /**
@@ -97,7 +99,7 @@ class Formatter
      */
     public function preserveQuery($status)
     {
-        $this->preserveQuery = (bool) $status;
+        $this->preserve_query = (bool) $status;
     }
 
     /**
@@ -111,7 +113,7 @@ class Formatter
      */
     public function preserveFragment($status)
     {
-        $this->preserveFragment = (bool) $status;
+        $this->preserve_fragment = (bool) $status;
     }
 
     /**
@@ -131,8 +133,12 @@ class Formatter
      */
     public function __invoke($input)
     {
+        if ($input instanceof Query) {
+            return Query::build($input->getPairs(), $this->query_separator, $this->enc_type);
+        }
+
         if ($input instanceof Component) {
-            return $this->formatUriPart($input);
+            return $input->getContent($this->enc_type);
         }
 
         if ($input instanceof Uri || $input instanceof UriInterface) {
@@ -142,42 +148,6 @@ class Formatter
         throw new InvalidArgumentException(
             'input must be an URI object or a League UriPartInterface object'
         );
-    }
-
-    /**
-     * Format a UriPartInterface implemented object according to the Formatter properties
-     *
-     * @param Component $part
-     *
-     * @return string
-     */
-    protected function formatUriPart(Component $part)
-    {
-        if ($part instanceof Query) {
-            return Query::build($part->getPairs(), $this->querySeparator);
-        }
-
-        if ($part instanceof Host) {
-            return $this->formatHost($part);
-        }
-
-        return (string) $part;
-    }
-
-    /**
-     * Format a Host according to the Formatter properties
-     *
-     * @param Host $host
-     *
-     * @return string
-     */
-    protected function formatHost(Host $host)
-    {
-        if (self::HOST_AS_ASCII === $this->hostEncoding) {
-            return (string) $host->toAscii();
-        }
-
-        return (string) $host->toUnicode();
     }
 
     /**
@@ -194,12 +164,23 @@ class Formatter
             $scheme .= ':';
         }
 
-        return $scheme
-            .$this->formatAuthority($uri)
-            .$uri->getPath()
-            .$this->formatQuery($uri)
-            .$this->formatFragment($uri)
-        ;
+        $path = (new Path($uri->getPath()))->getContent($this->enc_type);
+
+        $query = Query::build(
+            (new Query($uri->getQuery()))->getPairs(),
+            $this->query_separator,
+            $this->enc_type
+        );
+        if ($this->preserve_query || '' !== $query) {
+            $query = '?'.$query;
+        }
+
+        $fragment = (new Fragment($uri->getFragment()))->getContent($this->enc_type);
+        if ($this->preserve_fragment || '' != $fragment) {
+            $fragment = '#'.$fragment;
+        }
+
+        return $scheme.$this->formatAuthority($uri).$path.$query.$fragment;
     }
 
     /**
@@ -211,69 +192,22 @@ class Formatter
      */
     protected function formatAuthority($uri)
     {
-        if ('' === $uri->getAuthority()) {
+        if ('' == $uri->getAuthority()) {
             return '';
         }
 
-        $userInfo = $uri->getUserInfo();
+        $userInfo = (new UserInfo())->withContent($uri->getUserInfo())->getContent($this->enc_type);
         if ('' !== $userInfo) {
             $userInfo .= '@';
         }
 
-        return '//'
-            .$userInfo
-            .$this->formatHost(new Host($uri->getHost()))
-            .$this->formatPort($uri->getPort())
-        ;
-    }
+        $host = (new Host($uri->getHost()))->getContent($this->enc_type);
 
-    /**
-     * Format a URI port component according to the Formatter properties
-     *
-     * @param null|int $port
-     *
-     * @return string
-     */
-    protected function formatPort($port)
-    {
-        if (null !== $port) {
-            return ':'.$port;
+        $port = $uri->getPort();
+        if ('' != $port) {
+            $port = ':'.$port;
         }
 
-        return '';
-    }
-
-    /**
-     * Format a URI Query component according to the Formatter properties
-     *
-     * @param Uri|UriInterface $uri
-     *
-     * @return string
-     */
-    protected function formatQuery($uri)
-    {
-        $query = $this->formatUriPart(new Query($uri->getQuery()));
-        if ($this->preserveQuery || '' !== $query) {
-            $query = '?'.$query;
-        }
-
-        return $query;
-    }
-
-    /**
-     * Format a URI Fragment component according to the Formatter properties
-     *
-     * @param Uri|UriInterface $uri
-     *
-     * @return string
-     */
-    protected function formatFragment($uri)
-    {
-        $fragment = $uri->getFragment();
-        if ($this->preserveFragment || '' != $fragment) {
-            $fragment = '#'.$fragment;
-        }
-
-        return $fragment;
+        return '//'.$userInfo.$host.$port;
     }
 }

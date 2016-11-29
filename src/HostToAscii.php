@@ -32,6 +32,6 @@ class HostToAscii extends ManipulateHost
      */
     protected function modifyHost($str)
     {
-        return (string) (new Host($str))->toAscii();
+        return (string) (new Host($str))->getContent(Host::RFC3986);
     }
 }

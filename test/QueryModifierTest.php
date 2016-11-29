@@ -138,7 +138,7 @@ class QueryManipulatorTest extends PHPUnit_Framework_TestCase
     public function validWithoutQueryValuesProvider()
     {
         return [
-            [[1], 'kingkong=toto&foo=bar%20baz'],
+            [['1'], 'kingkong=toto&foo=bar%20baz'],
         ];
     }
 }

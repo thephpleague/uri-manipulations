@@ -2,6 +2,7 @@
 
 namespace LeagueTest\Uri\Modifiers;
 
+use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use InvalidArgumentException;
 use League\Uri\Components\Host;
 use League\Uri\Modifiers\AppendLabel;
@@ -98,7 +99,7 @@ class HostManipulatorTest extends PHPUnit_Framework_TestCase
 
     public function testHostToUnicodeProcess()
     {
-        $uri = HttpUri::createFromString('http://xn--mgbh0fb.xn--kgbechtv/where/to/go');
+        $uri = new GuzzleUri('http://xn--mgbh0fb.xn--kgbechtv/where/to/go');
         $modifier = new HostToUnicode();
         $this->assertSame(
             'http://مثال.إختبار/where/to/go',

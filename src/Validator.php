@@ -17,7 +17,6 @@ use League\Uri\Components\DataPath;
 use League\Uri\Components\HierarchicalPath;
 use League\Uri\Components\Host;
 use League\Uri\Components\Query;
-use League\Uri\Components\Traits\ImmutableComponent;
 use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
 
@@ -31,7 +30,51 @@ use Psr\Http\Message\UriInterface;
  */
 trait Validator
 {
-    use ImmutableComponent;
+    /**
+     * Invalid Characters
+     *
+     * @see http://tools.ietf.org/html/rfc3986#section-2
+     *
+     * @var string
+     */
+    protected static $invalidUriChars = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x7F";
+
+    /**
+     * RFC3986 unreserved characters encoded regular expression pattern
+     *
+     * @see http://tools.ietf.org/html/rfc3986#section-2.3
+     *
+     * @var string
+     */
+    protected static $unreservedCharsEncoded = '2[D|E]|3[0-9]|4[1-9|A-F]|5[0-9|A|F]|6[1-9|A-F]|7[0-9|E]';
+
+    /**
+     * validate a string
+     *
+     * @param mixed $str the value to evaluate as a string
+     *
+     * @throws InvalidArgumentException if the submitted data can not be converted to string
+     *
+     * @return string
+     */
+    protected static function validateString($str)
+    {
+        if (!is_string($str)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected data to be a string; received "%s"',
+                (is_object($str) ? get_class($str) : gettype($str))
+            ));
+        }
+
+        if (strlen($str) !== strcspn($str, self::$invalidUriChars)) {
+            throw new InvalidArgumentException(sprintf(
+                'the submitted string `%s` contains invalid characters',
+                $str
+            ));
+        }
+
+        return $str;
+    }
 
     /**
      * Available flags

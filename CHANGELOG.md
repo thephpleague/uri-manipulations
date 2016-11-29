@@ -2,11 +2,11 @@
 
 All Notable changes to `uri-manipulations` will be documented in this file
 
-## 0.1.0 - 2016-10-18
+## Next
 
 ### Added
 
-- None
+- `League\Uri\Modifier\Formatter::setEncoding`
 
 ### Fixed
 
@@ -20,6 +20,7 @@ All Notable changes to `uri-manipulations` will be documented in this file
 
 - `League\Uri\Formatter::getQueryEncoding`
 - `League\Uri\Formatter::setQueryEncoding`
+- `League\Uri\Formatter::setHostEncoding`
 - `League\Uri\Formatter::getHostEncoding`
 - `League\Uri\Formatter::getQuerySeparator`
 - `League\Uri\Formatter::format`
@@ -35,4 +36,4 @@ All Notable changes to `uri-manipulations` will be documented in this file
 - `League\Uri\Modifiers\DataUriParameters\withParameters`
 - `League\Uri\Modifiers\Extension\withExtension`
 - `League\Uri\Modifiers\KsortQuery\withAlgorithm`
-- `League\Uri\Modifiers\Typecode\withType`
+- `League\Uri\Modifiers\Typecode`
