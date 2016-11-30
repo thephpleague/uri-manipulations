@@ -11,7 +11,7 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Schemes\Uri;
+use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -94,7 +94,7 @@ class Relativize extends ManipulateUri
     /**
      * Tell whether the submitted URI object can be relativize
      *
-     * @param Uri|UriInterface $target
+     * @param Uri|UriInterface $payload
      *
      * @return bool
      */

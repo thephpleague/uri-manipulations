@@ -38,7 +38,7 @@ class Formatter
     /**
      * host encoding property
      *
-     * @var int
+     * @var string
      */
     protected $enc_type = self::RFC3986;
 
@@ -73,6 +73,7 @@ class Formatter
         if (!in_array($enc_type, [self::RFC3987, self::RFC3986])) {
             throw new InvalidArgumentException('Unknown encoding rule');
         }
+
         $this->enc_type = $enc_type;
     }
 
