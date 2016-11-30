@@ -5,8 +5,8 @@ namespace LeagueTest\Uri\Modifiers;
 use InvalidArgumentException;
 use League\Uri\Modifiers\Pipeline;
 use League\Uri\Modifiers\RemoveDotSegments;
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase as TestCase;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
@@ -14,11 +14,9 @@ use RuntimeException;
  */
 class PipelineTest extends TestCase
 {
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         $pipeline = new Pipeline([new RemoveDotSegments(), 'toto']);
     }
 
@@ -32,33 +30,29 @@ class PipelineTest extends TestCase
 
     public function testInvoke()
     {
-        $uri = HttpUri::createFromString('http://www.example.com/path/../to/the/./sky.php?kingkong=toto&foo=bar+baz#doc3');
+        $uri = Http::createFromString('http://www.example.com/path/../to/the/./sky.php?kingkong=toto&foo=bar+baz#doc3');
         $pipeline = new Pipeline([new RemoveDotSegments()]);
         $newUri = $pipeline->process($uri);
-        $this->assertInstanceOf(HttpUri::class, $newUri);
+        $this->assertInstanceOf(Http::class, $newUri);
         $this->assertSame('/to/the/sky.php', $newUri->getPath());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvokeThrowInvalidArgumentException()
     {
+        $this->expectException(InvalidArgumentException::class);
         $uri = 'http://www.example.com/path/../to/the/./sky.php?kingkong=toto&foo=bar+baz#doc3';
         $pipeline = new Pipeline([new RemoveDotSegments()]);
         $newUri = $pipeline->process($uri);
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testInvokeThrowRuntimeException()
     {
-        $modifier = function (HttpUri $uri) {
+        $this->expectException(RuntimeException::class);
+        $modifier = function (Http $uri) {
             return true;
         };
 
-        $uri = HttpUri::createFromString('http://www.example.com');
+        $uri = Http::createFromString('http://www.example.com');
         (new Pipeline([$modifier]))->process($uri);
     }
 }

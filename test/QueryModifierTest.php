@@ -8,24 +8,24 @@ use League\Uri\Modifiers\FilterQuery;
 use League\Uri\Modifiers\KsortQuery;
 use League\Uri\Modifiers\MergeQuery;
 use League\Uri\Modifiers\RemoveQueryKeys;
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group query
  * @group modifier
  * @group query-modifier
  */
-class QueryManipulatorTest extends PHPUnit_Framework_TestCase
+class QueryManipulatorTest extends TestCase
 {
     /**
-     * @var HttpUri
+     * @var Http
      */
     private $uri;
 
     protected function setUp()
     {
-        $this->uri = HttpUri::createFromString(
+        $this->uri = Http::createFromString(
             'http://www.example.com/path/to/the/sky.php?kingkong=toto&foo=bar%20baz#doc3'
         );
     }
@@ -50,11 +50,9 @@ class QueryManipulatorTest extends PHPUnit_Framework_TestCase
         $this->assertSame('kingkong=toto', $modifier->__invoke($this->uri)->getQuery());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFilterFlagFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new FilterQuery(function ($value) {
             return $value == 'toto';
         }, 'toto');
@@ -106,19 +104,15 @@ class QueryManipulatorTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testKsortQueryFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new KsortQuery(['data']);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testMergeQueryContructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new MergeQuery(new Query('toto=king'));
     }
 

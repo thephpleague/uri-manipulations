@@ -28,16 +28,16 @@ class RemoveQueryKeys extends ManipulateQuery
      *
      * @var array
      */
-    protected $keys;
+    protected $keys = [];
 
     /**
      * New instance
      *
-     * @param array $keys
+     * @param string[] $keys
      */
     public function __construct(array $keys)
     {
-        $this->keys = $keys;
+        $this->keys = array_map([$this, 'validateString'], $keys);
     }
 
     /**

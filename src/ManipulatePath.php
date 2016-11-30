@@ -28,9 +28,7 @@ abstract class ManipulatePath extends ManipulateUri
     {
         $this->assertUriObject($payload);
 
-        $path = $this->modifyPath($payload->getPath());
-
-        return $payload->withPath($path);
+        return $payload->withPath($this->modifyPath($payload->getPath()));
     }
 
     /**

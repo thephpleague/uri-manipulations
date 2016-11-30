@@ -30,7 +30,7 @@ To use the library.
 Documentation
 ------
 
-All functions and classes are located under the following namespace : `League\Uri\Manipulations`
+All functions and classes are located under the following namespace : `League\Uri\Modifiers`
 
 ## URI properties
 
@@ -62,14 +62,15 @@ An associative array is returned. The following keys are always present within t
 ```php
 <?php
 
+use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use League\Uri\Schemes\Http as HttpUri;
 use function League\Uri\Modifiers\uri_reference;
 
-$uri = HttpUri::createFromString("//스타벅스코리아.com/how/are/you?foo=baz");
+$guzzle_uri = new GuzzleUri("//스타벅스코리아.com/how/are/you?foo=baz");
 $alt_uri = HttpUri::createFromString("//xn--oy2b35ckwhba574atvuzkc.com/how/are/you?foo=baz#bar");
 
-var_dump(uri_reference($uri));
-//displays something like
+var_dump(uri_reference($guzzle_uri));
+//displays
 // array(5) {
 //   'absolute_uri' => bool(false)
 //   'network_path' => bool(true)
@@ -78,8 +79,8 @@ var_dump(uri_reference($uri));
 //   'same_document' => bool(false)
 // }
 
-var_dump(uri_reference($uri, $alt_uri));
-//displays something like
+var_dump(uri_reference($guzzle_uri, $alt_uri));
+//displays
 // array(5) {
 //   'absolute_uri' => bool(false)
 //   'network_path' => bool(true)
@@ -96,7 +97,7 @@ The Formatter class helps you format your URI according to your output.
 ```php
 <?php
 
-public Formatter::setHostEncoding(int $format): void
+public Formatter::setEncoding(string $format): void
 public Formatter::setQuerySeparator(string $separator): void
 public Formatter::preserveQuery(bool $status): void
 public Formatter::preserveFragment(bool $status): void
@@ -105,15 +106,15 @@ public Formatter::__invoke(mixed $uri): string
 
 This main method `__invoke` expects one of the following argument:
 
-- an Uri object (which implements PSR-7 `UriInterface` or the `League\Interfaces\Uri` interface);
-- a `League\Interfaces\Component` Interface.
+- an object which implements PSR-7 `UriInterface` or the `League\Interfaces\Uri` interface);
+- an object which implements `League\Interfaces\Component` Interface.
 
 and returns the URI string representation according to the settings you gave it using the remaining methods. **The returned string MAY no longer be a valid URI**
 
 A host can be output as encoded in ascii or in unicode. By default the formatter encode the host in unicode. To set the encoding you need to specify one of the predefined constant:
 
-- `Formatter::HOST_AS_UNICODE` to set the host encoding to IDN;
-- `Formatter::HOST_AS_ASCII`   to set the host encoding to ascii;
+- `Formatter::RFC3986` to encode the URI and its compnent according to RFC3986;
+- `Formatter::RFC3987` to encode the URI and its compnent according to RFC3987;
 
 ### Example
 
@@ -121,15 +122,16 @@ A host can be output as encoded in ascii or in unicode. By default the formatter
 <?php
 
 use League\Uri\Formatter;
-use League\Uri\Schemes\Http as HttpUri;
+use Zend\Diactoros\Uri as DiactorosUri;
 
 $formatter = new Formatter();
-$formatter->setHostEncoding(Formatter::HOST_AS_ASCII);
+$formatter->setHostEncoding(Formatter::RFC3987);
 $formatter->setQuerySeparator('&amp;');
 $formatter->preserveFragment(true);
 
-echo $formatter(HttpUri::createFromString('https://рф.ru:81?foo=ba%20r&baz=bar'));
-//displays https://xn--p1ai.ru:81?foo=ba%20r&amp;baz=bar#
+$uri = new DiactorosUri('https://xn--p1ai.ru:81?foo=ba%20r&baz=bar');
+echo $formatter($uri);
+//displays 'https://рф.ru:81?foo=ba r&amp;baz=bar#'
 ```
 
 ## URI Middlewares
@@ -175,7 +177,6 @@ All middlewares normalize the URI path component
 - `DataUriParameters` : update the paramaters associated to a Data Uri
 - `DataUriToAscii` : convert a Data Uri into its ASCII representation
 - `DataUriToBinary` : convert a Data Uri into its Binary representation
-- `Typecode` : Update the FTP Uri typecode path information
 
 ### Host Middlewares:
 
@@ -186,9 +187,11 @@ All middlewares normalize the component
 - `ReplaceLabel` : Replace specified host labels
 - `RemoveLabels` : Remove specified host labels
 - `FilterLabels` : Filters the host labels
-- `HostToAscii` : convert the host into its ASCII representation
-- `HostToUnicode` : convert the host into its Unicode representation
+- `HostToAscii` : convert the host into its ASCII representation (*)
+- `HostToUnicode` : convert the host into its Unicode representation (*)
 - `RemoveZoneIdentifier` : Remove the Zone Identifier of an IPv6 host
+
+*(*) The middleware will have no effect on League Uri objects because Host are always normalized to their ascii representation*
 
 ### Query Middlewares:
 

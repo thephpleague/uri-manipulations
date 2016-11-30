@@ -7,17 +7,17 @@ use League\Uri\Components\Host;
 use League\Uri\Components\Query;
 use League\Uri\Components\Scheme;
 use League\Uri\Modifiers\Formatter;
-use League\Uri\Schemes\Data as DataUri;
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase;
+use League\Uri\Schemes\Data;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group formatter
  */
-class FormatterTest extends PHPUnit_Framework_TestCase
+class FormatterTest extends TestCase
 {
     /**
-     * @var HttpUri
+     * @var Http
      */
     private $uri;
 
@@ -28,7 +28,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->uri = HttpUri::createFromString(
+        $this->uri = Http::createFromString(
             'http://login:pass@gwóźdź.pl:443/test/query.php?kingkong=toto&foo=bar+baz#doc3'
         );
         $this->formatter = new Formatter();
@@ -40,11 +40,9 @@ class FormatterTest extends PHPUnit_Framework_TestCase
         $this->assertSame('xn--gwd-hna98db.pl', $this->formatter->__invoke(new Host('gwóźdź.pl')));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidHostEncoding()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->formatter->setEncoding('toto');
     }
 
@@ -52,7 +50,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     {
         $uri = 'https://login:pass@gwóźdź.pl:443/test/query.php?kingkong=toto&foo=bar+baz#doc3';
         $expected = 'https://login:pass@xn--gwd-hna98db.pl/test/query.php?kingkong=toto&amp;foo=bar+baz#doc3';
-        $uri = HttpUri::createFromString($uri);
+        $uri = Http::createFromString($uri);
 
         $this->formatter->setQuerySeparator('&amp;');
         $this->formatter->setEncoding(Formatter::RFC3986);
@@ -62,7 +60,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     public function testFormatWithZeroes()
     {
         $expected = 'https://example.com/image.jpeg?0#0';
-        $uri = HttpUri::createFromString('https://example.com/image.jpeg?0#0');
+        $uri = Http::createFromString('https://example.com/image.jpeg?0#0');
         $this->assertSame($expected, $this->formatter->__invoke($uri));
     }
 
@@ -102,7 +100,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
 
     public function testFormatOpaqueUri()
     {
-        $uri = DataUri::createFromString('data:,');
+        $uri = Data::createFromString('data:,');
         $this->formatter->setQuerySeparator('&amp;');
         $this->formatter->setEncoding(Formatter::RFC3986);
         $this->assertSame($uri->__toString(), $this->formatter->__invoke($uri));
@@ -111,24 +109,22 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     public function testFormatWithoutAuthority()
     {
         $expected = '/test/query.php?kingkong=toto&amp;foo=bar+baz#doc3';
-        $uri = HttpUri::createFromString('/test/query.php?kingkong=toto&foo=bar+baz#doc3');
+        $uri = Http::createFromString('/test/query.php?kingkong=toto&foo=bar+baz#doc3');
         $this->formatter->setQuerySeparator('&amp;');
         $this->formatter->setEncoding(Formatter::RFC3986);
         $this->assertSame($expected, $this->formatter->__invoke($uri));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFormatterFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->formatter->__invoke('http://www.example.com');
     }
 
     public function testFormatterPreservedQuery()
     {
         $expected = 'http://example.com';
-        $uri = HttpUri::createFromString($expected);
+        $uri = Http::createFromString($expected);
         $this->formatter->preserveQuery(true);
         $this->assertSame($expected, (string) $uri);
         $this->assertSame('http://example.com?', $this->formatter->__invoke($uri));
@@ -137,7 +133,7 @@ class FormatterTest extends PHPUnit_Framework_TestCase
     public function testFormatterPreservedFragment()
     {
         $expected = 'http://example.com';
-        $uri = HttpUri::createFromString($expected);
+        $uri = Http::createFromString($expected);
         $this->formatter->preserveFragment(true);
         $this->assertSame($expected, (string) $uri);
         $this->assertSame('http://example.com#', $this->formatter->__invoke($uri));

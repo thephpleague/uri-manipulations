@@ -20,24 +20,24 @@ use League\Uri\Modifiers\RemoveLeadingSlash;
 use League\Uri\Modifiers\RemoveSegments;
 use League\Uri\Modifiers\RemoveTrailingSlash;
 use League\Uri\Modifiers\ReplaceSegment;
-use League\Uri\Schemes\Data as DataUri;
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase;
+use League\Uri\Schemes\Data;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group path
  * @group modifier
  */
-class PathManipulatorTest extends PHPUnit_Framework_TestCase
+class PathManipulatorTest extends TestCase
 {
     /**
-     * @var HttpUri
+     * @var Http
      */
     private $uri;
 
     protected function setUp()
     {
-        $this->uri = HttpUri::createFromString(
+        $this->uri = Http::createFromString(
             'http://www.example.com/path/to/the/sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
     }
@@ -71,11 +71,11 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
         $textPath = new DataPath('text/plain;charset=us-ascii,Bonjour%20le%20monde%21');
         $binPath = DataPath::createFromPath(__DIR__.'/data/red-nose.gif');
 
-        $ascii = DataUri::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde%21');
-        $binary = DataUri::createFromString('data:'.$textPath->toBinary());
+        $ascii = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde%21');
+        $binary = Data::createFromString('data:'.$textPath->toBinary());
 
-        $pathBin = DataUri::createFromPath(__DIR__.'/data/red-nose.gif');
-        $pathAscii = DataUri::createFromString('data:'.$binPath->toAscii());
+        $pathBin = Data::createFromPath(__DIR__.'/data/red-nose.gif');
+        $pathAscii = Data::createFromString('data:'.$binPath->toAscii());
 
         return [
             [$pathBin, $pathAscii],
@@ -86,7 +86,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testDataUriWithParameters()
     {
         $modifier = new DataUriParameters('coco=chanel');
-        $uri = DataUri::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
+        $uri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
         $this->assertSame('text/plain;coco=chanel,Bonjour%20le%20monde!', (string) $modifier($uri)->getPath());
     }
 
@@ -102,10 +102,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testAppendProcess($segment, $key, $append, $prepend, $replace)
     {
         $modifier = new AppendSegment($segment);
-        $this->assertSame(
-            $append,
-            $modifier($this->uri)->getPath()
-        );
+        $this->assertSame($append, $modifier($this->uri)->getPath());
     }
 
     /**
@@ -120,10 +117,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testPrependProcess($segment, $key, $append, $prepend, $replace)
     {
         $modifier = new PrependSegment($segment);
-        $this->assertSame(
-            $prepend,
-            $modifier($this->uri)->getPath()
-        );
+        $this->assertSame($prepend, $modifier($this->uri)->getPath());
     }
 
     /**
@@ -138,10 +132,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testReplaceSegmentProcess($segment, $key, $append, $prepend, $replace)
     {
         $modifier = new ReplaceSegment($key, $segment);
-        $this->assertSame(
-            $replace,
-            $modifier($this->uri)->getPath()
-        );
+        $this->assertSame($replace, $modifier($this->uri)->getPath());
     }
 
     public function validPathProvider()
@@ -183,7 +174,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
 
     public function testWithoutDotSegmentsProcess()
     {
-        $uri = HttpUri::createFromString(
+        $uri = Http::createFromString(
             'http://www.example.com/path/../to/the/./sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
         $modifier = new RemoveDotSegments();
@@ -192,7 +183,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
 
     public function testWithoutEmptySegmentsProcess()
     {
-        $uri = HttpUri::createFromString(
+        $uri = Http::createFromString(
             'http://www.example.com/path///to/the//sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
         $modifier = new RemoveEmptySegments();
@@ -201,7 +192,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
 
     public function testWithoutTrailingSlashProcess()
     {
-        $uri = HttpUri::createFromString('http://www.example.com/');
+        $uri = Http::createFromString('http://www.example.com/');
         $modifier = new RemoveTrailingSlash();
         $this->assertSame('', $modifier($uri)->getPath());
     }
@@ -236,7 +227,7 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testWithoutLeadingSlashProcess()
     {
         $modifier = new RemoveLeadingSlash();
-        $uri = HttpUri::createFromString('/foo/bar?q=b#h');
+        $uri = Http::createFromString('/foo/bar?q=b#h');
 
         $this->assertSame('foo/bar?q=b#h', $modifier($uri)->__toString());
     }
@@ -244,104 +235,86 @@ class PathManipulatorTest extends PHPUnit_Framework_TestCase
     public function testWithLeadingSlashProcess()
     {
         $modifier = new AddLeadingSlash();
-        $uri = HttpUri::createFromString('foo/bar?q=b#h');
+        $uri = Http::createFromString('foo/bar?q=b#h');
 
         $this->assertSame('/foo/bar?q=b#h', $modifier($uri)->__toString());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testAppendProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new AppendSegment(''))->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testAppendConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new AppendSegment(new Path('whynot'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testPrependProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new PrependSegment(''))->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testPrependConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new PrependSegment(new Path('whynot'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWithoutDotSegmentsProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new RemoveDotSegments())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testReplaceSegmentConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ReplaceSegment(2, new Path('whynot'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
+    public function testReplaceSegmentConstructorFailed2()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new ReplaceSegment(2, "whyno\0t");
+    }
+
     public function testWithoutLeadingSlashProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new RemoveLeadingSlash())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWithLeadingSlashProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new AddLeadingSlash())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWithoutTrailingSlashProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new AddTrailingSlash())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWithTrailingSlashProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new AddTrailingSlash())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testExtensionProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new Extension('to/to');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWithoutEmptySegmentsProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new RemoveEmptySegments())->__invoke('http://www.example.com');
     }
 }

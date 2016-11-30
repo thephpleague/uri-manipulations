@@ -51,6 +51,10 @@
             "LeagueTest\\Uri\\Modifiers\\": "test"
         }
     },
+    "suggest": {
+        "league/uri-parser": "Allow parsing any URI using RFC3986/RFC3987 compliant algorithm",
+        "league/uri-schemes": "Allow manipulating URI objects"
+    },
     "scripts": {
         "test": "phpunit --coverage-text; php-cs-fixer fix -v --diff --dry-run;",
         "phpunit": "phpunit --coverage-text",

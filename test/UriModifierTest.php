@@ -6,10 +6,10 @@ use InvalidArgumentException;
 use League\Uri\Modifiers\Normalize;
 use League\Uri\Modifiers\Relativize;
 use League\Uri\Modifiers\Resolve;
-use League\Uri\Schemes\Data as DataUri;
-use League\Uri\Schemes\Ftp as FtpUri;
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase as TestCase;
+use League\Uri\Schemes\Data;
+use League\Uri\Schemes\Ftp;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group uri
@@ -28,8 +28,8 @@ class UriManipulatorTest extends TestCase
      */
     public function testResolve($uri, $relative, $expected)
     {
-        $uri      = HttpUri::createFromString($uri);
-        $relative = HttpUri::createFromString($relative);
+        $uri      = Http::createFromString($uri);
+        $relative = Http::createFromString($relative);
         $modifier = new Resolve($uri);
 
         $this->assertSame($expected, (string) $modifier->__invoke($relative));
@@ -86,19 +86,17 @@ class UriManipulatorTest extends TestCase
 
     public function testResolveUri()
     {
-        $http = HttpUri::createFromString('http://example.com/path/to/file');
-        $dataUri = DataUri::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
+        $http = Http::createFromString('http://example.com/path/to/file');
+        $dataUri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
         $modifier = new Resolve($http);
         $this->assertSame($dataUri, $modifier->__invoke($dataUri));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testResolveLetThrowResolvedUriException()
     {
-        $http = HttpUri::createFromString('http://example.com/path/to/file');
-        $ftp = FtpUri::createFromString('ftp//a/b/c/d;p');
+        $this->expectException(InvalidArgumentException::class);
+        $http = Http::createFromString('http://example.com/path/to/file');
+        $ftp = Ftp::createFromString('ftp//a/b/c/d;p');
         $modifier = new Resolve($http);
         $modifier->__invoke($ftp);
     }
@@ -108,8 +106,8 @@ class UriManipulatorTest extends TestCase
      */
     public function testRelativize($uri, $resolved, $expected)
     {
-        $uri      = HttpUri::createFromString($uri);
-        $resolved = HttpUri::createFromString($resolved);
+        $uri      = Http::createFromString($uri);
+        $resolved = Http::createFromString($resolved);
         $modifier = new Relativize($uri);
 
         $this->assertSame($expected, (string) $modifier->__invoke($resolved));
@@ -167,10 +165,10 @@ class UriManipulatorTest extends TestCase
         $expectedRelativize,
         $expectedResolved
     ) {
-        $baseUri = HttpUri::createFromString($baseUri);
+        $baseUri = Http::createFromString($baseUri);
         $resolver = new Resolve($baseUri);
         $relativizer = new Relativize($baseUri);
-        $uri = HttpUri::createFromString($uri);
+        $uri = Http::createFromString($uri);
 
         $relativeUri = $relativizer($uri);
         $resolvedUri = $resolver($relativeUri);
@@ -200,9 +198,9 @@ class UriManipulatorTest extends TestCase
     /**
      * @dataProvider sameValueAsProvider
      *
-     * @param HttpUri $uri1
-     * @param FtpUri  $uri2
-     * @param bool    $expected
+     * @param Http $uri1
+     * @param Ftp  $uri2
+     * @param bool $expected
      */
     public function testSameValueAs($uri1, $uri2, $expected)
     {
@@ -217,33 +215,33 @@ class UriManipulatorTest extends TestCase
     {
         return [
             '2 disctincts URIs' => [
-                HttpUri::createFromString('http://example.com'),
-                FtpUri::createFromString('ftp://example.com'),
+                Http::createFromString('http://example.com'),
+                Ftp::createFromString('ftp://example.com'),
                 false,
             ],
             '2 identical URIs' => [
-                HttpUri::createFromString('http://example.com'),
-                HttpUri::createFromString('http://example.com'),
+                Http::createFromString('http://example.com'),
+                Http::createFromString('http://example.com'),
                 true,
             ],
             '2 identical URIs after normalization' => [
-                HttpUri::createFromString('HtTp://مثال.إختبار:80/%7efoo/%7efoo/'),
-                HttpUri::createFromString('http://xn--mgbh0fb.xn--kgbechtv/%7Efoo/~foo/'),
+                Http::createFromString('HtTp://مثال.إختبار:80/%7efoo/%7efoo/'),
+                Http::createFromString('http://xn--mgbh0fb.xn--kgbechtv/%7Efoo/~foo/'),
                 true,
             ],
             '2 identical URIs after removing dot segment' => [
-                HttpUri::createFromString('http://example.org/~foo/'),
-                HttpUri::createFromString('http://example.ORG/bar/./../~foo/'),
+                Http::createFromString('http://example.org/~foo/'),
+                Http::createFromString('http://example.ORG/bar/./../~foo/'),
                 true,
             ],
             '2 distincts relative URIs' => [
-                HttpUri::createFromString('~foo/'),
-                HttpUri::createFromString('../~foo/'),
+                Http::createFromString('~foo/'),
+                Http::createFromString('../~foo/'),
                 false,
             ],
             '2 identical relative URIs' => [
-                HttpUri::createFromString('../%7efoo/'),
-                HttpUri::createFromString('../~foo/'),
+                Http::createFromString('../%7efoo/'),
+                Http::createFromString('../~foo/'),
                 true,
             ],
         ];
@@ -253,7 +251,7 @@ class UriManipulatorTest extends TestCase
     {
         $rawUrl = 'HtTp://vonNN.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem';
         $uriNormalizer = new Normalize();
-        $uri = (string) $uriNormalizer(HttpUri::createFromString($rawUrl));
+        $uri = (string) $uriNormalizer(Http::createFromString($rawUrl));
         $this->assertSame('http://vonnn.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem', $uri);
     }
 }

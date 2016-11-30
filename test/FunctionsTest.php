@@ -2,14 +2,15 @@
 
 namespace LeagueTest\Uri\Modifiers;
 
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase;
+use InvalidArgumentException;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 use function League\Uri\Modifiers\uri_reference;
 
 /**
  * @group functions
  */
-class FunctionsTest extends PHPUnit_Framework_TestCase
+class FunctionsTest extends TestCase
 {
     /**
      * @dataProvider uriProvider
@@ -23,7 +24,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
     {
         return [
             'absolute uri' => [
-                'uri' => HttpUri::createFromString('http://a/p?q#f'),
+                'uri' => Http::createFromString('http://a/p?q#f'),
                 'base_uri' => null,
                 'infos' => [
                     'absolute_uri' => true,
@@ -34,8 +35,8 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
                 ],
             ],
             'network relative uri' => [
-                'uri' => HttpUri::createFromString('//스타벅스코리아.com/p?q#f'),
-                'base_uri' => HttpUri::createFromString('//xn--oy2b35ckwhba574atvuzkc.com/p?q#z'),
+                'uri' => Http::createFromString('//스타벅스코리아.com/p?q#f'),
+                'base_uri' => Http::createFromString('//xn--oy2b35ckwhba574atvuzkc.com/p?q#z'),
                 'infos' => [
                     'absolute_uri' => false,
                     'network_path' => true,
@@ -45,8 +46,8 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
                 ],
             ],
             'path absolute uri' => [
-                'uri' => HttpUri::createFromString('/p?q#f'),
-                'base_uri' => HttpUri::createFromString('/p?a#f'),
+                'uri' => Http::createFromString('/p?q#f'),
+                'base_uri' => Http::createFromString('/p?a#f'),
                 'infos' => [
                     'absolute_uri' => false,
                     'network_path' => false,
@@ -56,7 +57,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
                 ],
             ],
             'path relative uri with non empty path' => [
-                'uri' => HttpUri::createFromString('p?q#f'),
+                'uri' => Http::createFromString('p?q#f'),
                 'base_uri' => null,
                 'infos' => [
                     'absolute_uri' => false,
@@ -67,7 +68,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
                 ],
             ],
             'path relative uri with empty' => [
-                'uri' => HttpUri::createFromString('?q#f'),
+                'uri' => Http::createFromString('?q#f'),
                 'base_uri' => null,
                 'infos' => [
                     'absolute_uri' => false,
@@ -81,11 +82,11 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
      * @dataProvider failedUriProvider
      */
     public function testStatThrowsInvalidArgumentException($uri, $base_uri)
     {
+        $this->expectException(InvalidArgumentException::class);
         uri_reference($uri, $base_uri);
     }
 
@@ -93,12 +94,12 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
     {
         return [
             'invalid uri' => [
-                'uri' => HttpUri::createFromString('http://a/p?q#f'),
+                'uri' => Http::createFromString('http://a/p?q#f'),
                 'base_uri' => 'http://example.com',
             ],
             'invalid base uri' => [
                 'uri' => 'http://example.com',
-                'base_uri' => HttpUri::createFromString('//a/p?q#f'),
+                'base_uri' => Http::createFromString('//a/p?q#f'),
             ],
         ];
     }

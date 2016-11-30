@@ -62,33 +62,33 @@ class Relativize extends ManipulateUri
     /**
      * Return a Uri object modified according to the modifier
      *
-     * @param Uri|UriInterface $target
+     * @param Uri|UriInterface $payload
      *
      * @return Uri|UriInterface
      */
-    public function __invoke($target)
+    public function __invoke($payload)
     {
-        $this->assertUriObject($target);
-        if (!$this->isRelativizable($target)) {
-            return $target;
+        $this->assertUriObject($payload);
+        if (!$this->isRelativizable($payload)) {
+            return $payload;
         }
 
-        $target = $target->withScheme('')->withPort(null)->withUserInfo('')->withHost('');
+        $payload = $payload->withScheme('')->withPort(null)->withUserInfo('')->withHost('');
 
-        $target_path = $target->getPath();
+        $target_path = $payload->getPath();
         if ($target_path !== $this->base_uri->getPath()) {
-            return $target->withPath($this->relativizePath($target_path));
+            return $payload->withPath($this->relativizePath($target_path));
         }
 
-        if ($target->getQuery() === $this->base_uri->getQuery()) {
-            return $target->withPath('')->withQuery('');
+        if ($payload->getQuery() === $this->base_uri->getQuery()) {
+            return $payload->withPath('')->withQuery('');
         }
 
-        if ('' === $target->getQuery()) {
-            return $target->withPath($this->formatPathWithEmptyBaseQuery($target_path));
+        if ('' === $payload->getQuery()) {
+            return $payload->withPath($this->formatPathWithEmptyBaseQuery($target_path));
         }
 
-        return $target->withPath('');
+        return $payload->withPath('');
     }
 
     /**
@@ -98,13 +98,13 @@ class Relativize extends ManipulateUri
      *
      * @return bool
      */
-    protected function isRelativizable($target)
+    protected function isRelativizable($payload)
     {
-        $target = $this->hostToAscii($target);
+        $payload = $this->hostToAscii($payload);
 
-        return $this->base_uri->getScheme() === $target->getScheme()
-            && $this->base_uri->getAuthority() === $target->getAuthority()
-            && !uri_reference($target)['relative_path'];
+        return $this->base_uri->getScheme() === $payload->getScheme()
+            && $this->base_uri->getAuthority() === $payload->getAuthority()
+            && !uri_reference($payload)['relative_path'];
     }
 
     /**
@@ -128,7 +128,9 @@ class Relativize extends ManipulateUri
         }
         $target_segments[] = $target_basename;
 
-        return $this->formatPath(str_repeat('../', count($base_segments)).implode('/', $target_segments));
+        return $this->formatPath(
+            str_repeat('../', count($base_segments)).implode('/', $target_segments)
+        );
     }
 
     /**

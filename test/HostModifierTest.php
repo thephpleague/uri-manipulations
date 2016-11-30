@@ -13,23 +13,23 @@ use League\Uri\Modifiers\PrependLabel;
 use League\Uri\Modifiers\RemoveLabels;
 use League\Uri\Modifiers\RemoveZoneIdentifier;
 use League\Uri\Modifiers\ReplaceLabel;
-use League\Uri\Schemes\Http as HttpUri;
-use PHPUnit_Framework_TestCase;
+use League\Uri\Schemes\Http;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group host
  * @group modifier
  */
-class HostManipulatorTest extends PHPUnit_Framework_TestCase
+class HostManipulatorTest extends TestCase
 {
     /**
-     * @var HttpUri
+     * @var Http
      */
     private $uri;
 
     protected function setUp()
     {
-        $this->uri = HttpUri::createFromString(
+        $this->uri = Http::createFromString(
             'http://www.example.com/path/to/the/sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
     }
@@ -89,7 +89,7 @@ class HostManipulatorTest extends PHPUnit_Framework_TestCase
 
     public function testHostToAsciiProcess()
     {
-        $uri = HttpUri::createFromString('http://مثال.إختبار/where/to/go');
+        $uri = Http::createFromString('http://مثال.إختبار/where/to/go');
         $modifier = new HostToAscii();
         $this->assertSame(
             'http://xn--mgbh0fb.xn--kgbechtv/where/to/go',
@@ -110,7 +110,7 @@ class HostManipulatorTest extends PHPUnit_Framework_TestCase
     public function testWithoutZoneIdentifierProcess()
     {
         $modifier = new RemoveZoneIdentifier();
-        $uri = HttpUri::createFromString('http://[fe80::1234%25eth0-1]/path/to/the/sky.php');
+        $uri = Http::createFromString('http://[fe80::1234%25eth0-1]/path/to/the/sky.php');
         $this->assertSame(
             'http://[fe80::1234]/path/to/the/sky.php',
             (string) $modifier($uri)
@@ -151,75 +151,57 @@ class HostManipulatorTest extends PHPUnit_Framework_TestCase
         $this->assertSame('example.com', (string) $modifier($this->uri)->getHost());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testHostToUnicodeProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new HostToUnicode())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testHostToAsciiProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new HostToAscii())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testWithoutZoneIdentifierProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new RemoveZoneIdentifier())->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testAppendLabelProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new AppendLabel(''))->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testAppendLabelConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new AppendLabel(new Host('example.com'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testPrependLabelConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new PrependLabel(new Host('example.com'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testPrependLabelProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new PrependLabel(''))->__invoke('http://www.example.com');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testReplaceLabelProcessFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ReplaceLabel(-3, 'toto');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testReplaceLabelConstructorFailed()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ReplaceLabel(-3, new Host('toto'));
     }
 }

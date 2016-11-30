@@ -28,9 +28,7 @@ abstract class ManipulateQuery extends ManipulateUri
     {
         $this->assertUriObject($payload);
 
-        $query = $this->modifyQuery($payload->getQuery());
-
-        return $payload->withQuery($query);
+        return $payload->withQuery($this->modifyQuery($payload->getQuery()));
     }
 
     /**

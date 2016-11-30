@@ -25,6 +25,15 @@ use Psr\Http\Message\UriInterface;
 class DecodeUnreservedCharacters extends ManipulateUri
 {
     /**
+     * RFC3986 unreserved characters encoded regular expression pattern
+     *
+     * @see http://tools.ietf.org/html/rfc3986#section-2.3
+     *
+     * @var string
+     */
+    const UNRESERVED_CHARS_ENCODED = ',%(2[D|E]|3[0-9]|4[1-9|A-F]|5[0-9|A|F]|6[1-9|A-F]|7[0-9|E]),i';
+
+    /**
      * Return a Uri object modified according to the modifier
      *
      * @param Uri|UriInterface $uri
@@ -35,33 +44,17 @@ class DecodeUnreservedCharacters extends ManipulateUri
     {
         $this->assertUriObject($uri);
 
-        foreach (['Path', 'Query', 'Fragment'] as $part) {
-            $uri = $this->decodeUriPart($uri, $part);
-        }
-
-        return $uri;
-    }
-
-    /**
-     * Decode an URI part
-     *
-     * @param Uri|UriInterface $uri
-     * @param string           $property
-     *
-     * @return Uri|UriInterface
-     */
-    protected function decodeUriPart($uri, $property)
-    {
-        $decoder = function (array $matches) {
-            return rawurldecode($matches[0]);
-        };
-
-        $value = preg_replace_callback(
-            ',%('.self::$unreservedCharsEncoded.'),i',
-            $decoder,
-            call_user_func([$uri, 'get'.$property])
+        $decoded = preg_replace_callback(
+            self::UNRESERVED_CHARS_ENCODED,
+            function (array $matches) {
+                return rawurldecode($matches[0]);
+            },
+            [$uri->getPath(), $uri->getQuery(), $uri->getFragment()]
         );
 
-        return call_user_func([$uri, 'with'.$property], $value);
+        return $uri
+            ->withPath($decoded[0])
+            ->withQuery($decoded[1])
+            ->withFragment($decoded[2]);
     }
 }

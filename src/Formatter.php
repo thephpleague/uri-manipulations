@@ -64,9 +64,9 @@ class Formatter
     protected $preserve_fragment = false;
 
     /**
-     * Host encoding setter
+     * Formatting encoding type
      *
-     * @param int $encode a predefined constant value
+     * @param string $enc_type a predefined constant value
      */
     public function setEncoding($enc_type)
     {
@@ -146,7 +146,7 @@ class Formatter
         }
 
         throw new InvalidArgumentException(
-            'input must be an URI object or a League UriPartInterface object'
+            'input must be an URI object or a League URI Component object'
         );
     }
 
@@ -164,41 +164,9 @@ class Formatter
             $scheme .= ':';
         }
 
-        $path = (new Path($uri->getPath()))->getContent($this->enc_type);
-
-        $query = Query::build(
-            (new Query($uri->getQuery()))->getPairs(),
-            $this->query_separator,
-            $this->enc_type
-        );
-        if ($this->preserve_query || '' !== $query) {
-            $query = '?'.$query;
-        }
-
-        $fragment = (new Fragment($uri->getFragment()))->getContent($this->enc_type);
-        if ($this->preserve_fragment || '' != $fragment) {
-            $fragment = '#'.$fragment;
-        }
-
-        return $scheme.$this->formatAuthority($uri).$path.$query.$fragment;
-    }
-
-    /**
-     * Format a URI authority according to the Formatter properties
-     *
-     * @param Uri|UriInterface $uri
-     *
-     * @return string
-     */
-    protected function formatAuthority($uri)
-    {
-        if ('' == $uri->getAuthority()) {
-            return '';
-        }
-
-        $userInfo = (new UserInfo())->withContent($uri->getUserInfo())->getContent($this->enc_type);
-        if ('' !== $userInfo) {
-            $userInfo .= '@';
+        $user_info = (new UserInfo())->withContent($uri->getUserInfo())->getContent($this->enc_type);
+        if ('' !== $user_info) {
+            $user_info .= '@';
         }
 
         $host = (new Host($uri->getHost()))->getContent($this->enc_type);
@@ -208,6 +176,23 @@ class Formatter
             $port = ':'.$port;
         }
 
-        return '//'.$userInfo.$host.$port;
+        $authority = $user_info.$host.$port;
+        if ('' != $authority) {
+            $authority = '//'.$authority;
+        }
+
+        $path = (new Path($uri->getPath()))->getContent($this->enc_type);
+
+        $query = Query::build(Query::parse($uri->getQuery()), $this->query_separator, $this->enc_type);
+        if ($this->preserve_query || '' != $query) {
+            $query = '?'.$query;
+        }
+
+        $fragment = (new Fragment($uri->getFragment()))->getContent($this->enc_type);
+        if ($this->preserve_fragment || '' != $fragment) {
+            $fragment = '#'.$fragment;
+        }
+
+        return $scheme.$authority.$path.$query.$fragment;
     }
 }

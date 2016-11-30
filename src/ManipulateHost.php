@@ -28,9 +28,7 @@ abstract class ManipulateHost extends ManipulateUri
     {
         $this->assertUriObject($payload);
 
-        $host = $this->modifyHost($payload->getHost());
-
-        return $payload->withHost($host);
+        return $payload->withHost($this->modifyHost($payload->getHost()));
     }
 
     /**
