@@ -36,7 +36,7 @@ class FormatterTest extends TestCase
 
     public function testFormatHostAscii()
     {
-        $this->formatter->setEncoding(Formatter::RFC3986);
+        $this->formatter->setEncoding(Formatter::RFC3986_ENCODING);
         $this->assertSame('xn--gwd-hna98db.pl', $this->formatter->__invoke(new Host('gwóźdź.pl')));
     }
 
@@ -53,7 +53,7 @@ class FormatterTest extends TestCase
         $uri = Http::createFromString($uri);
 
         $this->formatter->setQuerySeparator('&amp;');
-        $this->formatter->setEncoding(Formatter::RFC3986);
+        $this->formatter->setEncoding(Formatter::RFC3986_ENCODING);
         $this->assertSame($expected, $this->formatter->__invoke($uri));
     }
 
@@ -72,7 +72,7 @@ class FormatterTest extends TestCase
 
     public function testFormatHostUnicode()
     {
-        $this->formatter->setEncoding(Formatter::RFC3987);
+        $this->formatter->setEncoding(Formatter::RFC3987_ENCODING);
         $this->assertSame('gwóźdź.pl', $this->formatter->__invoke(new Host('gwóźdź.pl')));
     }
 
@@ -93,7 +93,7 @@ class FormatterTest extends TestCase
     public function testFormat()
     {
         $this->formatter->setQuerySeparator('&amp;');
-        $this->formatter->setEncoding(Formatter::RFC3986);
+        $this->formatter->setEncoding(Formatter::RFC3986_ENCODING);
         $expected = 'http://login:pass@xn--gwd-hna98db.pl:443/test/query.php?kingkong=toto&amp;foo=bar+baz#doc3';
         $this->assertSame($expected, $this->formatter->__invoke($this->uri));
     }
@@ -102,7 +102,7 @@ class FormatterTest extends TestCase
     {
         $uri = Data::createFromString('data:,');
         $this->formatter->setQuerySeparator('&amp;');
-        $this->formatter->setEncoding(Formatter::RFC3986);
+        $this->formatter->setEncoding(Formatter::RFC3986_ENCODING);
         $this->assertSame($uri->__toString(), $this->formatter->__invoke($uri));
     }
 
@@ -111,7 +111,7 @@ class FormatterTest extends TestCase
         $expected = '/test/query.php?kingkong=toto&amp;foo=bar+baz#doc3';
         $uri = Http::createFromString('/test/query.php?kingkong=toto&foo=bar+baz#doc3');
         $this->formatter->setQuerySeparator('&amp;');
-        $this->formatter->setEncoding(Formatter::RFC3986);
+        $this->formatter->setEncoding(Formatter::RFC3986_ENCODING);
         $this->assertSame($expected, $this->formatter->__invoke($uri));
     }
 

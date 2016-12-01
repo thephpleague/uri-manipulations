@@ -2,7 +2,7 @@
 
 All Notable changes to `uri-manipulations` will be documented in this file
 
-## Next
+## 0.1.0 - 2016-12-01
 
 ### Added
 

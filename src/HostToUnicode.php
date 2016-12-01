@@ -32,6 +32,6 @@ class HostToUnicode extends ManipulateHost
      */
     protected function modifyHost($str)
     {
-        return (string) (new Host($str))->getContent(Host::RFC3987);
+        return (string) (new Host($str))->getContent(Host::RFC3987_ENCODING);
     }
 }

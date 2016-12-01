@@ -31,16 +31,18 @@ use Psr\Http\Message\UriInterface;
  */
 class Formatter
 {
-    const RFC3986 = Component::RFC3986;
+    const RFC3986_ENCODING = Component::RFC3986_ENCODING;
 
-    const RFC3987 = Component::RFC3987;
+    const RFC3987_ENCODING = Component::RFC3987_ENCODING;
+
+    const NO_ENCODING = Component::NO_ENCODING;
 
     /**
      * host encoding property
      *
      * @var string
      */
-    protected $enc_type = self::RFC3986;
+    protected $enc_type = self::RFC3986_ENCODING;
 
     /**
      * query separator property
@@ -70,8 +72,14 @@ class Formatter
      */
     public function setEncoding($enc_type)
     {
-        if (!in_array($enc_type, [self::RFC3987, self::RFC3986])) {
-            throw new InvalidArgumentException('Unknown encoding rule');
+        $enc_type_list = [
+            Component::RFC3986_ENCODING => 1,
+            Component::RFC3987_ENCODING => 1,
+            Component::NO_ENCODING => 1,
+        ];
+
+        if (!isset($enc_type_list[$enc_type])) {
+            throw new InvalidArgumentException(sprintf('Unsupported or Unknown Encoding: %s', $enc_type));
         }
 
         $this->enc_type = $enc_type;
