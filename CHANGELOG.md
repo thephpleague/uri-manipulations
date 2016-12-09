@@ -2,6 +2,23 @@
 
 All Notable changes to `uri-manipulations` will be documented in this file
 
+## 0.2.0 - 2016-12-09
+
+### Added
+
+- None
+
+### Fixed
+
+- Updated dependencies to `League\Uri\Components`
+- bug fix to path modifiers see [issue #91](https://github.com/thephpleague/uri/issues/91)
+
+### Deprecated
+
+- None
+
+### Removed
+
 ## 0.1.0 - 2016-12-01
 
 ### Added
