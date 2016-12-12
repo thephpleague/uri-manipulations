@@ -2,6 +2,7 @@
 
 namespace LeagueTest\Uri\Modifiers;
 
+use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use InvalidArgumentException;
 use League\Uri\Components\Host;
 use League\Uri\Components\Query;
@@ -137,5 +138,13 @@ class FormatterTest extends TestCase
         $this->formatter->preserveFragment(true);
         $this->assertSame($expected, (string) $uri);
         $this->assertSame('http://example.com#', $this->formatter->__invoke($uri));
+    }
+
+    public function testUriStaysRFC3986Compliant()
+    {
+        $expected = 'http://bébé.com/foo/bar';
+        $uri = (new GuzzleUri('http://bébé.com'))->withPath('foo/bar');
+        $this->formatter->setEncoding(Formatter::RFC3987_ENCODING);
+        $this->assertSame($expected, $this->formatter->__invoke($uri));
     }
 }

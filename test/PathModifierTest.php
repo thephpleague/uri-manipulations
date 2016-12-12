@@ -2,15 +2,18 @@
 
 namespace LeagueTest\Uri\Modifiers;
 
+use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use InvalidArgumentException;
 use League\Uri\Components\DataPath;
 use League\Uri\Components\Path;
 use League\Uri\Modifiers\AddLeadingSlash;
 use League\Uri\Modifiers\AddTrailingSlash;
 use League\Uri\Modifiers\AppendSegment;
+use League\Uri\Modifiers\Basename;
 use League\Uri\Modifiers\DataUriParameters;
 use League\Uri\Modifiers\DataUriToAscii;
 use League\Uri\Modifiers\DataUriToBinary;
+use League\Uri\Modifiers\Dirname;
 use League\Uri\Modifiers\Extension;
 use League\Uri\Modifiers\FilterSegments;
 use League\Uri\Modifiers\PrependSegment;
@@ -139,6 +142,49 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @dataProvider validBasenameProvider
+     */
+    public function testBasename($path, $uri, $expected)
+    {
+        $modifier = new Basename($path);
+        $this->assertSame($expected, (string) $modifier(new GuzzleUri($uri)));
+    }
+
+    public function validBasenameProvider()
+    {
+        return [
+            ['baz', 'http://example.com', 'http://example.com/baz'],
+            ['baz', 'http://example.com/foo/bar', 'http://example.com/foo/baz'],
+            ['baz', 'http://example.com/foo/', 'http://example.com/foo/baz'],
+            ['baz', 'http://example.com/foo', 'http://example.com/baz'],
+        ];
+    }
+
+    public function testBasenameThrowException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Basename('foo/baz');
+    }
+
+    /**
+     * @dataProvider validDirnameProvider
+     */
+    public function testDirname($path, $uri, $expected)
+    {
+        $modifier = new Dirname($path);
+        $this->assertSame($expected, (string) $modifier(new GuzzleUri($uri)));
+    }
+
+    public function validDirnameProvider()
+    {
+        return [
+            ['baz', 'http://example.com', 'http://example.com/baz/'],
+            ['baz/', 'http://example.com', 'http://example.com/baz/'],
+            ['baz', 'http://example.com/foo', 'http://example.com/baz/foo'],
+            ['baz', 'http://example.com/foo/yes', 'http://example.com/baz/yes'],
+        ];
+    }
 
     /**
      * @dataProvider validPathProvider

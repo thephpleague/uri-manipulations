@@ -107,7 +107,7 @@ public Formatter::__invoke(mixed $uri): string
 This main method `__invoke` expects one of the following argument:
 
 - an object which implements PSR-7 `UriInterface` or the `League\Interfaces\Uri` interface);
-- an object which implements `League\Interfaces\Component` Interface.
+- an object which implements `League\Components\ComponentInterface` Interface.
 
 and returns the URI string representation according to the settings you gave it using the remaining methods. **The returned string MAY no longer be a valid URI**
 
@@ -171,6 +171,8 @@ All middlewares normalize the URI path component
 - `ReplaceSegment` : Replace specified path segments
 - `RemoveSegments` : Remove specified path segments
 - `FilterSegments` : Filters the path segments
+- `Dirname` : update the path dirname  **NEW**
+- `Basename` : update the path basename  **NEW**
 - `Extension` : update the path extension
 - `RemoveDotSegments` : Remove the path dot segments according to RFC3986
 - `RemoveEmptySegments` : Remove the path empty segments

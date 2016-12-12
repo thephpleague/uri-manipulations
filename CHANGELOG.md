@@ -2,6 +2,25 @@
 
 All Notable changes to `uri-manipulations` will be documented in this file
 
+## Next
+
+### Added
+
+- `League\Uri\Modifier\Basename` uri middleware to update the URI dirname path
+- `League\Uri\Modifier\Dirname` uri middleware to update the URI basename path
+
+### Fixed
+
+- bug fix `League\Uri\Modifier\Formatter` for [issue #91](https://github.com/thephpleague/uri/issues/91)
+
+### Deprecated
+
+- None
+
+### Removed
+
+- None
+
 ## 0.2.0 - 2016-12-09
 
 ### Added

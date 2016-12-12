@@ -13,12 +13,12 @@
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
+use League\Uri\Components\ComponentInterface;
 use League\Uri\Components\Fragment;
 use League\Uri\Components\Host;
 use League\Uri\Components\Path;
 use League\Uri\Components\Query;
 use League\Uri\Components\UserInfo;
-use League\Uri\Interfaces\Component;
 use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
 
@@ -31,11 +31,11 @@ use Psr\Http\Message\UriInterface;
  */
 class Formatter
 {
-    const RFC3986_ENCODING = Component::RFC3986_ENCODING;
+    const RFC3986_ENCODING = ComponentInterface::RFC3986_ENCODING;
 
-    const RFC3987_ENCODING = Component::RFC3987_ENCODING;
+    const RFC3987_ENCODING = ComponentInterface::RFC3987_ENCODING;
 
-    const NO_ENCODING = Component::NO_ENCODING;
+    const NO_ENCODING = ComponentInterface::NO_ENCODING;
 
     /**
      * host encoding property
@@ -73,9 +73,9 @@ class Formatter
     public function setEncoding($enc_type)
     {
         $enc_type_list = [
-            Component::RFC3986_ENCODING => 1,
-            Component::RFC3987_ENCODING => 1,
-            Component::NO_ENCODING => 1,
+            ComponentInterface::RFC3986_ENCODING => 1,
+            ComponentInterface::RFC3987_ENCODING => 1,
+            ComponentInterface::NO_ENCODING => 1,
         ];
 
         if (!isset($enc_type_list[$enc_type])) {
@@ -146,7 +146,7 @@ class Formatter
             return Query::build($input->getPairs(), $this->query_separator, $this->enc_type);
         }
 
-        if ($input instanceof Component) {
+        if ($input instanceof ComponentInterface) {
             return $input->getContent($this->enc_type);
         }
 
@@ -191,6 +191,9 @@ class Formatter
         }
 
         $path = (new Path($uri->getPath()))->getContent($this->enc_type);
+        if ('' != $authority && '' != $path && '/' != $path[0]) {
+            $path = '/'.$path;
+        }
 
         $query = Query::build(Query::parse($uri->getQuery()), $this->query_separator, $this->enc_type);
         if ($this->preserve_query || '' != $query) {
