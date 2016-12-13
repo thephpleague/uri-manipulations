@@ -5,14 +5,18 @@ namespace LeagueTest\Uri\Modifiers;
 use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use InvalidArgumentException;
 use League\Uri\Components\Host;
+use League\Uri\Modifiers\AddRootLabel;
 use League\Uri\Modifiers\AppendLabel;
 use League\Uri\Modifiers\FilterLabels;
 use League\Uri\Modifiers\HostToAscii;
 use League\Uri\Modifiers\HostToUnicode;
 use League\Uri\Modifiers\PrependLabel;
+use League\Uri\Modifiers\RegisterableDomain;
 use League\Uri\Modifiers\RemoveLabels;
+use League\Uri\Modifiers\RemoveRootLabel;
 use League\Uri\Modifiers\RemoveZoneIdentifier;
 use League\Uri\Modifiers\ReplaceLabel;
+use League\Uri\Modifiers\Subdomain;
 use League\Uri\Schemes\Http;
 use PHPUnit\Framework\TestCase;
 
@@ -151,10 +155,58 @@ class HostManipulatorTest extends TestCase
         $this->assertSame('example.com', (string) $modifier($this->uri)->getHost());
     }
 
+    public function testSubdomain()
+    {
+        $modifier = new Subdomain('shop');
+        $this->assertSame('shop.example.com', (string) $modifier($this->uri)->getHost());
+    }
+
+    public function testRegisterableDomain()
+    {
+        $modifier = new RegisterableDomain('ulb.ac.be');
+        $this->assertSame('www.ulb.ac.be', (string) $modifier($this->uri)->getHost());
+    }
+
+    public function testAddRootLabel()
+    {
+        $modifier = new AddRootLabel();
+        $this->assertSame('www.example.com.', (string) $modifier($this->uri)->getHost());
+    }
+
+    public function testRemoveRootLabel()
+    {
+        $modifier = new RemoveRootLabel();
+        $this->assertSame('www.example.com', (string) $modifier($this->uri)->getHost());
+    }
+
     public function testHostToUnicodeProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
         (new HostToUnicode())->__invoke('http://www.example.com');
+    }
+
+    public function testRegisterableDomainFailed()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new RegisterableDomain('example.com.');
+    }
+
+    public function testRegisterableDomainFailedWithIpaddress()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        (new RegisterableDomain('example.com'))->__invoke($this->uri->withHost('127.0.0.1'));
+    }
+
+    public function testSubdomainFailed()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Subdomain('example.com.');
+    }
+
+    public function testSubdomainFailedWithIpaddress()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        (new Subdomain('example.com'))->__invoke($this->uri->withHost('127.0.0.1'));
     }
 
     public function testHostToAsciiProcessFailed()
@@ -193,15 +245,15 @@ class HostManipulatorTest extends TestCase
         (new PrependLabel(''))->__invoke('http://www.example.com');
     }
 
-    public function testReplaceLabelProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new ReplaceLabel(-3, 'toto');
-    }
-
     public function testReplaceLabelConstructorFailed()
     {
         $this->expectException(InvalidArgumentException::class);
         new ReplaceLabel(-3, new Host('toto'));
+    }
+
+    public function testReplaceLabelConstructorFailedWithInvalidType()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new ReplaceLabel('toto', new Host('toto'));
     }
 }

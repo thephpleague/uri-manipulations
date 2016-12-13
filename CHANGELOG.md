@@ -8,6 +8,10 @@ All Notable changes to `uri-manipulations` will be documented in this file
 
 - `League\Uri\Modifier\Basename` uri middleware to update the URI dirname path
 - `League\Uri\Modifier\Dirname` uri middleware to update the URI basename path
+- `League\Uri\Modifier\AddRootLabel` uri middleware to update the URI dirname path
+- `League\Uri\Modifier\RemoveRootLabel` uri middleware to update the URI basename path
+- `League\Uri\Modifier\Subdomain` uri middleware to update the URI host subdomains
+- `League\Uri\Modifier\RegisterableDomain` uri middleware to update the URI host registerable domains part
 
 ### Fixed
 

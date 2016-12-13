@@ -192,6 +192,10 @@ All middlewares normalize the component
 - `HostToAscii` : convert the host into its ASCII representation (*)
 - `HostToUnicode` : convert the host into its Unicode representation (*)
 - `RemoveZoneIdentifier` : Remove the Zone Identifier of an IPv6 host
+- `Subdomain` : update the host subdomains  **NEW**
+- `RegisterableDomain` : update the host registerable domain  **NEW**
+- `AddRootLabel` : adds the root label to the host  **NEW**
+- `RemoveRootLabel` : remove the root label from the host  **NEW**
 
 *(*) The middleware will have no effect on League Uri objects because Host are always normalized to their ascii representation*
 

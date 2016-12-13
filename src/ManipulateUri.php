@@ -156,7 +156,7 @@ abstract class ManipulateUri
      */
     protected function filterOffset($offset)
     {
-        $offset = filter_var($offset, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
+        $offset = filter_var($offset, FILTER_VALIDATE_INT);
         if (false !== $offset) {
             return $offset;
         }

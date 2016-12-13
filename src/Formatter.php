@@ -40,7 +40,7 @@ class Formatter
     /**
      * host encoding property
      *
-     * @var string
+     * @var int
      */
     protected $enc_type = self::RFC3986_ENCODING;
 
@@ -68,7 +68,7 @@ class Formatter
     /**
      * Formatting encoding type
      *
-     * @param string $enc_type a predefined constant value
+     * @param int $enc_type a predefined constant value
      */
     public function setEncoding($enc_type)
     {
