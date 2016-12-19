@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use InvalidArgumentException;
 use League\Uri\Components\DataPath;
 use League\Uri\Components\Path;
+use League\Uri\Modifiers\AddBasePath;
 use League\Uri\Modifiers\AddLeadingSlash;
 use League\Uri\Modifiers\AddTrailingSlash;
 use League\Uri\Modifiers\AppendSegment;
@@ -17,6 +18,7 @@ use League\Uri\Modifiers\Dirname;
 use League\Uri\Modifiers\Extension;
 use League\Uri\Modifiers\FilterSegments;
 use League\Uri\Modifiers\PrependSegment;
+use League\Uri\Modifiers\RemoveBasePath;
 use League\Uri\Modifiers\RemoveDotSegments;
 use League\Uri\Modifiers\RemoveEmptySegments;
 use League\Uri\Modifiers\RemoveLeadingSlash;
@@ -222,6 +224,58 @@ class PathManipulatorTest extends TestCase
             ['toto', 2, '/path/to/the/sky.php/toto', '/toto/path/to/the/sky.php', '/path/to/toto/sky.php'],
             ['le blanc', 2, '/path/to/the/sky.php/le%20blanc', '/le%20blanc/path/to/the/sky.php', '/path/to/le%20blanc/sky.php'],
         ];
+    }
+
+    /**
+     * @dataProvider addBasePathProvider
+     */
+    public function testAddBasePath($basepath, $expected)
+    {
+        $modifier = new AddBasePath($basepath);
+        $this->assertSame($expected, $modifier($this->uri)->getPath());
+    }
+
+    public function addBasePathProvider()
+    {
+        return [
+            ['/', '/path/to/the/sky.php'],
+            ['', '/path/to/the/sky.php'],
+            ['/path/to', '/path/to/the/sky.php'],
+            ['/route/to', '/route/to/path/to/the/sky.php'],
+        ];
+    }
+
+    public function testAddBasePathWithRelativePath()
+    {
+        $uri = Http::createFromString('base/path');
+        $modifier = new AddBasePath('/base/path');
+        $this->assertSame('/base/path', $modifier($uri)->getPath());
+    }
+
+    /**
+     * @dataProvider removeBasePathProvider
+     */
+    public function testRemoveBasePath($basepath, $expected)
+    {
+        $modifier = new RemoveBasePath($basepath);
+        $this->assertSame($expected, $modifier($this->uri)->getPath());
+    }
+
+    public function removeBasePathProvider()
+    {
+        return [
+            ['/', '/path/to/the/sky.php'],
+            ['', '/path/to/the/sky.php'],
+            ['/path/to', '/the/sky.php'],
+            ['/route/to', '/path/to/the/sky.php'],
+        ];
+    }
+
+    public function testRemoveBasePathWithRelativePath()
+    {
+        $uri = Http::createFromString('base/path');
+        $modifier = new RemoveBasePath('/base/path');
+        $this->assertSame('/', $modifier($uri)->getPath());
     }
 
     /**
