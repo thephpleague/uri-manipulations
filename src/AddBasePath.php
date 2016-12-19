@@ -15,7 +15,7 @@ namespace League\Uri\Modifiers;
 use League\Uri\Components\HierarchicalPath;
 
 /**
- * Append a segment to the URI path
+ * Add a base path the URI path
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
@@ -33,7 +33,7 @@ class AddBasePath extends ManipulatePath
     /**
      * New instance
      *
-     * @param string $segment
+     * @param string $basepath
      */
     public function __construct($basepath)
     {
