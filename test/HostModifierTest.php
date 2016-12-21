@@ -227,33 +227,9 @@ class HostManipulatorTest extends TestCase
         (new AppendLabel(''))->__invoke('http://www.example.com');
     }
 
-    public function testAppendLabelConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new AppendLabel(new Host('example.com'));
-    }
-
-    public function testPrependLabelConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new PrependLabel(new Host('example.com'));
-    }
-
     public function testPrependLabelProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
         (new PrependLabel(''))->__invoke('http://www.example.com');
-    }
-
-    public function testReplaceLabelConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new ReplaceLabel(-3, new Host('toto'));
-    }
-
-    public function testReplaceLabelConstructorFailedWithInvalidType()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new ReplaceLabel('toto', new Host('toto'));
     }
 }

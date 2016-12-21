@@ -43,5 +43,5 @@ abstract class ManipulatePath extends ManipulateUri
      *
      * @return string the modified URI part string representation
      */
-    abstract protected function modifyPath($str);
+    abstract protected function modifyPath(string $str): string;
 }

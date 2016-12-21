@@ -30,7 +30,7 @@ class RemoveTrailingSlash extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($path)
+    protected function modifyPath(string $path): string
     {
         return (string) (new Path($path))->withoutTrailingSlash();
     }

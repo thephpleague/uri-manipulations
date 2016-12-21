@@ -41,10 +41,10 @@ class FormatterTest extends TestCase
         $this->assertSame('xn--gwd-hna98db.pl', $this->formatter->__invoke(new Host('gwóźdź.pl')));
     }
 
-    public function testInvalidHostEncoding()
+    public function testInvalidEncoding()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->formatter->setEncoding('toto');
+        $this->formatter->setEncoding(24);
     }
 
     public function testFormatWithSimpleString()

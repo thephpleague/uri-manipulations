@@ -35,7 +35,7 @@ class Dirname extends ManipulatePath
      *
      * @param string $dirname
      */
-    public function __construct($dirname)
+    public function __construct(string $dirname)
     {
         $this->dirname = (string) $this->filterSegment($dirname);
     }
@@ -47,7 +47,7 @@ class Dirname extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) (new HierarchicalPath($str))->withDirname($this->dirname);
     }

@@ -35,7 +35,7 @@ class RemoveBasePath extends ManipulatePath
      *
      * @param string $basepath
      */
-    public function __construct($basepath)
+    public function __construct(string $basepath)
     {
         $this->basepath = $this->filterSegment($basepath);
     }
@@ -47,7 +47,7 @@ class RemoveBasePath extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         if (in_array((string) $this->basepath, ['', '/'], true)) {
             return $str;

@@ -30,7 +30,7 @@ class RemoveZoneIdentifier extends ManipulateHost
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyHost($str)
+    protected function modifyHost(string $str): string
     {
         return (string) (new Host($str))->withoutZoneIdentifier();
     }

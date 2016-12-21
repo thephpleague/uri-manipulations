@@ -47,7 +47,7 @@ class RemoveSegments extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) (new HierarchicalPath($str))->without($this->keys);
     }

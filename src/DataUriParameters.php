@@ -36,7 +36,7 @@ class DataUriParameters extends ManipulatePath
      * @param string $parameters the data to be used
      *
      */
-    public function __construct($parameters)
+    public function __construct(string $parameters)
     {
         $this->parameters = $this->filterParamaters($parameters);
     }
@@ -48,7 +48,7 @@ class DataUriParameters extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (new DataPath($str))->withParameters($this->parameters)->__toString();
     }

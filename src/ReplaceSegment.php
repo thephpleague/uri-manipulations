@@ -43,9 +43,9 @@ class ReplaceSegment extends ManipulatePath
      * @param int    $offset
      * @param string $segment
      */
-    public function __construct($offset, $segment)
+    public function __construct(int $offset, string $segment)
     {
-        $this->offset = $this->filterOffset($offset);
+        $this->offset = $offset;
         $this->segment = $this->filterSegment($segment);
     }
 
@@ -56,7 +56,7 @@ class ReplaceSegment extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) $this->segment
             ->withContent($str)

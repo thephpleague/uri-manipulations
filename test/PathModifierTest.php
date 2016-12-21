@@ -381,11 +381,6 @@ class PathManipulatorTest extends TestCase
         (new AppendSegment(''))->__invoke('http://www.example.com');
     }
 
-    public function testAppendConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new AppendSegment(new Path('whynot'));
-    }
 
     public function testPrependProcessFailed()
     {
@@ -393,22 +388,10 @@ class PathManipulatorTest extends TestCase
         (new PrependSegment(''))->__invoke('http://www.example.com');
     }
 
-    public function testPrependConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new PrependSegment(new Path('whynot'));
-    }
-
     public function testWithoutDotSegmentsProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
         (new RemoveDotSegments())->__invoke('http://www.example.com');
-    }
-
-    public function testReplaceSegmentConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new ReplaceSegment(2, new Path('whynot'));
     }
 
     public function testReplaceSegmentConstructorFailed2()

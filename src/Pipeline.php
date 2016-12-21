@@ -40,7 +40,7 @@ class Pipeline extends ManipulateUri
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($modifiers = [])
+    public function __construct(array $modifiers = [])
     {
         foreach ($modifiers as $modifier) {
             if (false === is_callable($modifier)) {
@@ -57,7 +57,7 @@ class Pipeline extends ManipulateUri
      *
      * @return static
      */
-    public function pipe(callable $modifier)
+    public function pipe(callable $modifier): self
     {
         $clone = clone $this;
         $clone->modifiers[] = $modifier;

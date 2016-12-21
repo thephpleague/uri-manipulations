@@ -67,15 +67,8 @@ abstract class ManipulateUri
      *
      * @return string
      */
-    protected function validateString($str)
+    protected function validateString(string $str): string
     {
-        if (!is_string($str)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected data to be a string; received "%s"',
-                (is_object($str) ? get_class($str) : gettype($str))
-            ));
-        }
-
         if (strlen($str) !== strcspn($str, self::INVALID_CHARS)) {
             throw new InvalidArgumentException(sprintf(
                 'the submitted string `%s` contains invalid characters',
@@ -110,7 +103,7 @@ abstract class ManipulateUri
      *
      * @return Host
      */
-    protected function filterLabel($label)
+    protected function filterLabel(string $label): Host
     {
         return new Host($this->validateString($label));
     }
@@ -124,7 +117,7 @@ abstract class ManipulateUri
      *
      * @return int
      */
-    protected function filterFlag($flag)
+    protected function filterFlag(int $flag): int
     {
         if (isset(static::$flagList[$flag])) {
             return $flag;
@@ -140,28 +133,9 @@ abstract class ManipulateUri
      *
      * @return Query
      */
-    protected function filterQuery($query)
+    protected function filterQuery(string $query): Query
     {
         return new Query($this->validateString($query));
-    }
-
-    /**
-     * Filter and validate the offset key
-     *
-     * @param int $offset
-     *
-     * @throws InvalidArgumentException if the Offset key is invalid
-     *
-     * @return int
-     */
-    protected function filterOffset($offset)
-    {
-        $offset = filter_var($offset, FILTER_VALIDATE_INT);
-        if (false !== $offset) {
-            return $offset;
-        }
-
-        throw new InvalidArgumentException('The submitted index is invalid');
     }
 
     /**
@@ -171,7 +145,7 @@ abstract class ManipulateUri
      *
      * @return HierarchicalPath
      */
-    protected function filterSegment($path)
+    protected function filterSegment(string $path): HierarchicalPath
     {
         return new HierarchicalPath($this->validateString($path));
     }
@@ -207,7 +181,7 @@ abstract class ManipulateUri
      *
      * @return string
      */
-    protected function filterParamaters($parameters)
+    protected function filterParamaters(string $parameters): string
     {
         return (new DataPath('text/plain;charset=us-ascii,'))
             ->withParameters($parameters)
@@ -223,7 +197,7 @@ abstract class ManipulateUri
      *
      * @return string
      */
-    protected function filterExtension($extension)
+    protected function filterExtension(string $extension): string
     {
         $extension = $this->validateString($extension);
         if (0 === strpos($extension, '.') || false !== strpos($extension, '/')) {

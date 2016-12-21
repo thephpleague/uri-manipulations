@@ -36,7 +36,7 @@ class AppendLabel extends ManipulateHost
      * @param string $label the data to be used
      *
      */
-    public function __construct($label)
+    public function __construct(string $label)
     {
         $this->label = $this->filterLabel($label);
     }
@@ -48,7 +48,7 @@ class AppendLabel extends ManipulateHost
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyHost($str)
+    protected function modifyHost(string $str): string
     {
         return (string) $this->label
             ->withContent($str)

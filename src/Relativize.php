@@ -98,7 +98,7 @@ class Relativize extends ManipulateUri
      *
      * @return bool
      */
-    protected function isRelativizable($payload)
+    protected function isRelativizable($payload): bool
     {
         $payload = $this->hostToAscii($payload);
 
@@ -114,7 +114,7 @@ class Relativize extends ManipulateUri
      *
      * @return string
      */
-    protected function relativizePath($path)
+    protected function relativizePath(string $path): string
     {
         $base_segments = $this->getSegments($this->base_uri->getPath());
         $target_segments = $this->getSegments($path);
@@ -140,7 +140,7 @@ class Relativize extends ManipulateUri
      *
      * @return array
      */
-    protected function getSegments($path)
+    protected function getSegments(string $path): array
     {
         if ('' !== $path && '/' === $path[0]) {
             $path = substr($path, 1);
@@ -156,7 +156,7 @@ class Relativize extends ManipulateUri
      *
      * @return string
      */
-    protected function formatPath($path)
+    protected function formatPath(string $path): string
     {
         if ('' === $path) {
             $base_path = $this->base_uri->getPath();
@@ -182,7 +182,7 @@ class Relativize extends ManipulateUri
      *
      * @return string
      */
-    protected function formatPathWithEmptyBaseQuery($path)
+    protected function formatPathWithEmptyBaseQuery(string $path): string
     {
         $target_segments = $this->getSegments($path);
         $basename = end($target_segments);

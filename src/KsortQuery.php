@@ -51,7 +51,7 @@ class KsortQuery extends ManipulateQuery
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyQuery($str)
+    protected function modifyQuery(string $str): string
     {
         return (string) (new Query($str))->ksort($this->sort);
     }

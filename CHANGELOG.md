@@ -25,7 +25,7 @@ All Notable changes to `uri-manipulations` will be documented in this file
 
 ### Removed
 
-- None
+- PHP5 support
 
 ## 0.2.0 - 2016-12-09
 

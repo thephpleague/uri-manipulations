@@ -44,7 +44,7 @@ class FilterSegments extends ManipulatePath
      * @param callable $callable
      * @param int      $flag
      */
-    public function __construct(callable $callable, $flag = 0)
+    public function __construct(callable $callable, int $flag = 0)
     {
         $this->callable = $callable;
         $this->flag = $this->filterFlag($flag);
@@ -57,7 +57,7 @@ class FilterSegments extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) (new HierarchicalPath($str))->filter($this->callable, $this->flag);
     }

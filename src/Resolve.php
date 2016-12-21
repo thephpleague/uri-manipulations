@@ -82,7 +82,7 @@ class Resolve extends ManipulateUri
      *
      * @return string[]
      */
-    protected function resolvePathAndQuery($path, $query)
+    protected function resolvePathAndQuery(string $path, string $query): array
     {
         $components = ['path' => $path, 'query' => $query];
 
@@ -109,7 +109,7 @@ class Resolve extends ManipulateUri
      *
      * @return string
      */
-    protected function mergePath($path)
+    protected function mergePath(string $path): string
     {
         $base_path = $this->base_uri->getPath();
         if ('' !== $this->base_uri->getAuthority() && '' === $base_path) {
@@ -132,7 +132,7 @@ class Resolve extends ManipulateUri
      *
      * @return string
      */
-    protected function formatPath($path)
+    protected function formatPath(string $path): string
     {
         $path = (new Path($path))->withoutDotSegments();
         if ('' !== $this->base_uri->getAuthority() && '' !== $path->__toString()) {

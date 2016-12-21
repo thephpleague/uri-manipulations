@@ -36,7 +36,7 @@ class Basename extends ManipulatePath
      *
      * @param string $basename
      */
-    public function __construct($basename)
+    public function __construct(string $basename)
     {
         $basename = (string) $this->filterSegment($basename);
         if (false !== strpos($basename, '/')) {
@@ -53,7 +53,7 @@ class Basename extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) (new HierarchicalPath($str))->withBasename($this->basename);
     }

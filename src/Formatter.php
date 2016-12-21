@@ -72,7 +72,7 @@ class Formatter
      *
      * @param int $enc_type a predefined constant value
      */
-    public function setEncoding($enc_type)
+    public function setEncoding(int $enc_type)
     {
         static $enc_type_list;
         if (null === $enc_type_list) {
@@ -96,7 +96,7 @@ class Formatter
      *
      * @param string $separator
      */
-    public function setQuerySeparator($separator)
+    public function setQuerySeparator(string $separator)
     {
         $separator = filter_var($separator, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
@@ -112,9 +112,9 @@ class Formatter
      *
      * @param bool $status
      */
-    public function preserveQuery($status)
+    public function preserveQuery(bool $status)
     {
-        $this->preserve_query = (bool) $status;
+        $this->preserve_query = $status;
     }
 
     /**
@@ -126,9 +126,9 @@ class Formatter
      *
      * @param bool $status
      */
-    public function preserveFragment($status)
+    public function preserveFragment(bool $status)
     {
-        $this->preserve_fragment = (bool) $status;
+        $this->preserve_fragment = $status;
     }
 
     /**
@@ -160,9 +160,7 @@ class Formatter
             return $this->formatUri($input);
         }
 
-        throw new InvalidArgumentException(
-            'input must be an URI object or a League URI Component object'
-        );
+        throw new InvalidArgumentException('input must be an URI object or a League URI Component object');
     }
 
     /**
@@ -172,7 +170,7 @@ class Formatter
      *
      * @return string
      */
-    protected function formatUri($uri)
+    protected function formatUri($uri): string
     {
         $scheme = $uri->getScheme();
         if ('' !== $scheme) {

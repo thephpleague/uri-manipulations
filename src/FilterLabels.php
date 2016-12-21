@@ -44,7 +44,7 @@ class FilterLabels extends ManipulateHost
      * @param callable $callable
      * @param int      $flag
      */
-    public function __construct(callable $callable, $flag = 0)
+    public function __construct(callable $callable, int $flag = 0)
     {
         $this->callable = $callable;
         $this->flag = $this->filterFlag($flag);
@@ -57,7 +57,7 @@ class FilterLabels extends ManipulateHost
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyHost($str)
+    protected function modifyHost(string $str): string
     {
         return (string) (new Host($str))->filter($this->callable, $this->flag);
     }

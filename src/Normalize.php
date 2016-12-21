@@ -40,9 +40,9 @@ class Normalize extends ManipulateUri
     /**
      * Return the default modifier to apply on any URI object
      *
-     * @return array
+     * @return Pipeline
      */
-    protected function getDefaultManipulators()
+    protected function getDefaultManipulators(): Pipeline
     {
         static $defaults;
         if (null === $defaults) {

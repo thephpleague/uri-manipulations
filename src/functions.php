@@ -43,7 +43,7 @@ use Psr\Http\Message\UriInterface;
  *
  * @return array
  */
-function uri_reference($uri, $base_uri = null)
+function uri_reference($uri, $base_uri = null): array
 {
     if (!$uri instanceof Uri && !$uri instanceof UriInterface) {
         throw new InvalidArgumentException(

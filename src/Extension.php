@@ -35,7 +35,7 @@ class Extension extends ManipulatePath
      *
      * @param string $extension
      */
-    public function __construct($extension)
+    public function __construct(string $extension)
     {
         $this->extension = $this->filterExtension($extension);
     }
@@ -47,7 +47,7 @@ class Extension extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) (new HierarchicalPath($str))->withExtension($this->extension);
     }

@@ -38,5 +38,5 @@ abstract class ManipulateHost extends ManipulateUri
      *
      * @return string the modified URI part string representation
      */
-    abstract protected function modifyHost($str);
+    abstract protected function modifyHost(string $str): string;
 }

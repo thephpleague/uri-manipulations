@@ -55,7 +55,7 @@ class QueryManipulatorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         new FilterQuery(function ($value) {
             return $value == 'toto';
-        }, 'toto');
+        }, 42);
     }
 
     /**
@@ -108,12 +108,6 @@ class QueryManipulatorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         new KsortQuery(['data']);
-    }
-
-    public function testMergeQueryContructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new MergeQuery(new Query('toto=king'));
     }
 
     /**

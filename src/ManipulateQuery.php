@@ -38,5 +38,5 @@ abstract class ManipulateQuery extends ManipulateUri
      *
      * @return string the modified URI part string representation
      */
-    abstract protected function modifyQuery($str);
+    abstract protected function modifyQuery(string $str): string;
 }

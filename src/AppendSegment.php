@@ -35,7 +35,7 @@ class AppendSegment extends ManipulatePath
      *
      * @param string $segment
      */
-    public function __construct($segment)
+    public function __construct(string $segment)
     {
         $this->segment = $this->filterSegment($segment);
     }
@@ -47,7 +47,7 @@ class AppendSegment extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (string) $this->segment
             ->withContent($str)

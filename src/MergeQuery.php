@@ -35,7 +35,7 @@ class MergeQuery extends ManipulateQuery
      *
      * @param string $query
      */
-    public function __construct($query)
+    public function __construct(string $query)
     {
         $this->query = $this->filterQuery($query);
     }
@@ -47,7 +47,7 @@ class MergeQuery extends ManipulateQuery
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyQuery($str)
+    protected function modifyQuery(string $str): string
     {
         return (string) $this->query
             ->withContent($str)

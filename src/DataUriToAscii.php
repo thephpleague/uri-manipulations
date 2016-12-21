@@ -30,7 +30,7 @@ class DataUriToAscii extends ManipulatePath
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath($str)
+    protected function modifyPath(string $str): string
     {
         return (new DataPath($str))->toAscii()->__toString();
     }
