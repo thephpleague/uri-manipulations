@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
-
 /**
  * Remove the leading slash to the URI path
  *
@@ -32,6 +30,6 @@ class RemoveLeadingSlash extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new Path($str))->withoutLeadingSlash();
+        return (string) $this->filterPath($str)->withoutLeadingSlash();
     }
 }

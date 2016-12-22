@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
-
 /**
  * Add a leading slash to the URI path
  *
@@ -32,6 +30,6 @@ class AddLeadingSlash extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new Path($str))->withLeadingSlash();
+        return (string) $this->filterPath($str)->withLeadingSlash();
     }
 }

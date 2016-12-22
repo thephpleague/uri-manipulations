@@ -12,7 +12,7 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
+use League\Uri\Components\ComponentInterface;
 
 /**
  * Convert to unicode the URI host
@@ -32,6 +32,6 @@ class HostToUnicode extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) (new Host($str))->getContent(Host::RFC3987_ENCODING);
+        return (string) $this->filterHost($str)->getContent(ComponentInterface::RFC3987_ENCODING);
     }
 }

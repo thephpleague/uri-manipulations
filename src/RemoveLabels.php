@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Remove labels from the URI host
  *
@@ -49,6 +47,6 @@ class RemoveLabels extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) (new Host($str))->without($this->keys);
+        return (string) $this->filterHost($str)->without($this->keys);
     }
 }

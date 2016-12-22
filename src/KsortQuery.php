@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Query;
-
 /**
  * Sort the URI object Query
  *
@@ -53,6 +51,6 @@ class KsortQuery extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        return (string) (new Query($str))->ksort($this->sort);
+        return (string) $this->filterQuery($str)->ksort($this->sort);
     }
 }

@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Query;
-
 /**
  * Remove some keys from the Query string
  *
@@ -49,6 +47,6 @@ class RemoveQueryKeys extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        return (string) (new Query($str))->without($this->keys);
+        return (string) $this->filterQuery($str)->without($this->keys);
     }
 }

@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Add the root Label to the Host
  *
@@ -32,6 +30,6 @@ class AddRootLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) (new Host($str))->withRootLabel();
+        return (string) $this->filterHost($str)->withRootLabel();
     }
 }

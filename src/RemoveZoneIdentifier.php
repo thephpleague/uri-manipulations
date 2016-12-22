@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Remove the ZoneID from a Host
  *
@@ -32,6 +30,6 @@ class RemoveZoneIdentifier extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) (new Host($str))->withoutZoneIdentifier();
+        return (string) $this->filterHost($str)->withoutZoneIdentifier();
     }
 }

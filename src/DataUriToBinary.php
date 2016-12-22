@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\DataPath;
-
 /**
  * Convert the Data URI to its binary version
  *
@@ -32,6 +30,6 @@ class DataUriToBinary extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (new DataPath($str))->toBinary()->__toString();
+        return (string) $this->filterDataPath($str)->toBinary();
     }
 }

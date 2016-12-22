@@ -39,7 +39,7 @@ class RegisterableDomain extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterLabel($label);
+        $this->label = $this->filterHost($label);
         if ($this->label->isAbsolute()) {
             throw new InvalidArgumentException('The submitted registerable domain can not be a fully qualified domaine name');
         }
@@ -54,8 +54,6 @@ class RegisterableDomain extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->label
-            ->withContent($str)
-            ->withRegisterableDomain($this->label->getContent());
+        return (string) $this->filterHost($str)->withRegisterableDomain($this->label->getContent());
     }
 }

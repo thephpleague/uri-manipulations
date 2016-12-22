@@ -59,6 +59,6 @@ class FilterLabels extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) (new Host($str))->filter($this->callable, $this->flag);
+        return (string) $this->filterHost($str)->filter($this->callable, $this->flag);
     }
 }

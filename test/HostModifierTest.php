@@ -191,22 +191,10 @@ class HostManipulatorTest extends TestCase
         new RegisterableDomain('example.com.');
     }
 
-    public function testRegisterableDomainFailedWithIpaddress()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new RegisterableDomain('example.com'))->__invoke($this->uri->withHost('127.0.0.1'));
-    }
-
     public function testSubdomainFailed()
     {
         $this->expectException(InvalidArgumentException::class);
         new Subdomain('example.com.');
-    }
-
-    public function testSubdomainFailedWithIpaddress()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new Subdomain('example.com'))->__invoke($this->uri->withHost('127.0.0.1'));
     }
 
     public function testHostToAsciiProcessFailed()

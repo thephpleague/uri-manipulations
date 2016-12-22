@@ -59,6 +59,6 @@ class FilterQuery extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        return (string) (new Query($str))->filter($this->callable, $this->flag);
+        return (string) $this->filterQuery($str)->filter($this->callable, $this->flag);
     }
 }

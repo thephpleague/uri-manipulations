@@ -38,7 +38,7 @@ class AppendLabel extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterLabel($label);
+        $this->label = $this->filterHost($label);
     }
 
     /**
@@ -50,8 +50,6 @@ class AppendLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->label
-            ->withContent($str)
-            ->append($this->label->getContent());
+        return (string) $this->filterHost($str)->append($this->label->getContent());
     }
 }

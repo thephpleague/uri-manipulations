@@ -12,7 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
 use League\Uri\Schemes\Uri;
 use Psr\Http\Message\UriInterface;
 
@@ -53,13 +52,13 @@ class Resolve extends ManipulateUri
         $target_path = $target->getPath();
         if ($meta['absolute_uri']) {
             return $target
-                ->withPath((new Path($target_path))->withoutDotSegments()->__toString());
+                ->withPath($this->filterPath($target_path)->withoutDotSegments()->__toString());
         }
 
         if ($meta['network_path']) {
             return $target
                 ->withScheme($this->base_uri->getScheme())
-                ->withPath((new Path($target_path))->withoutDotSegments()->__toString());
+                ->withPath($this->filterPath($target_path)->withoutDotSegments()->__toString());
         }
 
         $user_info = explode(':', $this->base_uri->getUserInfo(), 2);
@@ -113,7 +112,7 @@ class Resolve extends ManipulateUri
     {
         $base_path = $this->base_uri->getPath();
         if ('' !== $this->base_uri->getAuthority() && '' === $base_path) {
-            return (string) (new Path($path))->withLeadingSlash();
+            return (string) $this->filterPath($path)->withLeadingSlash();
         }
 
         if ('' !== $base_path) {
@@ -134,7 +133,7 @@ class Resolve extends ManipulateUri
      */
     protected function formatPath(string $path): string
     {
-        $path = (new Path($path))->withoutDotSegments();
+        $path = $this->filterPath($path)->withoutDotSegments();
         if ('' !== $this->base_uri->getAuthority() && '' !== $path->__toString()) {
             $path = $path->withLeadingSlash();
         }

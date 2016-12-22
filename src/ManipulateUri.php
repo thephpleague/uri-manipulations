@@ -16,6 +16,7 @@ use InvalidArgumentException;
 use League\Uri\Components\DataPath;
 use League\Uri\Components\HierarchicalPath;
 use League\Uri\Components\Host;
+use League\Uri\Components\Path;
 use League\Uri\Components\Query;
 use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
@@ -103,7 +104,7 @@ abstract class ManipulateUri
      *
      * @return Host
      */
-    protected function filterLabel(string $label): Host
+    protected function filterHost(string $label): Host
     {
         return new Host($this->validateString($label));
     }
@@ -127,9 +128,9 @@ abstract class ManipulateUri
     }
 
     /**
-     * Filter and validate the query data
+     * Filter and validate the query string
      *
-     * @param string $query the data to be merged
+     * @param string $query
      *
      * @return Query
      */
@@ -139,15 +140,39 @@ abstract class ManipulateUri
     }
 
     /**
-     * Filter and validate the path data
+     * Filter and validate a hierarchical path
      *
-     * @param string $path the data to be merged query can be
+     * @param string $path
      *
      * @return HierarchicalPath
      */
     protected function filterSegment(string $path): HierarchicalPath
     {
         return new HierarchicalPath($this->validateString($path));
+    }
+
+    /**
+     * Filter and validate a generic path
+     *
+     * @param string $path the data to be merged query can be
+     *
+     * @return Path
+     */
+    protected function filterPath(string $path): Path
+    {
+        return new Path($this->validateString($path));
+    }
+
+    /**
+     * Filter and validate a data URI path
+     *
+     * @param string $path the data to be merged query can be
+     *
+     * @return Path
+     */
+    protected function filterDataPath(string $path): DataPath
+    {
+        return new DataPath($this->validateString($path));
     }
 
     /**
@@ -183,7 +208,7 @@ abstract class ManipulateUri
      */
     protected function filterParamaters(string $parameters): string
     {
-        return (new DataPath('text/plain;charset=us-ascii,'))
+        return $this->filterDataPath('text/plain;charset=us-ascii,')
             ->withParameters($parameters)
             ->getParameters();
     }

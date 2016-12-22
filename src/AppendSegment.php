@@ -49,8 +49,6 @@ class AppendSegment extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) $this->segment
-            ->withContent($str)
-            ->append((string) $this->segment);
+        return (string) $this->filterSegment($str)->append((string) $this->segment);
     }
 }

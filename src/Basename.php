@@ -13,7 +13,6 @@
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Components\HierarchicalPath;
 
 /**
  * Path component extension modifier
@@ -55,6 +54,6 @@ class Basename extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new HierarchicalPath($str))->withBasename($this->basename);
+        return (string) $this->filterSegment($str)->withBasename($this->basename);
     }
 }

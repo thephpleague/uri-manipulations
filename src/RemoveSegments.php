@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\HierarchicalPath;
-
 /**
  * Remove segments from the URI path
  *
@@ -49,6 +47,6 @@ class RemoveSegments extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new HierarchicalPath($str))->without($this->keys);
+        return (string) $this->filterSegment($str)->without($this->keys);
     }
 }

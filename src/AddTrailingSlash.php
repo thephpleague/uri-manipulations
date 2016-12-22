@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
-
 /**
  * Add a trailing slash to the URI path
  *
@@ -32,6 +30,6 @@ class AddTrailingSlash extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new Path($str))->withTrailingSlash();
+        return (string) $this->filterPath($str)->withTrailingSlash();
     }
 }

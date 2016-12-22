@@ -49,8 +49,6 @@ class PrependSegment extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) $this->segment
-            ->withContent($str)
-            ->prepend((string) $this->segment);
+        return (string) $this->filterSegment($str)->prepend($this->segment->getContent());
     }
 }

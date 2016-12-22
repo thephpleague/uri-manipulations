@@ -50,6 +50,6 @@ class DataUriParameters extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (new DataPath($str))->withParameters($this->parameters)->__toString();
+        return (string) $this->filterDataPath($str)->withParameters($this->parameters);
     }
 }

@@ -37,7 +37,7 @@ class PrependLabel extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterLabel($label);
+        $this->label = $this->filterHost($label);
     }
 
     /**
@@ -49,8 +49,6 @@ class PrependLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->label
-            ->withContent($str)
-            ->prepend($this->label->getContent());
+        return (string) $this->filterHost($str)->prepend($this->label->getContent());
     }
 }

@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\HierarchicalPath;
-
 /**
  * Path component extension modifier
  *
@@ -49,6 +47,6 @@ class Dirname extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new HierarchicalPath($str))->withDirname($this->dirname);
+        return (string) $this->filterSegment($str)->withDirname($this->dirname);
     }
 }

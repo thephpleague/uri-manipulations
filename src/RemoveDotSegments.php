@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
-
 /**
  * Remove dot segments from the URI path according to RFC3986 rules
  *
@@ -32,6 +30,6 @@ class RemoveDotSegments extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new Path($str))->withoutDotSegments();
+        return (string) $this->filterPath($str)->withoutDotSegments();
     }
 }

@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\DataPath;
-
 /**
  * Convert the Data URI to its ascii version
  *
@@ -32,6 +30,6 @@ class DataUriToAscii extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (new DataPath($str))->toAscii()->__toString();
+        return (string) $this->filterDataPath($str)->toAscii();
     }
 }

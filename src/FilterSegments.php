@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\HierarchicalPath;
-
 /**
  * Filter the path component segments
  *
@@ -59,6 +57,6 @@ class FilterSegments extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new HierarchicalPath($str))->filter($this->callable, $this->flag);
+        return (string) $this->filterSegment($str)->filter($this->callable, $this->flag);
     }
 }

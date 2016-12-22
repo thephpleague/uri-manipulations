@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
-
 /**
  * Remove empty segments from the URI path
  *
@@ -32,6 +30,6 @@ class RemoveEmptySegments extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) (new Path($str))->withoutEmptySegments();
+        return (string) $this->filterPath($str)->withoutEmptySegments();
     }
 }

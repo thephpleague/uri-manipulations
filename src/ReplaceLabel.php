@@ -46,7 +46,7 @@ class ReplaceLabel extends ManipulateHost
     public function __construct(int $offset, string $label)
     {
         $this->offset = $offset;
-        $this->label = $this->filterLabel($label);
+        $this->label = $this->filterHost($label);
     }
 
     /**
@@ -58,8 +58,6 @@ class ReplaceLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->label
-            ->withContent($str)
-            ->replace($this->offset, $this->label->getContent());
+        return (string) $this->filterHost($str)->replace($this->offset, $this->label->getContent());
     }
 }

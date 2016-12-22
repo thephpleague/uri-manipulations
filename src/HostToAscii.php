@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Convert to ascii the URI host
  *
@@ -32,6 +30,6 @@ class HostToAscii extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) (new Host($str))->getContent(Host::RFC3986_ENCODING);
+        return (string) $this->filterHost($str)->getContent();
     }
 }

@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Path;
-
 /**
  * Remove the trailing slash to the URI path
  *
@@ -32,6 +30,6 @@ class RemoveTrailingSlash extends ManipulatePath
      */
     protected function modifyPath(string $path): string
     {
-        return (string) (new Path($path))->withoutTrailingSlash();
+        return (string) $this->filterPath($path)->withoutTrailingSlash();
     }
 }
