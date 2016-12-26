@@ -16,7 +16,6 @@ use League\Uri\Modifiers\DataUriToAscii;
 use League\Uri\Modifiers\DataUriToBinary;
 use League\Uri\Modifiers\Dirname;
 use League\Uri\Modifiers\Extension;
-use League\Uri\Modifiers\FilterSegments;
 use League\Uri\Modifiers\PrependSegment;
 use League\Uri\Modifiers\RemoveBasePath;
 use League\Uri\Modifiers\RemoveDotSegments;
@@ -296,15 +295,6 @@ class PathManipulatorTest extends TestCase
         return [
             [[1], '/path/the/sky.php'],
         ];
-    }
-
-    public function testFilterSegments()
-    {
-        $modifier = new FilterSegments(function ($value) {
-            return $value > 0 && $value < 2;
-        }, ARRAY_FILTER_USE_KEY);
-
-        $this->assertSame('/to', $modifier($this->uri)->getPath());
     }
 
     public function testWithoutDotSegmentsProcess()

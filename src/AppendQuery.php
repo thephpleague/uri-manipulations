@@ -12,42 +12,32 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
+use League\Uri\Components\Query;
 
 /**
- * Filter the host component labels
+ * Append a quey string to the URI query
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.0.0
  */
-class FilterLabels extends ManipulateHost
+class AppendQuery extends ManipulateQuery
 {
     /**
-     * The filter flag
+     * A Query object
      *
-     * @var int
+     * @var Query
      */
-    protected $flag;
+    protected $query;
 
     /**
-     * a filter callable to filter the
-     * data to keep
+     * New Instance
      *
-     * @var callable
+     * @param string $query
      */
-    protected $callable;
-
-    /**
-     * New instance
-     *
-     * @param callable $callable
-     * @param int      $flag
-     */
-    public function __construct(callable $callable, int $flag = 0)
+    public function __construct(string $query)
     {
-        $this->callable = $callable;
-        $this->flag = $this->filterFlag($flag);
+        $this->query = $this->filterQuery($query);
     }
 
     /**
@@ -57,8 +47,13 @@ class FilterLabels extends ManipulateHost
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyHost(string $str): string
+    protected function modifyQuery(string $str): string
     {
-        return (string) $this->filterHost($str)->filter($this->callable, $this->flag);
+        $new = $this->filterQuery($str);
+        foreach ($this->query as $key => $value) {
+            $new = $new->append($key, $value);
+        }
+
+        return (string) $new;
     }
 }

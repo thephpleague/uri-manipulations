@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use League\Uri\Components\Host;
 use League\Uri\Modifiers\AddRootLabel;
 use League\Uri\Modifiers\AppendLabel;
-use League\Uri\Modifiers\FilterLabels;
 use League\Uri\Modifiers\HostToAscii;
 use League\Uri\Modifiers\HostToUnicode;
 use League\Uri\Modifiers\PrependLabel;
@@ -138,15 +137,6 @@ class HostManipulatorTest extends TestCase
         return [
             [[1], 'www.com'],
         ];
-    }
-
-    public function testFilterLabels()
-    {
-        $modifier = new FilterLabels(function ($value) {
-            return strpos($value, 'w') === false;
-        });
-
-        $this->assertSame('example.com', (string) $modifier($this->uri)->getHost());
     }
 
     public function testRemoveLabels()

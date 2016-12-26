@@ -4,7 +4,7 @@ namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Components\Query;
-use League\Uri\Modifiers\FilterQuery;
+use League\Uri\Modifiers\AppendQuery;
 use League\Uri\Modifiers\KsortQuery;
 use League\Uri\Modifiers\MergeQuery;
 use League\Uri\Modifiers\RemoveQueryKeys;
@@ -30,36 +30,8 @@ class QueryManipulatorTest extends TestCase
         );
     }
 
-    public function testFilterQueryParameters()
-    {
-        $modifier = new FilterQuery(function ($value) {
-            return $value == 'kingkong';
-        }, ARRAY_FILTER_USE_KEY);
-
-        $this->assertSame('kingkong=toto', $modifier->__invoke($this->uri)->getQuery());
-    }
-
-    public function testFilterQueryValues()
-    {
-        $filter = function ($value) {
-            return $value == 'toto';
-        };
-
-        $modifier = new FilterQuery($filter, 0);
-
-        $this->assertSame('kingkong=toto', $modifier->__invoke($this->uri)->getQuery());
-    }
-
-    public function testFilterFlagFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new FilterQuery(function ($value) {
-            return $value == 'toto';
-        }, 42);
-    }
-
     /**
-     * @dataProvider validQueryProvider
+     * @dataProvider validMergeQueryProvider
      *
      * @param string $query
      * @param string $expected
@@ -71,11 +43,29 @@ class QueryManipulatorTest extends TestCase
         $this->assertSame($expected, $modifier->__invoke($this->uri)->getQuery());
     }
 
-    public function validQueryProvider()
+    public function validMergeQueryProvider()
     {
         return [
             ['toto', 'kingkong=toto&foo=bar%20baz&toto'],
-            ['toto=&toto=1', 'kingkong=toto&foo=bar%20baz&toto=&toto=1'],
+            ['kingkong=ape', 'kingkong=ape&foo=bar%20baz'],
+        ];
+    }
+
+    /**
+     * @dataProvider validAppendQueryProvider
+     */
+    public function testAppendQuery($query, $expected)
+    {
+        $modifier = new AppendQuery($query);
+
+        $this->assertSame($expected, $modifier->__invoke($this->uri)->getQuery());
+    }
+
+    public function validAppendQueryProvider()
+    {
+        return [
+            ['toto', 'kingkong=toto&foo=bar%20baz&toto'],
+            ['kingkong=ape', 'kingkong=toto&kingkong=ape&foo=bar%20baz'],
         ];
     }
 

@@ -33,6 +33,13 @@ Dependencies
 
 To use the library.
 
+Installation
+------
+
+``` bash
+$ composer require league/uri-manipulations
+```
+
 Documentation
 ------
 

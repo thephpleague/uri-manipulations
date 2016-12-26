@@ -40,17 +40,6 @@ abstract class ManipulateUri
     const INVALID_CHARS = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x7F";
 
     /**
-     * Available flags
-     *
-     * @var array
-     */
-    protected static $flagList = [
-        0 => 1,
-        ARRAY_FILTER_USE_BOTH => 1,
-        ARRAY_FILTER_USE_KEY => 1,
-    ];
-
-    /**
      * Return a Uri object modified according to the modifier
      *
      * @param Uri|UriInterface $payload
@@ -107,24 +96,6 @@ abstract class ManipulateUri
     protected function filterHost(string $label): Host
     {
         return new Host($this->validateString($label));
-    }
-
-    /**
-     * Filter and validate the host string
-     *
-     * @param int $flag the data to validate
-     *
-     * @throws InvalidArgumentException for invalid flag
-     *
-     * @return int
-     */
-    protected function filterFlag(int $flag): int
-    {
-        if (isset(static::$flagList[$flag])) {
-            return $flag;
-        }
-
-        throw new InvalidArgumentException('Invalid Flag');
     }
 
     /**

@@ -49,8 +49,6 @@ class MergeQuery extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        return (string) $this->query
-            ->withContent($str)
-            ->merge((string) $this->query);
+        return (string) $this->filterQuery($str)->merge((string) $this->query);
     }
 }

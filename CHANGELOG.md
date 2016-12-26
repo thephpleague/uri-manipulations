@@ -14,6 +14,7 @@ All Notable changes to `uri-manipulations` will be documented in this file
 - `League\Uri\Modifier\RemoveBasePath` uri middleware to remove a base path from your URI
 - `League\Uri\Modifier\Subdomain` uri middleware to update the URI host subdomains
 - `League\Uri\Modifier\RegisterableDomain` uri middleware to update the URI host registerable domains part
+- `League\Uri\Modifier\AppendQuery` uri middleware to append data to the URI query component
 
 ### Fixed
 
