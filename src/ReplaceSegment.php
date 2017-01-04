@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\HierarchicalPath;
-
 /**
  * Replace a Segment from a Path
  *
@@ -24,9 +22,9 @@ use League\Uri\Components\HierarchicalPath;
 class ReplaceSegment extends ManipulatePath
 {
     /**
-     * A HierarchicalPath object
+     * The path/segment to inject
      *
-     * @var HierarchicalPath
+     * @var string
      */
     protected $segment;
 

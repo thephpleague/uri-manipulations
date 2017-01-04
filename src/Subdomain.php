@@ -13,7 +13,6 @@
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Components\Host;
 
 /**
  * Modify the subdomains of the URI host
@@ -43,7 +42,8 @@ class Subdomain extends ManipulateHost
         if ($label->isAbsolute()) {
             throw new InvalidArgumentException('The submitted subdomain can not be a fully qualified domaine name');
         }
-        $this->label = $label->getContent();
+
+        $this->label = (string) $label;
     }
 
     /**

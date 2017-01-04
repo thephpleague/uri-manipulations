@@ -24,7 +24,7 @@ class MergeQuery extends ManipulateQuery
     /**
      * The query to merge
      *
-     * @var Query
+     * @var string
      */
     protected $query;
 
