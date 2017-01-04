@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Prepend a label to the URI host
  *
@@ -24,9 +22,9 @@ use League\Uri\Components\Host;
 class PrependLabel extends ManipulateHost
 {
     /**
-     * A Host object
+     * A Host/label to prepend
      *
-     * @var Host
+     * @var string
      */
     protected $label;
 
@@ -37,7 +35,7 @@ class PrependLabel extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterHost($label);
+        $this->label = (string) $this->filterHost($label);
     }
 
     /**
@@ -49,6 +47,6 @@ class PrependLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->prepend($this->label->getContent());
+        return (string) $this->filterHost($str)->prepend($this->label);
     }
 }

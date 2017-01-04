@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\HierarchicalPath;
-
 /**
  * Prepend a path to the URI path
  *
@@ -24,9 +22,9 @@ use League\Uri\Components\HierarchicalPath;
 class PrependSegment extends ManipulatePath
 {
     /**
-     * A HierarchicalPath object
+     * The path to prepend
      *
-     * @var HierarchicalPath
+     * @var string
      */
     protected $segment;
 
@@ -37,7 +35,7 @@ class PrependSegment extends ManipulatePath
      */
     public function __construct(string $segment)
     {
-        $this->segment = $this->filterSegment($segment);
+        $this->segment = $this->filterSegment($segment)->getContent();
     }
 
     /**
@@ -49,6 +47,6 @@ class PrependSegment extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) $this->filterSegment($str)->prepend($this->segment->getContent());
+        return (string) $this->filterSegment($str)->prepend($this->segment);
     }
 }

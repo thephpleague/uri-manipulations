@@ -39,7 +39,7 @@ class Basename extends ManipulatePath
     {
         $basename = (string) $this->filterSegment($basename);
         if (false !== strpos($basename, '/')) {
-            throw new InvalidArgumentException('The basename can not contain the separator');
+            throw new InvalidArgumentException('The basename can not contain the path separator');
         }
 
         $this->basename = $basename;

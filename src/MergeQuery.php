@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Query;
-
 /**
  * Add or Update the Query string from the URI object
  *
@@ -24,7 +22,7 @@ use League\Uri\Components\Query;
 class MergeQuery extends ManipulateQuery
 {
     /**
-     * A Query object
+     * The query to merge
      *
      * @var Query
      */
@@ -37,7 +35,7 @@ class MergeQuery extends ManipulateQuery
      */
     public function __construct(string $query)
     {
-        $this->query = $this->filterQuery($query);
+        $this->query = (string) $this->filterQuery($query);
     }
 
     /**
@@ -49,6 +47,6 @@ class MergeQuery extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        return (string) $this->filterQuery($str)->merge((string) $this->query);
+        return (string) $this->filterQuery($str)->merge($this->query);
     }
 }

@@ -61,6 +61,6 @@ class RemoveBasePath extends ManipulatePath
             return $str;
         }
 
-        return (string) $this->filterSegment($str)->without($this->basepath->keys());
+        return (string) $this->filterSegment($str)->delete($this->basepath->keys());
     }
 }

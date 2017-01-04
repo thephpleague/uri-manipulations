@@ -39,10 +39,11 @@ class Subdomain extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterHost($label);
-        if ($this->label->isAbsolute()) {
+        $label = $this->filterHost($label);
+        if ($label->isAbsolute()) {
             throw new InvalidArgumentException('The submitted subdomain can not be a fully qualified domaine name');
         }
+        $this->label = $label->getContent();
     }
 
     /**
@@ -54,6 +55,6 @@ class Subdomain extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->withSubdomain($this->label->getContent());
+        return (string) $this->filterHost($str)->withSubdomain($this->label);
     }
 }

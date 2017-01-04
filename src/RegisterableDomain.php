@@ -13,7 +13,6 @@
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Components\Host;
 
 /**
  * Modify the registerable domain part of the URI host
@@ -27,7 +26,7 @@ class RegisterableDomain extends ManipulateHost
     /**
      * A Host object
      *
-     * @var Host
+     * @var string
      */
     protected $label;
 
@@ -39,10 +38,12 @@ class RegisterableDomain extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterHost($label);
-        if ($this->label->isAbsolute()) {
+        $label = $this->filterHost($label);
+        if ($label->isAbsolute()) {
             throw new InvalidArgumentException('The submitted registerable domain can not be a fully qualified domaine name');
         }
+
+        $this->label = (string) $label;
     }
 
     /**
@@ -54,6 +55,6 @@ class RegisterableDomain extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->withRegisterableDomain($this->label->getContent());
+        return (string) $this->filterHost($str)->withRegisterableDomain($this->label);
     }
 }

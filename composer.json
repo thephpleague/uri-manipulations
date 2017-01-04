@@ -6,6 +6,7 @@
         "url",
         "uri",
         "rfc3986",
+        "rfc3987",
         "psr-7",
         "Manipulations",
         "manipulation",
@@ -30,12 +31,12 @@
     "require": {
         "php" : ">=7.0",
         "psr/http-message": "^1.0",
+        "league/uri-interfaces": "^1.0",
         "league/uri-components": "dev-master"
     },
     "require-dev": {
-        "league/uri-schemes": "~0.4",
+        "league/uri-schemes": "^1.0",
         "guzzlehttp/psr7": "^1.2",
-        "league/uri-parser": "~0.2",
         "friendsofphp/php-cs-fixer": "^1.9",
         "phpunit/phpunit" : "^5.0"
     },
@@ -51,7 +52,6 @@
         }
     },
     "suggest": {
-        "league/uri-parser": "Allow parsing any URI using RFC3986/RFC3987 compliant algorithm",
         "league/uri-schemes": "Allow manipulating URI objects"
     },
     "scripts": {

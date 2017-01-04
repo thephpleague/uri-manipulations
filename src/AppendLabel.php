@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Append a label to the URI host
  *
@@ -24,9 +22,9 @@ use League\Uri\Components\Host;
 class AppendLabel extends ManipulateHost
 {
     /**
-     * A Host object
+     * the host/label to append
      *
-     * @var Host
+     * @var string
      */
     protected $label;
 
@@ -38,7 +36,7 @@ class AppendLabel extends ManipulateHost
      */
     public function __construct(string $label)
     {
-        $this->label = $this->filterHost($label);
+        $this->label = $this->filterHost($label)->getContent();
     }
 
     /**
@@ -50,6 +48,6 @@ class AppendLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->append($this->label->getContent());
+        return (string) $this->filterHost($str)->append($this->label);
     }
 }

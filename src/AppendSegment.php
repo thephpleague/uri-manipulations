@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\HierarchicalPath;
-
 /**
  * Append a segment to the URI path
  *
@@ -24,9 +22,9 @@ use League\Uri\Components\HierarchicalPath;
 class AppendSegment extends ManipulatePath
 {
     /**
-     * A HierarchicalPath object
+     * The path to append
      *
-     * @var HierarchicalPath
+     * @var string
      */
     protected $segment;
 
@@ -37,7 +35,7 @@ class AppendSegment extends ManipulatePath
      */
     public function __construct(string $segment)
     {
-        $this->segment = $this->filterSegment($segment);
+        $this->segment = $this->filterSegment($segment)->getContent();
     }
 
     /**
@@ -49,6 +47,6 @@ class AppendSegment extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) $this->filterSegment($str)->append((string) $this->segment);
+        return (string) $this->filterSegment($str)->append($this->segment);
     }
 }

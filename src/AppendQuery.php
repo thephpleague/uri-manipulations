@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Query;
-
 /**
  * Append a quey string to the URI query
  *
@@ -24,7 +22,7 @@ use League\Uri\Components\Query;
 class AppendQuery extends ManipulateQuery
 {
     /**
-     * @var array
+     * @var string
      */
     protected $query;
 
@@ -35,7 +33,7 @@ class AppendQuery extends ManipulateQuery
      */
     public function __construct(string $query)
     {
-        $this->query = $this->filterQuery($query)->getPairs();
+        $this->query = (string) $this->filterQuery($query);
     }
 
     /**
@@ -47,38 +45,6 @@ class AppendQuery extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        $new = $this->filterQuery($str)->getPairs();
-        foreach ($this->query as $key => $value) {
-            $this->appendData($new, $key, $value);
-        }
-
-        return (string) Query::createFromPairs($new);
-    }
-
-    /**
-     * Append Data
-     *
-     * @param array  $pairs
-     * @param string $key
-     * @param mixed  $value
-     */
-    protected function appendData(array &$pairs, string $key, $value)
-    {
-        if (!array_key_exists($key, $pairs)) {
-            $pairs[$key] = $value;
-
-            return;
-        }
-
-        $pair = $pairs[$key];
-        if (!is_array($pair)) {
-            $pair = [$pair];
-        }
-
-        if (!is_array($value)) {
-            $value = [$value];
-        }
-
-        $pairs[$key] = array_merge($pair, $value);
+        return (string) $this->filterQuery($str)->append($this->query);
     }
 }

@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\DataPath;
-
 /**
  * Data Uri Paramaters Manipulator
  *
@@ -24,7 +22,7 @@ use League\Uri\Components\DataPath;
 class DataUriParameters extends ManipulatePath
 {
     /**
-     * A DataPath object
+     * The parameters to add
      *
      * @var string
      */

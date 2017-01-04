@@ -12,8 +12,6 @@
  */
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\Host;
-
 /**
  * Replace a label from a Host
  *
@@ -26,7 +24,7 @@ class ReplaceLabel extends ManipulateHost
     /**
      * A Host object
      *
-     * @var Host
+     * @var string
      */
     protected $label;
 
@@ -46,7 +44,7 @@ class ReplaceLabel extends ManipulateHost
     public function __construct(int $offset, string $label)
     {
         $this->offset = $offset;
-        $this->label = $this->filterHost($label);
+        $this->label = (string) $this->filterHost($label);
     }
 
     /**
@@ -58,6 +56,6 @@ class ReplaceLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->replace($this->offset, $this->label->getContent());
+        return (string) $this->filterHost($str)->replace($this->offset, $this->label);
     }
 }

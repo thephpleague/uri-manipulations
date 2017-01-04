@@ -47,6 +47,6 @@ class RemoveLabels extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->without($this->keys);
+        return (string) $this->filterHost($str)->delete($this->keys);
     }
 }
