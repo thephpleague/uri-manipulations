@@ -37,7 +37,7 @@ class RemoveSegments extends ManipulatePath
      */
     public function __construct(array $keys)
     {
-        $this->keys = $this->filterInt(...$keys);
+        $this->keys = $this->filterInt($keys);
     }
 
     /**

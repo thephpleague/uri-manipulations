@@ -145,6 +145,22 @@ class HostManipulatorTest extends TestCase
         $this->assertSame('example.com', (string) $modifier($this->uri)->getHost());
     }
 
+    /**
+     * @dataProvider invalidRemoveLabelsParameters
+     */
+    public function testRemoveLabelsFailedConstructor($params)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new RemoveLabels($params);
+    }
+
+    public function invalidRemoveLabelsParameters()
+    {
+        return [
+            'array contains float' => [[1, 2, '3.1']],
+        ];
+    }
+
     public function testSubdomain()
     {
         $modifier = new Subdomain('shop');

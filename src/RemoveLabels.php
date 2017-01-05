@@ -37,7 +37,7 @@ class RemoveLabels extends ManipulateHost
      */
     public function __construct(array $keys)
     {
-        $this->keys = $this->filterInt(...$keys);
+        $this->keys = $this->filterInt($keys);
     }
 
     /**

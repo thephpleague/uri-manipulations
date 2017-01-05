@@ -38,8 +38,6 @@ class Pipeline extends ManipulateUri
      * New instance
      *
      * @param callable[] $modifiers
-     *
-     * @throws InvalidArgumentException
      */
     public function __construct($modifiers = [])
     {

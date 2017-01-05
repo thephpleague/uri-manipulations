@@ -297,6 +297,22 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @dataProvider invalidRemoveSegmentsParameters
+     */
+    public function testRemoveSegmentsFailedConstructor($params)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new RemoveSegments($params);
+    }
+
+    public function invalidRemoveSegmentsParameters()
+    {
+        return [
+            'array contains float' => [[1, 2, '3.1']],
+        ];
+    }
+
     public function testWithoutDotSegmentsProcess()
     {
         $uri = Http::createFromString(

@@ -210,19 +210,24 @@ abstract class ManipulateUri
     /**
      * filter and validate the offset list
      *
-     * @param  int ...$offsets
+     * @param array $offsets
      *
      * @return int[]
      */
-    protected function filterInt(int ...$offsets)
+    protected function filterInt(array $offsets)
     {
-        return $offsets;
+        $offsets = filter_var($offsets, FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
+        if (!in_array(false, $offsets, true)) {
+            return $offsets;
+        }
+
+        throw new InvalidArgumentException('The offset list must contain integers only');
     }
 
     /**
      * filter and validate the offset list
      *
-     * @param  callable ...$callable
+     * @param callable ...$callable
      *
      * @return callable[]
      */
