@@ -14,12 +14,6 @@ use RuntimeException;
  */
 class PipelineTest extends TestCase
 {
-    public function testConstructorFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $pipeline = new Pipeline([new RemoveDotSegments(), 'toto']);
-    }
-
     public function testPipe()
     {
         $pipeline = new Pipeline([new RemoveDotSegments()]);

@@ -10,6 +10,8 @@
  * @version    1.0.0
  * @link       https://github.com/thephpleague/uri-components
  */
+declare(strict_types=1);
+
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
@@ -203,5 +205,29 @@ abstract class ManipulateUri
         }
 
         return trim($extension);
+    }
+
+    /**
+     * filter and validate the offset list
+     *
+     * @param  int ...$offsets
+     *
+     * @return int[]
+     */
+    protected function filterInt(int ...$offsets)
+    {
+        return $offsets;
+    }
+
+    /**
+     * filter and validate the offset list
+     *
+     * @param  callable ...$callable
+     *
+     * @return callable[]
+     */
+    protected function filterCallable(callable ...$callable)
+    {
+        return $callable;
     }
 }

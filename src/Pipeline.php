@@ -10,9 +10,10 @@
  * @version    1.0.0
  * @link       https://github.com/thephpleague/uri-components
  */
+declare(strict_types=1);
+
 namespace League\Uri\Modifiers;
 
-use InvalidArgumentException;
 use League\Uri\Schemes\Uri;
 use Psr\Http\Message\UriInterface;
 use RuntimeException;
@@ -40,14 +41,9 @@ class Pipeline extends ManipulateUri
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $modifiers = [])
+    public function __construct($modifiers = [])
     {
-        foreach ($modifiers as $modifier) {
-            if (false === is_callable($modifier)) {
-                throw new InvalidArgumentException('All submitted modifiers should be callable');
-            }
-        }
-        $this->modifiers = $modifiers;
+        $this->modifiers = $this->filterCallable(...$modifiers);
     }
 
     /**
@@ -85,16 +81,17 @@ class Pipeline extends ManipulateUri
     public function __invoke($uri)
     {
         $this->assertUriObject($uri);
-        $submittedUriClass = get_class($uri);
-        foreach ($this->modifiers as $modifier) {
-            $uri = call_user_func($modifier, $uri);
-            if (!is_object($uri) || $submittedUriClass !== get_class($uri)) {
-                throw new RuntimeException(
-                    'The returned value is not of the same class as the submitted URI object'
-                );
-            }
-        }
+        $uri_class = get_class($uri);
 
-        return $uri;
+        $reducer = function ($uri, callable $modifier) use ($uri_class) {
+            $uri = $modifier($uri);
+            if (!is_object($uri) || $uri_class !== get_class($uri)) {
+                throw new RuntimeException('The returned value is not of the same class as the submitted URI object');
+            }
+
+            return $uri;
+        };
+
+        return array_reduce($this->modifiers, $reducer, $uri);
     }
 }

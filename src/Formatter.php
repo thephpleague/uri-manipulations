@@ -10,10 +10,13 @@
  * @version    1.0.0
  * @link       https://github.com/thephpleague/uri-components
  */
+declare(strict_types=1);
+
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Components\ComponentInterface;
+use League\Uri\Components\EncodingInterface;
 use League\Uri\Components\Fragment;
 use League\Uri\Components\Host;
 use League\Uri\Components\Path;
@@ -29,16 +32,8 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.0.0
  */
-class Formatter
+class Formatter implements EncodingInterface
 {
-    const RFC1738_ENCODING = ComponentInterface::RFC1738_ENCODING;
-
-    const RFC3986_ENCODING = ComponentInterface::RFC3986_ENCODING;
-
-    const RFC3987_ENCODING = ComponentInterface::RFC3987_ENCODING;
-
-    const NO_ENCODING = ComponentInterface::NO_ENCODING;
-
     /**
      * host encoding property
      *
@@ -77,10 +72,10 @@ class Formatter
         static $enc_type_list;
         if (null === $enc_type_list) {
             $enc_type_list = [
-                ComponentInterface::RFC1738_ENCODING => 1,
-                ComponentInterface::RFC3986_ENCODING => 1,
-                ComponentInterface::RFC3987_ENCODING => 1,
-                ComponentInterface::NO_ENCODING => 1,
+                EncodingInterface::RFC1738_ENCODING => 1,
+                EncodingInterface::RFC3986_ENCODING => 1,
+                EncodingInterface::RFC3987_ENCODING => 1,
+                EncodingInterface::NO_ENCODING => 1,
             ];
         }
 

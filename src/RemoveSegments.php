@@ -10,6 +10,8 @@
  * @version    1.0.0
  * @link       https://github.com/thephpleague/uri-components
  */
+declare(strict_types=1);
+
 namespace League\Uri\Modifiers;
 
 /**
@@ -35,7 +37,7 @@ class RemoveSegments extends ManipulatePath
      */
     public function __construct(array $keys)
     {
-        $this->keys = $keys;
+        $this->keys = $this->filterInt(...$keys);
     }
 
     /**
