@@ -41,7 +41,9 @@ class Pipeline extends ManipulateUri
      */
     public function __construct($modifiers = [])
     {
-        $this->modifiers = $this->filterCallable(...$modifiers);
+        $this->modifiers = (function (callable ...$callable) {
+            return $callable;
+        })(...$modifiers);
     }
 
     /**

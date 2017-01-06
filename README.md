@@ -4,16 +4,11 @@ URI manipulations
 [![Build Status](https://img.shields.io/travis/thephpleague/uri-manipulations/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/uri-manipulations)
 [![Latest Version](https://img.shields.io/github/release/thephpleague/uri-manipulations.svg?style=flat-square)](https://github.com/thephpleague/uri-manipulations/releases)
 
-The `league-uri-manipulations` repository contains:
+The package contains:
 
-- an URI formatter to format URI string representation output;
-- an URI function to get the URI object reference information according to RFC3986;
-- URI middlewares to filter Uri objects;
-
-To be used, the URI objects are required to implement one of the following interface:
-
-- `Psr\Http\Message\UriInteface`;
-- `League\Uri\Schemes\Uri`;
+- an object to format URI string representation output;
+- a function to get the URI reference information according to [RFC3986](https://tools.ietf.org/html/rfc3986#section-4);
+- URI middlewares to ease filtering and manipulating Uri objects;
 
 System Requirements
 -------
@@ -31,7 +26,6 @@ Dependencies
 - [League Uri Interfaces](https://github.com/thephpleague/uri-interfaces)
 - [League Uri Components](https://github.com/thephpleague/uri-components)
 
-To use the library.
 
 Installation
 ------

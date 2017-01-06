@@ -26,9 +26,9 @@ use InvalidArgumentException;
 class Subdomain extends ManipulateHost
 {
     /**
-     * A Host object
+     * the new subdomain
      *
-     * @var Host
+     * @var string
      */
     protected $label;
 
