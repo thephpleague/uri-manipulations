@@ -49,6 +49,6 @@ class RemoveQueryKeys extends ManipulateQuery
      */
     protected function modifyQuery(string $str): string
     {
-        return (string) $this->filterQuery($str)->delete($this->keys);
+        return (string) $this->filterQuery($str)->withoutPairs($this->keys);
     }
 }

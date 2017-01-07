@@ -49,6 +49,6 @@ class RemoveSegments extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) $this->filterSegment($str)->delete($this->keys);
+        return (string) $this->filterSegment($str)->withoutSegments($this->keys);
     }
 }

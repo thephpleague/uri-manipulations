@@ -58,6 +58,6 @@ class ReplaceLabel extends ManipulateHost
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->replace($this->offset, $this->label);
+        return (string) $this->filterHost($str)->replaceLabel($this->offset, $this->label);
     }
 }

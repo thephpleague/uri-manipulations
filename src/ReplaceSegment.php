@@ -58,6 +58,6 @@ class ReplaceSegment extends ManipulatePath
      */
     protected function modifyPath(string $str): string
     {
-        return (string) $this->filterSegment($str)->replace($this->offset, $this->segment);
+        return (string) $this->filterSegment($str)->replaceSegment($this->offset, $this->segment);
     }
 }
