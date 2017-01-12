@@ -30,7 +30,7 @@ use Psr\Http\Message\UriInterface;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
 class Formatter implements EncodingInterface
 {

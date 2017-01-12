@@ -14,16 +14,14 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use InvalidArgumentException;
-
 /**
  * Path component extension modifier
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class Basename extends ManipulatePath
+class Basename extends AbstractPathMiddleware
 {
     /**
      * The basename to use for URI modification
@@ -41,7 +39,7 @@ class Basename extends ManipulatePath
     {
         $basename = (string) $this->filterSegment($basename);
         if (false !== strpos($basename, '/')) {
-            throw new InvalidArgumentException('The basename can not contain the path separator');
+            throw new Exception('The basename can not contain the path separator');
         }
 
         $this->basename = $basename;

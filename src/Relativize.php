@@ -24,7 +24,7 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.2.0
  */
-class Relativize extends ManipulateUri
+class Relativize extends AbstractUriMiddleware
 {
     /**
      * Base URI
@@ -58,39 +58,35 @@ class Relativize extends ManipulateUri
             $modifier = new HostToAscii();
         }
 
-        return $modifier($uri);
+        return $modifier->process($uri);
     }
 
     /**
-     * Return a Uri object modified according to the modifier
-     *
-     * @param Uri|UriInterface $payload
-     *
-     * @return Uri|UriInterface
+     * @inheritdoc
      */
-    public function __invoke($payload)
+    public function process($uri)
     {
-        $this->assertUriObject($payload);
-        if (!$this->isRelativizable($payload)) {
-            return $payload;
+        $this->assertUriObject($uri);
+        if (!$this->isRelativizable($uri)) {
+            return $uri;
         }
 
-        $payload = $payload->withScheme('')->withPort(null)->withUserInfo('')->withHost('');
+        $uri = $uri->withScheme('')->withPort(null)->withUserInfo('')->withHost('');
 
-        $target_path = $payload->getPath();
+        $target_path = $uri->getPath();
         if ($target_path !== $this->base_uri->getPath()) {
-            return $payload->withPath($this->relativizePath($target_path));
+            return $uri->withPath($this->relativizePath($target_path));
         }
 
-        if ($payload->getQuery() === $this->base_uri->getQuery()) {
-            return $payload->withPath('')->withQuery('');
+        if ($uri->getQuery() === $this->base_uri->getQuery()) {
+            return $uri->withPath('')->withQuery('');
         }
 
-        if ('' === $payload->getQuery()) {
-            return $payload->withPath($this->formatPathWithEmptyBaseQuery($target_path));
+        if ('' === $uri->getQuery()) {
+            return $uri->withPath($this->formatPathWithEmptyBaseQuery($target_path));
         }
 
-        return $payload->withPath('');
+        return $uri->withPath('');
     }
 
     /**

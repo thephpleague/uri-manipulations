@@ -19,9 +19,9 @@ namespace League\Uri\Modifiers;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class RemoveSegments extends ManipulatePath
+class RemoveSegments extends AbstractPathMiddleware
 {
     /**
      * The list of keys to remove

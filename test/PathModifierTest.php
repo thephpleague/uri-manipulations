@@ -55,7 +55,7 @@ class PathManipulatorTest extends TestCase
     public function testToBinary($binary, $ascii)
     {
         $modifier = new DataUriToBinary();
-        $this->assertSame((string) $binary, (string) $modifier($ascii));
+        $this->assertSame((string) $binary, (string) $modifier->process($ascii));
     }
 
     /**
@@ -67,7 +67,7 @@ class PathManipulatorTest extends TestCase
     public function testToAscii($binary, $ascii)
     {
         $modifier = new DataUriToAscii();
-        $this->assertSame((string) $ascii, (string) $modifier($binary));
+        $this->assertSame((string) $ascii, (string) $modifier->process($binary));
     }
 
     public function fileProvider()
@@ -91,7 +91,7 @@ class PathManipulatorTest extends TestCase
     {
         $modifier = new DataUriParameters('coco=chanel');
         $uri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
-        $this->assertSame('text/plain;coco=chanel,Bonjour%20le%20monde!', (string) $modifier($uri)->getPath());
+        $this->assertSame('text/plain;coco=chanel,Bonjour%20le%20monde!', (string) $modifier->process($uri)->getPath());
     }
 
     /**
@@ -106,7 +106,7 @@ class PathManipulatorTest extends TestCase
     public function testAppendProcess($segment, $key, $append, $prepend, $replace)
     {
         $modifier = new AppendSegment($segment);
-        $this->assertSame($append, $modifier($this->uri)->getPath());
+        $this->assertSame($append, $modifier->process($this->uri)->getPath());
     }
 
     /**
@@ -115,7 +115,7 @@ class PathManipulatorTest extends TestCase
     public function testAppendProcessWithRelativePath($uri, $segment, $expected)
     {
         $modifier = new AppendSegment($segment);
-        $this->assertSame($expected, (string) $modifier(Http::createFromString($uri)));
+        $this->assertSame($expected, (string) $modifier->process(Http::createFromString($uri)));
     }
     public function validAppendPathProvider()
     {
@@ -149,7 +149,7 @@ class PathManipulatorTest extends TestCase
     public function testBasename($path, $uri, $expected)
     {
         $modifier = new Basename($path);
-        $this->assertSame($expected, (string) $modifier(new GuzzleUri($uri)));
+        $this->assertSame($expected, (string) $modifier->process(new GuzzleUri($uri)));
     }
 
     public function validBasenameProvider()
@@ -174,7 +174,7 @@ class PathManipulatorTest extends TestCase
     public function testDirname($path, $uri, $expected)
     {
         $modifier = new Dirname($path);
-        $this->assertSame($expected, (string) $modifier(new GuzzleUri($uri)));
+        $this->assertSame($expected, (string) $modifier->process(new GuzzleUri($uri)));
     }
 
     public function validDirnameProvider()
@@ -199,7 +199,7 @@ class PathManipulatorTest extends TestCase
     public function testPrependProcess($segment, $key, $append, $prepend, $replace)
     {
         $modifier = new PrependSegment($segment);
-        $this->assertSame($prepend, $modifier($this->uri)->getPath());
+        $this->assertSame($prepend, $modifier->process($this->uri)->getPath());
     }
 
     /**
@@ -214,7 +214,7 @@ class PathManipulatorTest extends TestCase
     public function testReplaceSegmentProcess($segment, $key, $append, $prepend, $replace)
     {
         $modifier = new ReplaceSegment($key, $segment);
-        $this->assertSame($replace, $modifier($this->uri)->getPath());
+        $this->assertSame($replace, $modifier->process($this->uri)->getPath());
     }
 
     public function validPathProvider()
@@ -231,7 +231,7 @@ class PathManipulatorTest extends TestCase
     public function testAddBasePath($basepath, $expected)
     {
         $modifier = new AddBasePath($basepath);
-        $this->assertSame($expected, $modifier($this->uri)->getPath());
+        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
     }
 
     public function addBasePathProvider()
@@ -248,7 +248,7 @@ class PathManipulatorTest extends TestCase
     {
         $uri = Http::createFromString('base/path');
         $modifier = new AddBasePath('/base/path');
-        $this->assertSame('/base/path', $modifier($uri)->getPath());
+        $this->assertSame('/base/path', $modifier->process($uri)->getPath());
     }
 
     /**
@@ -257,7 +257,7 @@ class PathManipulatorTest extends TestCase
     public function testRemoveBasePath($basepath, $expected)
     {
         $modifier = new RemoveBasePath($basepath);
-        $this->assertSame($expected, $modifier($this->uri)->getPath());
+        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
     }
 
     public function removeBasePathProvider()
@@ -274,7 +274,7 @@ class PathManipulatorTest extends TestCase
     {
         $uri = Http::createFromString('base/path');
         $modifier = new RemoveBasePath('/base/path');
-        $this->assertSame('/', $modifier($uri)->getPath());
+        $this->assertSame('/', $modifier->process($uri)->getPath());
     }
 
     /**
@@ -287,7 +287,7 @@ class PathManipulatorTest extends TestCase
     {
         $modifier = new RemoveSegments($keys);
 
-        $this->assertSame($expected, $modifier($this->uri)->getPath());
+        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
     }
 
     public function validWithoutSegmentsProvider()
@@ -319,7 +319,7 @@ class PathManipulatorTest extends TestCase
             'http://www.example.com/path/../to/the/./sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
         $modifier = new RemoveDotSegments();
-        $this->assertSame('/to/the/sky.php', $modifier($uri)->getPath());
+        $this->assertSame('/to/the/sky.php', $modifier->process($uri)->getPath());
     }
 
     public function testWithoutEmptySegmentsProcess()
@@ -328,14 +328,14 @@ class PathManipulatorTest extends TestCase
             'http://www.example.com/path///to/the//sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
         $modifier = new RemoveEmptySegments();
-        $this->assertSame('/path/to/the/sky.php', $modifier($uri)->getPath());
+        $this->assertSame('/path/to/the/sky.php', $modifier->process($uri)->getPath());
     }
 
     public function testWithoutTrailingSlashProcess()
     {
         $uri = Http::createFromString('http://www.example.com/');
         $modifier = new RemoveTrailingSlash();
-        $this->assertSame('', $modifier($uri)->getPath());
+        $this->assertSame('', $modifier->process($uri)->getPath());
     }
 
     /**
@@ -348,7 +348,7 @@ class PathManipulatorTest extends TestCase
     {
         $modifier = new Extension($extension);
 
-        $this->assertSame($expected, $modifier($this->uri)->getPath());
+        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
     }
 
     public function validExtensionProvider()
@@ -362,7 +362,7 @@ class PathManipulatorTest extends TestCase
     public function testWithTrailingSlashProcess()
     {
         $modifier = new AddTrailingSlash();
-        $this->assertSame('/path/to/the/sky.php/', $modifier($this->uri)->getPath());
+        $this->assertSame('/path/to/the/sky.php/', $modifier->process($this->uri)->getPath());
     }
 
     public function testWithoutLeadingSlashProcess()
@@ -370,7 +370,7 @@ class PathManipulatorTest extends TestCase
         $modifier = new RemoveLeadingSlash();
         $uri = Http::createFromString('/foo/bar?q=b#h');
 
-        $this->assertSame('foo/bar?q=b#h', $modifier($uri)->__toString());
+        $this->assertSame('foo/bar?q=b#h', $modifier->process($uri)->__toString());
     }
 
     public function testWithLeadingSlashProcess()
@@ -378,26 +378,26 @@ class PathManipulatorTest extends TestCase
         $modifier = new AddLeadingSlash();
         $uri = Http::createFromString('foo/bar?q=b#h');
 
-        $this->assertSame('/foo/bar?q=b#h', $modifier($uri)->__toString());
+        $this->assertSame('/foo/bar?q=b#h', $modifier->process($uri)->__toString());
     }
 
     public function testAppendProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new AppendSegment(''))->__invoke('http://www.example.com');
+        (new AppendSegment(''))->process('http://www.example.com');
     }
 
 
     public function testPrependProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new PrependSegment(''))->__invoke('http://www.example.com');
+        (new PrependSegment(''))->process('http://www.example.com');
     }
 
     public function testWithoutDotSegmentsProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new RemoveDotSegments())->__invoke('http://www.example.com');
+        (new RemoveDotSegments())->process('http://www.example.com');
     }
 
     public function testReplaceSegmentConstructorFailed2()
@@ -409,25 +409,25 @@ class PathManipulatorTest extends TestCase
     public function testWithoutLeadingSlashProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new RemoveLeadingSlash())->__invoke('http://www.example.com');
+        (new RemoveLeadingSlash())->process('http://www.example.com');
     }
 
     public function testWithLeadingSlashProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new AddLeadingSlash())->__invoke('http://www.example.com');
+        (new AddLeadingSlash())->process('http://www.example.com');
     }
 
     public function testWithoutTrailingSlashProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new AddTrailingSlash())->__invoke('http://www.example.com');
+        (new AddTrailingSlash())->process('http://www.example.com');
     }
 
     public function testWithTrailingSlashProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new AddTrailingSlash())->__invoke('http://www.example.com');
+        (new AddTrailingSlash())->process('http://www.example.com');
     }
 
     public function testExtensionProcessFailed()
@@ -439,6 +439,6 @@ class PathManipulatorTest extends TestCase
     public function testWithoutEmptySegmentsProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        (new RemoveEmptySegments())->__invoke('http://www.example.com');
+        (new RemoveEmptySegments())->process('http://www.example.com');
     }
 }

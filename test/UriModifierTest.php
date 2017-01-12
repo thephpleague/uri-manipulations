@@ -32,7 +32,7 @@ class UriManipulatorTest extends TestCase
         $relative = Http::createFromString($relative);
         $modifier = new Resolve($uri);
 
-        $this->assertSame($expected, (string) $modifier->__invoke($relative));
+        $this->assertSame($expected, (string) $modifier->process($relative));
     }
 
     public function resolveProvider()
@@ -89,7 +89,7 @@ class UriManipulatorTest extends TestCase
         $http = Http::createFromString('http://example.com/path/to/file');
         $dataUri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
         $modifier = new Resolve($http);
-        $this->assertSame($dataUri, $modifier->__invoke($dataUri));
+        $this->assertSame($dataUri, $modifier->process($dataUri));
     }
 
     public function testResolveLetThrowResolvedUriException()
@@ -98,7 +98,7 @@ class UriManipulatorTest extends TestCase
         $http = Http::createFromString('http://example.com/path/to/file');
         $ftp = Ftp::createFromString('ftp//a/b/c/d;p');
         $modifier = new Resolve($http);
-        $modifier->__invoke($ftp);
+        $modifier->process($ftp);
     }
 
     /**
@@ -110,7 +110,7 @@ class UriManipulatorTest extends TestCase
         $resolved = Http::createFromString($resolved);
         $modifier = new Relativize($uri);
 
-        $this->assertSame($expected, (string) $modifier->__invoke($resolved));
+        $this->assertSame($expected, (string) $modifier->process($resolved));
     }
 
     public function relativizeProvider()
@@ -170,8 +170,8 @@ class UriManipulatorTest extends TestCase
         $relativizer = new Relativize($baseUri);
         $uri = Http::createFromString($uri);
 
-        $relativeUri = $relativizer($uri);
-        $resolvedUri = $resolver($relativeUri);
+        $relativeUri = $relativizer->process($uri);
+        $resolvedUri = $resolver->process($relativeUri);
 
         $this->assertSame($expectedRelativize, (string) $relativeUri);
         $this->assertSame($expectedResolved, (string) $resolvedUri);
@@ -207,7 +207,7 @@ class UriManipulatorTest extends TestCase
         $modifier = new Normalize();
         $this->assertSame(
             $expected,
-            $modifier($uri1)->__toString() === $modifier($uri2)->__toString()
+            $modifier->process($uri1)->__toString() === $modifier->process($uri2)->__toString()
         );
     }
 
@@ -250,8 +250,7 @@ class UriManipulatorTest extends TestCase
     public function testNormalizeDoesNotAlterPathEncoding()
     {
         $rawUrl = 'HtTp://vonNN.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem';
-        $uriNormalizer = new Normalize();
-        $uri = (string) $uriNormalizer(Http::createFromString($rawUrl));
+        $uri = (string) (new Normalize())->process(Http::createFromString($rawUrl));
         $this->assertSame('http://vonnn.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem', $uri);
     }
 }

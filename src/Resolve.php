@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Schemes\Uri;
+use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -23,9 +23,9 @@ use Psr\Http\Message\UriInterface;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class Resolve extends ManipulateUri
+class Resolve extends AbstractUriMiddleware
 {
     /**
      * The list of keys to remove
@@ -48,25 +48,25 @@ class Resolve extends ManipulateUri
     /**
      * @inheritdoc
      */
-    public function __invoke($target)
+    public function process($uri)
     {
-        $meta = uri_reference($target);
-        $target_path = $target->getPath();
+        $meta = uri_reference($uri);
+        $target_path = $uri->getPath();
         if ($meta['absolute_uri']) {
-            return $target
-                ->withPath($this->filterPath($target_path)->withoutDotSegments()->__toString());
+            return $uri
+                ->withPath((string) $this->filterPath($target_path)->withoutDotSegments());
         }
 
         if ($meta['network_path']) {
-            return $target
+            return $uri
                 ->withScheme($this->base_uri->getScheme())
-                ->withPath($this->filterPath($target_path)->withoutDotSegments()->__toString());
+                ->withPath((string) $this->filterPath($target_path)->withoutDotSegments());
         }
 
         $user_info = explode(':', $this->base_uri->getUserInfo(), 2);
-        $components = $this->resolvePathAndQuery($target_path, $target->getQuery());
+        $components = $this->resolvePathAndQuery($target_path, $uri->getQuery());
 
-        return $target
+        return $uri
             ->withPath($this->formatPath($components['path']))
             ->withQuery($components['query'])
             ->withHost($this->base_uri->getHost())

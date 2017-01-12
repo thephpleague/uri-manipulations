@@ -19,9 +19,9 @@ namespace League\Uri\Modifiers;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class AddTrailingSlash extends ManipulatePath
+class AddTrailingSlash extends AbstractPathMiddleware
 {
     /**
      * Modify a URI part

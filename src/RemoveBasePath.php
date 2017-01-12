@@ -21,9 +21,9 @@ use League\Uri\Components\HierarchicalPath;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class RemoveBasePath extends ManipulatePath
+class RemoveBasePath extends AbstractPathMiddleware
 {
     /**
      * A HierarchicalPath object

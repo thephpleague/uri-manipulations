@@ -15,22 +15,27 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * Abstract Class to modify the Host component
+ * Abstract Class to modify the Path component
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-abstract class ManipulateHost extends ManipulateUri
+abstract class AbstractPathMiddleware extends AbstractUriMiddleware
 {
     /**
      * @inheritdoc
      */
-    public function __invoke($payload)
+    public function process($uri)
     {
-        $this->assertUriObject($payload);
+        $this->assertUriObject($uri);
 
-        return $payload->withHost($this->modifyHost($payload->getHost()));
+        $path = $this->modifyPath($uri->getPath());
+        if ('' != $uri->getAuthority() && '' != $path && '/' != $path[0]) {
+            $path = '/'.$path;
+        }
+
+        return $uri->withPath($path);
     }
 
     /**
@@ -40,5 +45,5 @@ abstract class ManipulateHost extends ManipulateUri
      *
      * @return string the modified URI part string representation
      */
-    abstract protected function modifyHost(string $str): string;
+    abstract protected function modifyPath(string $str): string;
 }

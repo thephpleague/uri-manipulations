@@ -15,22 +15,22 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * Abstract Class to modify the Query component
+ * Abstract Class to modify the Host component
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-abstract class ManipulateQuery extends ManipulateUri
+abstract class AbstractHostMiddleware extends AbstractUriMiddleware
 {
     /**
      * @inheritdoc
      */
-    public function __invoke($payload)
+    public function process($uri)
     {
-        $this->assertUriObject($payload);
+        $this->assertUriObject($uri);
 
-        return $payload->withQuery($this->modifyQuery($payload->getQuery()));
+        return $uri->withHost($this->modifyHost($uri->getHost()));
     }
 
     /**
@@ -40,5 +40,5 @@ abstract class ManipulateQuery extends ManipulateUri
      *
      * @return string the modified URI part string representation
      */
-    abstract protected function modifyQuery(string $str): string;
+    abstract protected function modifyHost(string $str): string;
 }

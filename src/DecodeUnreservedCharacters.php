@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Schemes\Uri;
-use Psr\Http\Message\UriInterface;
-
 /**
  * A class to Decode URI parts unreserved characters
  *
@@ -24,7 +21,7 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.2.0
  */
-class DecodeUnreservedCharacters extends ManipulateUri
+class DecodeUnreservedCharacters extends AbstractUriMiddleware
 {
     /**
      * RFC3986 unreserved characters encoded regular expression pattern
@@ -36,13 +33,9 @@ class DecodeUnreservedCharacters extends ManipulateUri
     const UNRESERVED_CHARS_ENCODED = ',%(2[D|E]|3[0-9]|4[1-9|A-F]|5[0-9|A|F]|6[1-9|A-F]|7[0-9|E]),i';
 
     /**
-     * Return a Uri object modified according to the modifier
-     *
-     * @param Uri|UriInterface $uri
-     *
-     * @return Uri|UriInterface
+     * @inheritdoc
      */
-    public function __invoke($uri)
+    public function process($uri)
     {
         $this->assertUriObject($uri);
 

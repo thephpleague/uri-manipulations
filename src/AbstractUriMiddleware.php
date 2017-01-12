@@ -28,9 +28,9 @@ use Psr\Http\Message\UriInterface;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-abstract class ManipulateUri
+abstract class AbstractUriMiddleware implements UriMiddlewareInterface
 {
     /**
      * Invalid Characters
@@ -42,13 +42,37 @@ abstract class ManipulateUri
     const INVALID_CHARS = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x7F";
 
     /**
-     * Return a Uri object modified according to the modifier
+     * Process and return an Uri
      *
-     * @param Uri|UriInterface $payload
+     * @param Uri|UriInterface $uri
+     *
+     * @throws Exception If the submitted URI is invalid
+     *
+     * @return Uri|UriInterface
+     *
+     * @see AbstractUriMiddleware::process
+     */
+    public function __invoke($uri)
+    {
+        return $this->process($uri);
+    }
+
+    /**
+     * Process and return an Uri
+     *
+     * This method MUST retain the state of the submitted URI instance, and return
+     * an URI instance of the same class that contains the applied modifications.
+     *
+     * This method MUST be transparent when dealing with error and exceptions.
+     * It MUST not alter of silence them apart from validating its own parameters.
+     *
+     * @param Uri|UriInterface $uri
+     *
+     * @throws Exception If the submitted URI is invalid
      *
      * @return Uri|UriInterface
      */
-    abstract public function __invoke($payload);
+    abstract public function process($uri);
 
     /**
      * validate a string
@@ -76,15 +100,12 @@ abstract class ManipulateUri
      *
      * @param Uri|UriInterface $uri
      *
-     * @throws InvalidArgumentException if the object does not implemet PSR-7 UriInterface
+     * @throws InvalidArgumentException if the submitted URI object is invalid
      */
     protected function assertUriObject($uri)
     {
         if (!$uri instanceof Uri && !$uri instanceof UriInterface) {
-            throw new InvalidArgumentException(sprintf(
-                'URI passed must implement PSR-7 or League\Uri Uri interface; received "%s"',
-               (is_object($uri) ? get_class($uri) : gettype($uri))
-            ));
+            throw Exception::fromInvalidUri($uri);
         }
     }
 

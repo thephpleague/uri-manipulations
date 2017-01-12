@@ -21,9 +21,9 @@ use InvalidArgumentException;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class RegisterableDomain extends ManipulateHost
+class RegisterableDomain extends AbstractHostMiddleware
 {
     /**
      * A Host object

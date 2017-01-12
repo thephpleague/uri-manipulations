@@ -19,12 +19,12 @@ namespace League\Uri\Modifiers;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class PrependLabel extends ManipulateHost
+class PrependLabel extends AbstractHostMiddleware
 {
     /**
-     * A Host/label to prepend
+     * The host to prepend
      *
      * @var string
      */

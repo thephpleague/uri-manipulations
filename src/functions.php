@@ -73,8 +73,8 @@ function uri_reference($uri, $base_uri = null): array
     }
 
     if (null !== $base_uri) {
-        $uri_string = (string) $normalizer($uri)->withFragment('');
-        $base_uri_string = (string) $normalizer($base_uri)->withFragment('');
+        $uri_string = (string) $normalizer->process($uri)->withFragment('');
+        $base_uri_string = (string) $normalizer->process($base_uri)->withFragment('');
         $infos['same_document'] = $uri_string === $base_uri_string;
     }
 

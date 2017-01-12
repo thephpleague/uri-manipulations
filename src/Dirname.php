@@ -19,9 +19,9 @@ namespace League\Uri\Modifiers;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class Dirname extends ManipulatePath
+class Dirname extends AbstractPathMiddleware
 {
     /**
      * The dirname to use for URI modification

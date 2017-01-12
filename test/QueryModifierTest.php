@@ -40,7 +40,7 @@ class QueryManipulatorTest extends TestCase
     {
         $modifier = new MergeQuery($query);
 
-        $this->assertSame($expected, $modifier->__invoke($this->uri)->getQuery());
+        $this->assertSame($expected, $modifier->process($this->uri)->getQuery());
     }
 
     public function validMergeQueryProvider()
@@ -58,7 +58,7 @@ class QueryManipulatorTest extends TestCase
     {
         $modifier = new AppendQuery($query);
 
-        $this->assertSame($expected, $modifier->__invoke($this->uri)->getQuery());
+        $this->assertSame($expected, $modifier->process($this->uri)->getQuery());
     }
 
     public function validAppendQueryProvider()
@@ -79,7 +79,7 @@ class QueryManipulatorTest extends TestCase
     {
         $modifier = new KsortQuery($input);
 
-        $this->assertSame($expected, $modifier->__invoke($this->uri)->getQuery());
+        $this->assertSame($expected, $modifier->process($this->uri)->getQuery());
     }
 
     //?kingkong=toto&foo=bar+baz
@@ -110,7 +110,7 @@ class QueryManipulatorTest extends TestCase
     {
         $modifier = new RemoveQueryKeys($input);
 
-        $this->assertSame($expected, $modifier->__invoke($this->uri)->getQuery());
+        $this->assertSame($expected, $modifier->process($this->uri)->getQuery());
     }
 
     public function validWithoutQueryValuesProvider()

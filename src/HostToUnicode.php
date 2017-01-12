@@ -21,9 +21,9 @@ use League\Uri\Components\ComponentInterface;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class HostToUnicode extends ManipulateHost
+class HostToUnicode extends AbstractHostMiddleware
 {
     /**
      * Modify a URI part

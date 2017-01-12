@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Schemes\Uri;
-use Psr\Http\Message\UriInterface;
-use RuntimeException;
+use League\Uri\Interfaces\Uri;
 
 /**
  * A class to ease applying multiple modification
@@ -25,9 +23,9 @@ use RuntimeException;
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   4.0.0
+ * @since   1.0.0
  */
-class Pipeline extends ManipulateUri
+class Pipeline extends AbstractUriMiddleware
 {
     /**
      * @var callable[]
@@ -37,23 +35,40 @@ class Pipeline extends ManipulateUri
     /**
      * New instance
      *
-     * @param callable[] $modifiers
+     * @param callable[] $callables
+     */
+    public static function createFromCallables($callables = [])
+    {
+        $pipeline = new static();
+        $pipeline->modifiers = (function (callable ...$callables) {
+            return array_map(function (callable $value) {
+                return new CallableUriMiddleware($value);
+            }, $callables);
+        })(...$callables);
+
+        return $pipeline;
+    }
+
+    /**
+     * New instance
+     *
+     * @param UriMiddlewareInterface[] $modifiers
      */
     public function __construct($modifiers = [])
     {
-        $this->modifiers = (function (callable ...$callable) {
-            return $callable;
+        $this->modifiers = (function (UriMiddlewareInterface ...$middlewares) {
+            return $middlewares;
         })(...$modifiers);
     }
 
     /**
      * Create a new pipeline with an appended modifier.
      *
-     * @param callable $modifier
+     * @param UriMiddlewareInterface $modifier
      *
      * @return static
      */
-    public function pipe(callable $modifier): self
+    public function pipe(UriMiddlewareInterface $modifier): self
     {
         $clone = clone $this;
         $clone->modifiers[] = $modifier;
@@ -62,31 +77,17 @@ class Pipeline extends ManipulateUri
     }
 
     /**
-     * Iteratively apply the modifiers to a URI object
-     *
-     * @param Uri|UriInterface $uri
-     *
-     * @return Uri|UriInterface
-     *
-     * @see Pipeline::__invoke
-     */
-    public function process($uri)
-    {
-        return $this->__invoke($uri);
-    }
-
-    /**
      * @inheritdoc
      */
-    public function __invoke($uri)
+    public function process($uri)
     {
         $this->assertUriObject($uri);
         $uri_class = get_class($uri);
 
-        $reducer = function ($uri, callable $modifier) use ($uri_class) {
-            $uri = $modifier($uri);
+        $reducer = function ($uri, UriMiddlewareInterface $modifier) use ($uri_class) {
+            $uri = $modifier->process($uri);
             if (!is_object($uri) || $uri_class !== get_class($uri)) {
-                throw new RuntimeException('The returned value is not of the same class as the submitted URI object');
+                throw Exception::fromInvalidClass($uri, $uri_class);
             }
 
             return $uri;
