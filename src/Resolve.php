@@ -48,7 +48,7 @@ class Resolve extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
         $meta = uri_reference($uri);
         $target_path = $uri->getPath();

@@ -64,9 +64,8 @@ class Relativize extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
         if (!$this->isRelativizable($uri)) {
             return $uri;
         }

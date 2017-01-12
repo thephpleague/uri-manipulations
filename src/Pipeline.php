@@ -79,18 +79,10 @@ class Pipeline extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
-        $uri_class = get_class($uri);
-
-        $reducer = function ($uri, UriMiddlewareInterface $modifier) use ($uri_class) {
-            $uri = $modifier->process($uri);
-            if (!is_object($uri) || $uri_class !== get_class($uri)) {
-                throw Exception::fromInvalidClass($uri, $uri_class);
-            }
-
-            return $uri;
+        $reducer = function ($uri, UriMiddlewareInterface $modifier) {
+            return $modifier->process($uri);
         };
 
         return array_reduce($this->modifiers, $reducer, $uri);

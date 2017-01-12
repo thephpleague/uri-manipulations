@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use InvalidArgumentException;
 use League\Uri\Components\DataPath;
 use League\Uri\Components\HierarchicalPath;
 use League\Uri\Components\Host;
@@ -72,27 +71,13 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
      *
      * @return Uri|UriInterface
      */
-    abstract public function process($uri);
-
-    /**
-     * validate a string
-     *
-     * @param mixed $str the value to evaluate as a string
-     *
-     * @throws InvalidArgumentException if the submitted data can not be converted to string
-     *
-     * @return string
-     */
-    protected function validateString(string $str): string
+    public function process($uri)
     {
-        if (strlen($str) !== strcspn($str, self::INVALID_CHARS)) {
-            throw new InvalidArgumentException(sprintf(
-                'the submitted string `%s` contains invalid characters',
-                $str
-            ));
-        }
+        $this->assertUriObject($uri);
+        $new_uri = $this->execute($uri);
+        $this->assertReturnedUriObject($new_uri, $uri);
 
-        return $str;
+        return $new_uri;
     }
 
     /**
@@ -100,13 +85,64 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
      *
      * @param Uri|UriInterface $uri
      *
-     * @throws InvalidArgumentException if the submitted URI object is invalid
+     * @throws Exception if the submitted URI object is invalid
      */
     protected function assertUriObject($uri)
     {
         if (!$uri instanceof Uri && !$uri instanceof UriInterface) {
             throw Exception::fromInvalidUri($uri);
         }
+    }
+
+    /**
+     * Process and return an Uri
+     *
+     * This method MUST retain the state of the submitted URI instance, and return
+     * an URI instance of the same class that contains the applied modifications.
+     *
+     * This method MUST be transparent when dealing with error and exceptions.
+     * It MUST not alter of silence them apart from validating its own parameters.
+     *
+     * @param Uri|UriInterface $uri
+     *
+     * @return Uri|UriInterface
+     */
+    abstract protected function execute($uri);
+
+    /**
+     * Assert the returned URI object is valid
+     *
+     * @param Uri|UriInterface $new_uri
+     * @param Uri|UriInterface $uri
+     *
+     * @throws Exception if the submitted URI object is invalid
+     */
+    protected function assertReturnedUriObject($new_uri, $uri)
+    {
+        if (!is_object($new_uri) || get_class($uri) !== get_class($new_uri)) {
+            throw Exception::fromInvalidClass($new_uri, $uri);
+        }
+    }
+
+    /**
+     * validate a string
+     *
+     * @param mixed $str the value to evaluate as a string
+     *
+     * @throws Exception if the submitted data can not be converted to string
+     *
+     * @return string
+     */
+    protected function validateString(string $str): string
+    {
+        if (strlen($str) !== strcspn($str, self::INVALID_CHARS)) {
+            throw new Exception(sprintf(
+                'the submitted string `%s` contains invalid characters',
+                $str
+            ));
+        }
+
+        return $str;
     }
 
     /**
@@ -178,7 +214,7 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
      *                           considered to be respectively less than, equal to,
      *                           or greater than the second.
      *
-     * @throws InvalidArgumentException if the sort argument is invalid
+     * @throws Exception if the sort argument is invalid
      *
      * @return callable|int
      */
@@ -188,15 +224,13 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
             return $sort;
         }
 
-        throw new InvalidArgumentException('The submitted sorting algorithm is invalid');
+        throw new Exception('The submitted sorting algorithm is invalid');
     }
 
     /**
      * Filter and validate the parameters
      *
      * @param string $parameters the data to be used
-     *
-     * @throws InvalidArgumentException if the value is invalid
      *
      * @return string
      */
@@ -212,7 +246,7 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
      *
      * @param string $extension
      *
-     * @throws InvalidArgumentException if the extension is not valid
+     * @throws Exception if the extension is not valid
      *
      * @return string
      */
@@ -220,7 +254,7 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
     {
         $extension = $this->validateString($extension);
         if (0 === strpos($extension, '.') || false !== strpos($extension, '/')) {
-            throw new InvalidArgumentException(
+            throw new Exception(
                 'extension must be string sequence without a leading `.` and the path separator `/` characters'
             );
         }
@@ -233,6 +267,8 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
      *
      * @param array $offsets
      *
+     * @throws Exception if the offsets are invalid
+     *
      * @return int[]
      */
     protected function filterInt(array $offsets)
@@ -241,6 +277,6 @@ abstract class AbstractUriMiddleware implements UriMiddlewareInterface
             return $offsets;
         }
 
-        throw new InvalidArgumentException('The offset list must contain integers only');
+        throw new Exception('The offset list must contain integers only');
     }
 }

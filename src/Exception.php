@@ -34,12 +34,12 @@ class Exception extends InvalidArgumentException
         ));
     }
 
-    public static function fromInvalidClass($uri, $uri_class)
+    public static function fromInvalidClass($new_uri, $old_uri)
     {
         return new self(sprintf(
-            'The returned URI passed to the next middleware must be a "%s"; received "%s"',
-            $uri_class,
-            is_object($uri) ? get_class($uri) : gettype($uri)
+            'The returned URI must be a "%s"; received "%s"',
+            get_class($old_uri),
+            is_object($new_uri) ? get_class($new_uri) : gettype($new_uri)
         ));
     }
 }

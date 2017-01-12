@@ -26,10 +26,8 @@ abstract class AbstractQueryMiddleware extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
-
         return $uri->withQuery($this->modifyQuery($uri->getQuery()));
     }
 

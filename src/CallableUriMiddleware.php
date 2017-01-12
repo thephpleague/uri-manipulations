@@ -43,15 +43,8 @@ class CallableUriMiddleware extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
-        $uri_class = get_class($uri);
-        $new_uri = ($this->callable)($uri);
-        if (!is_object($new_uri) || $uri_class !== get_class($new_uri)) {
-            throw Exception::fromInvalidClass($new_uri, $uri_class);
-        }
-
-        return $new_uri;
+        return ($this->callable)($uri);
     }
 }

@@ -35,10 +35,8 @@ class DecodeUnreservedCharacters extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
-
         $decoded = preg_replace_callback(
             self::UNRESERVED_CHARS_ENCODED,
             function (array $matches) {

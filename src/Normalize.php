@@ -26,9 +26,8 @@ class Normalize extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
         $modifiers = $this->getDefaultManipulators();
         $path = $uri->getPath();
         if ('' !== $uri->getScheme().$uri->getAuthority()

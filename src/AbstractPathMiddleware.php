@@ -26,10 +26,8 @@ abstract class AbstractPathMiddleware extends AbstractUriMiddleware
     /**
      * @inheritdoc
      */
-    public function process($uri)
+    protected function execute($uri)
     {
-        $this->assertUriObject($uri);
-
         $path = $this->modifyPath($uri->getPath());
         if ('' != $uri->getAuthority() && '' != $path && '/' != $path[0]) {
             $path = '/'.$path;
