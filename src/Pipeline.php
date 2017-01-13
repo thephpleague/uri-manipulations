@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Interfaces\Uri;
-
 /**
  * A class to ease applying multiple modification
  * on a URI object based on the pipeline pattern
@@ -25,8 +23,10 @@ use League\Uri\Interfaces\Uri;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class Pipeline extends AbstractUriMiddleware
+class Pipeline implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * @var callable[]
      */

@@ -25,8 +25,10 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class Resolve extends AbstractUriMiddleware
+class Resolve implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * The list of keys to remove
      *

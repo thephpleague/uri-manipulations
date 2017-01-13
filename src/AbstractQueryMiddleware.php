@@ -21,8 +21,10 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-abstract class AbstractQueryMiddleware extends AbstractUriMiddleware
+abstract class AbstractQueryMiddleware implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * @inheritdoc
      */

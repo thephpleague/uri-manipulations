@@ -37,7 +37,7 @@ class RemoveQueryKeys extends AbstractQueryMiddleware
      */
     public function __construct(array $keys)
     {
-        $this->keys = array_map([$this, 'validateString'], $keys);
+        $this->keys = array_map([$this, 'filterString'], $keys);
     }
 
     /**

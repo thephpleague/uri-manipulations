@@ -21,8 +21,10 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.2.0
  */
-class DecodeUnreservedCharacters extends AbstractUriMiddleware
+class DecodeUnreservedCharacters implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * RFC3986 unreserved characters encoded regular expression pattern
      *

@@ -23,8 +23,10 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class CallableUriMiddleware extends AbstractUriMiddleware
+class CallableUriMiddleware implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * @var callable
      */

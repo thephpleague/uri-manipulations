@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use InvalidArgumentException;
-
 /**
  * Modify the registerable domain part of the URI host
  *
@@ -42,7 +40,7 @@ class RegisterableDomain extends AbstractHostMiddleware
     {
         $label = $this->filterHost($label);
         if ($label->isAbsolute()) {
-            throw new InvalidArgumentException('The submitted registerable domain can not be a fully qualified domaine name');
+            throw new Exception('The submitted registerable domain can not be a fully qualified domaine name');
         }
 
         $this->label = (string) $label;

@@ -24,8 +24,10 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.2.0
  */
-class Relativize extends AbstractUriMiddleware
+class Relativize implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * Base URI
      *

@@ -21,8 +21,10 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class Normalize extends AbstractUriMiddleware
+class Normalize implements UriMiddlewareInterface
 {
+    use MiddlewareTrait;
+
     /**
      * @inheritdoc
      */

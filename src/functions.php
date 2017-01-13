@@ -48,15 +48,17 @@ use Psr\Http\Message\UriInterface;
 function uri_reference($uri, $base_uri = null): array
 {
     if (!$uri instanceof Uri && !$uri instanceof UriInterface) {
-        throw new InvalidArgumentException(
-            'URI passed must implement PSR-7 UriInterface or League\Uri Uri interface'
-        );
+        throw new InvalidArgumentException(sprintf(
+            'Expected uri to be a valid URI object; received "%s"',
+            is_object($uri) ? get_class($uri) : gettype($uri)
+        ));
     }
 
     if (null !== $base_uri && (!$base_uri instanceof Uri && !$base_uri instanceof UriInterface)) {
-        throw new InvalidArgumentException(
-            'The base URI passed must implement PSR-7 UriInterface or League\Uri Uri interface'
-        );
+        throw new InvalidArgumentException(sprintf(
+            'Expected base URI to be a valid URI object; received "%s"',
+            is_object($base_uri) ? get_class($base_uri) : gettype($base_uri)
+        ));
     }
 
     $infos = [
@@ -91,7 +93,7 @@ function uri_reference($uri, $base_uri = null): array
     }
 
     $path = $uri->getPath();
-    if (isset($path[0]) && '/' === $path[0]) {
+    if ('/' === substr($path, 0, 1)) {
         $infos['absolute_path'] = true;
 
         return $infos;
