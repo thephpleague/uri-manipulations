@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class Subdomain extends AbstractHostMiddleware
+class Subdomain implements UriMiddlewareInterface
 {
+    use HostMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * the new subdomain
      *

@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class AddLeadingSlash extends AbstractPathMiddleware
+class AddLeadingSlash implements UriMiddlewareInterface
 {
+    use PathMiddlewareTrait;
+    use UriMiddlewareTrait;
+    
     /**
      * Modify a URI part
      *

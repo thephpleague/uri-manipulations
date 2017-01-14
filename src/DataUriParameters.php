@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class DataUriParameters extends AbstractPathMiddleware
+class DataUriParameters implements UriMiddlewareInterface
 {
+    use PathMiddlewareTrait;
+    use UriMiddlewareTrait;
+    
     /**
      * The parameters to add
      *

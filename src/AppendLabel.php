@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class AppendLabel extends AbstractHostMiddleware
+class AppendLabel implements UriMiddlewareInterface
 {
+    use HostMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * the host/label to append
      *

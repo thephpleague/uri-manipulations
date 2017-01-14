@@ -29,7 +29,7 @@ use Psr\Http\Message\UriInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-trait MiddlewareTrait
+trait UriMiddlewareTrait
 {
     /**
      * Process and return an Uri
@@ -40,7 +40,7 @@ trait MiddlewareTrait
      *
      * @return Uri|UriInterface
      *
-     * @see AbstractUriMiddleware::process
+     * @see UriMiddlewareTrait::process
      */
     public function __invoke($uri)
     {
@@ -51,7 +51,7 @@ trait MiddlewareTrait
      * Process and return an Uri
      *
      * This method MUST retain the state of the submitted URI instance, and return
-     * an URI instance of the same class that contains the applied modifications.
+     * an URI instance of the same type that contains the applied modifications.
      *
      * This method MUST be transparent when dealing with error and exceptions.
      * It MUST not alter of silence them apart from validating its own parameters.
@@ -64,9 +64,9 @@ trait MiddlewareTrait
      */
     public function process($uri)
     {
-        $this->assertUriObject($uri);
+        $class_name = $this->assertUriObject($uri);
         $new_uri = $this->execute($uri);
-        $this->assertReturnedUriObject($new_uri, $uri);
+        $this->assertReturnedUriObject($new_uri, $class_name);
 
         return $new_uri;
     }
@@ -77,12 +77,20 @@ trait MiddlewareTrait
      * @param Uri|UriInterface $uri
      *
      * @throws Exception if the submitted URI object is invalid
+     *
+     * @return string
      */
     protected function assertUriObject($uri)
     {
-        if (!$uri instanceof Uri && !$uri instanceof UriInterface) {
-            throw Exception::fromInvalidUri($uri);
+        if ($uri instanceof UriInterface) {
+            return UriInterface::class;
         }
+        
+        if ($uri instanceof Uri) {
+            return Uri::class;
+        }
+
+        throw Exception::fromInvalidUri($uri);
     }
 
     /**
@@ -100,15 +108,15 @@ trait MiddlewareTrait
     /**
      * Assert the returned URI object is valid
      *
-     * @param Uri|UriInterface $new_uri
      * @param Uri|UriInterface $uri
+     * @param string           $interface
      *
      * @throws Exception if the submitted URI object is invalid
      */
-    protected function assertReturnedUriObject($new_uri, $uri)
+    protected function assertReturnedUriObject($uri, $interface)
     {
-        if (!is_object($new_uri) || get_class($uri) !== get_class($new_uri)) {
-            throw Exception::fromInvalidClass($new_uri, $uri);
+        if (!is_object($uri) || !$uri instanceof $interface) {
+            throw Exception::fromInvalidInterface($uri, $interface);
         }
     }
 

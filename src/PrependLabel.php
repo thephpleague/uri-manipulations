@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class PrependLabel extends AbstractHostMiddleware
+class PrependLabel implements UriMiddlewareInterface
 {
+    use HostMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * The host to prepend
      *

@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class RegisterableDomain extends AbstractHostMiddleware
+class RegisterableDomain implements UriMiddlewareInterface
 {
+    use HostMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * A Host object
      *

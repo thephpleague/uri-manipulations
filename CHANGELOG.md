@@ -8,7 +8,8 @@ All Notable changes to `uri-manipulations` will be documented in this file
 
 - `League\Uri\Modifier\UriMiddlewareInterface`
 - `League\Uri\Modifier\Exception`
-- `League\Uri\Modifier\CallableUriMiddleware`
+- `League\Uri\Modifier\CallableAdapter`
+- `League\Uri\Modifier\Pipeline::createFromCallable`
 - `League\Uri\Modifier\Basename` uri middleware to update the URI dirname path
 - `League\Uri\Modifier\Dirname` uri middleware to update the URI basename path
 - `League\Uri\Modifier\AddRootLabel` uri middleware to update the URI dirname path

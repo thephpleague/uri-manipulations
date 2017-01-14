@@ -26,6 +26,13 @@ use InvalidArgumentException;
  */
 class Exception extends InvalidArgumentException
 {
+    /**
+     * New instance from invalid URI
+     *
+     * @param mixed $uri invalid uri
+     *
+     * @return self
+     */
     public static function fromInvalidUri($uri)
     {
         return new self(sprintf(
@@ -34,12 +41,20 @@ class Exception extends InvalidArgumentException
         ));
     }
 
-    public static function fromInvalidClass($new_uri, $old_uri)
+    /**
+     * New instance from invalid URI
+     *
+     * @param mixed  $uri       invalid uri
+     * @param string $interface required interface
+     *
+     * @return self
+     */
+    public static function fromInvalidInterface($uri, $interface)
     {
         return new self(sprintf(
             'The returned URI must be a "%s"; received "%s"',
-            get_class($old_uri),
-            is_object($new_uri) ? get_class($new_uri) : gettype($new_uri)
+            $interface,
+            is_object($uri) ? get_class($uri) : gettype($uri)
         ));
     }
 }

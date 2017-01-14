@@ -23,8 +23,11 @@ use League\Uri\Components\ComponentInterface;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class HostToUnicode extends AbstractHostMiddleware
+class HostToUnicode implements UriMiddlewareInterface
 {
+    use HostMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * Modify a URI part
      *

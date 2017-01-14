@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class RemoveQueryKeys extends AbstractQueryMiddleware
+class RemoveQueryKeys implements UriMiddlewareInterface
 {
+    use QueryMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * The list of keys to remove
      *

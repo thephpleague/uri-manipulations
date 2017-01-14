@@ -15,22 +15,20 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * Abstract Class to modify the Host component
+ * Abstract Class to modify the Query component
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-abstract class AbstractHostMiddleware implements UriMiddlewareInterface
+trait QueryMiddlewareTrait
 {
-    use MiddlewareTrait;
-
     /**
      * @inheritdoc
      */
     protected function execute($uri)
     {
-        return $uri->withHost($this->modifyHost($uri->getHost()));
+        return $uri->withQuery($this->modifyQuery($uri->getQuery()));
     }
 
     /**
@@ -40,5 +38,5 @@ abstract class AbstractHostMiddleware implements UriMiddlewareInterface
      *
      * @return string the modified URI part string representation
      */
-    abstract protected function modifyHost(string $str): string;
+    abstract protected function modifyQuery(string $str): string;
 }

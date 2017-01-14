@@ -15,38 +15,33 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * A class to ease applying multiple modification
- * on a URI object based on the pipeline pattern
- * This class is based on league.pipeline
+ * Abstract Class to modify the Path component
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class CallableUriMiddleware implements UriMiddlewareInterface
+trait PathMiddlewareTrait
 {
-    use MiddlewareTrait;
-
-    /**
-     * @var callable
-     */
-    protected $callable;
-
-    /**
-     * New instance
-     *
-     * @param callable $callable
-     */
-    public function __construct(callable $callable)
-    {
-        $this->callable = $callable;
-    }
-
     /**
      * @inheritdoc
      */
     protected function execute($uri)
     {
-        return ($this->callable)($uri);
+        $path = $this->modifyPath($uri->getPath());
+        if ('' != $uri->getAuthority() && '' != $path && '/' != $path[0]) {
+            $path = '/'.$path;
+        }
+
+        return $uri->withPath($path);
     }
+
+    /**
+     * Modify a URI part
+     *
+     * @param string $str the URI part string representation
+     *
+     * @return string the modified URI part string representation
+     */
+    abstract protected function modifyPath(string $str): string;
 }

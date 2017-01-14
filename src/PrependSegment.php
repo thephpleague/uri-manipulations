@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class PrependSegment extends AbstractPathMiddleware
+class PrependSegment implements UriMiddlewareInterface
 {
+    use PathMiddlewareTrait;
+    use UriMiddlewareTrait;
+    
     /**
      * The path to prepend
      *

@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class ReplaceSegment extends AbstractPathMiddleware
+class ReplaceSegment implements UriMiddlewareInterface
 {
+    use PathMiddlewareTrait;
+    use UriMiddlewareTrait;
+    
     /**
      * The path/segment to inject
      *

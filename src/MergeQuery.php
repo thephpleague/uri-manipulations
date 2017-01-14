@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class MergeQuery extends AbstractQueryMiddleware
+class MergeQuery implements UriMiddlewareInterface
 {
+    use QueryMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * The query to merge
      *

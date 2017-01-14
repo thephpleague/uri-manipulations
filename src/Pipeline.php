@@ -25,7 +25,7 @@ namespace League\Uri\Modifiers;
  */
 class Pipeline implements UriMiddlewareInterface
 {
-    use MiddlewareTrait;
+    use UriMiddlewareTrait;
 
     /**
      * @var callable[]
@@ -37,12 +37,12 @@ class Pipeline implements UriMiddlewareInterface
      *
      * @param callable[] $callables
      */
-    public static function createFromCallables($callables = [])
+    public static function createFromCallable($callables = [])
     {
         $pipeline = new static();
         $pipeline->modifiers = (function (callable ...$callables) {
             return array_map(function (callable $value) {
-                return new CallableUriMiddleware($value);
+                return new CallableAdapter($value);
             }, $callables);
         })(...$callables);
 

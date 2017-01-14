@@ -15,30 +15,38 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * Abstract Class to modify the Query component
+ * A class to ease applying multiple modification
+ * on a URI object based on the pipeline pattern
+ * This class is based on league.pipeline
  *
  * @package League.uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-abstract class AbstractQueryMiddleware implements UriMiddlewareInterface
+class CallableAdapter implements UriMiddlewareInterface
 {
-    use MiddlewareTrait;
+    use UriMiddlewareTrait;
+
+    /**
+     * @var callable
+     */
+    protected $callable;
+
+    /**
+     * New instance
+     *
+     * @param callable $callable
+     */
+    public function __construct(callable $callable)
+    {
+        $this->callable = $callable;
+    }
 
     /**
      * @inheritdoc
      */
     protected function execute($uri)
     {
-        return $uri->withQuery($this->modifyQuery($uri->getQuery()));
+        return ($this->callable)($uri);
     }
-
-    /**
-     * Modify a URI part
-     *
-     * @param string $str the URI part string representation
-     *
-     * @return string the modified URI part string representation
-     */
-    abstract protected function modifyQuery(string $str): string;
 }

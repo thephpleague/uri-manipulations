@@ -23,7 +23,7 @@ namespace League\Uri\Modifiers;
  */
 class DecodeUnreservedCharacters implements UriMiddlewareInterface
 {
-    use MiddlewareTrait;
+    use UriMiddlewareTrait;
 
     /**
      * RFC3986 unreserved characters encoded regular expression pattern

@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class AppendQuery extends AbstractQueryMiddleware
+class AppendQuery implements UriMiddlewareInterface
 {
+    use QueryMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * @var string
      */

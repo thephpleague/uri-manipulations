@@ -27,7 +27,7 @@ use Psr\Http\Message\UriInterface;
  */
 class Resolve implements UriMiddlewareInterface
 {
-    use MiddlewareTrait;
+    use UriMiddlewareTrait;
 
     /**
      * The list of keys to remove

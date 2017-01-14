@@ -21,8 +21,11 @@ namespace League\Uri\Modifiers;
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   1.0.0
  */
-class KsortQuery extends AbstractQueryMiddleware
+class KsortQuery implements UriMiddlewareInterface
 {
+    use QueryMiddlewareTrait;
+    use UriMiddlewareTrait;
+
     /**
      * Sort algorithm use to sort the query string keys
      *

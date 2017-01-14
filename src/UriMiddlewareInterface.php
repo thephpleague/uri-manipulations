@@ -30,7 +30,7 @@ interface UriMiddlewareInterface
      * Process and return an Uri
      *
      * This method MUST retain the state of the submitted URI instance, and return
-     * an URI instance of the same class that contains the applied modifications.
+     * an URI instance of the same type containing the applied modifications.
      *
      * This method MUST be transparent when dealing with error and exceptions.
      * It MUST not alter of silence them apart from validating its own parameters.

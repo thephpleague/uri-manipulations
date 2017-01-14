@@ -23,7 +23,7 @@ namespace League\Uri\Modifiers;
  */
 class Normalize implements UriMiddlewareInterface
 {
-    use MiddlewareTrait;
+    use UriMiddlewareTrait;
 
     /**
      * @inheritdoc

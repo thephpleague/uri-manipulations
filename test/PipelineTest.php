@@ -3,7 +3,7 @@
 namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Modifiers\CallableUriMiddleware;
+use League\Uri\Modifiers\CallableAdapter;
 use League\Uri\Modifiers\Exception;
 use League\Uri\Modifiers\Pipeline;
 use League\Uri\Modifiers\RemoveDotSegments;
@@ -40,10 +40,10 @@ class PipelineTest extends TestCase
         $newUri = $pipeline->process($uri);
     }
 
-    public function testCallableUriMiddleware()
+    public function testCallableAdapter()
     {
         $uri = Http::createFromString('http://example.com');
-        $pipeline = (new Pipeline())->pipe(new CallableUriMiddleware(function ($uri) {
+        $pipeline = (new Pipeline())->pipe(new CallableAdapter(function ($uri) {
             return $uri;
         }));
 
@@ -58,6 +58,6 @@ class PipelineTest extends TestCase
         };
 
         $uri = Http::createFromString('http://www.example.com');
-        Pipeline::createFromCallables([$modifier])->process($uri);
+        Pipeline::createFromCallable([$modifier])->process($uri);
     }
 }

@@ -26,7 +26,7 @@ use Psr\Http\Message\UriInterface;
  */
 class Relativize implements UriMiddlewareInterface
 {
-    use MiddlewareTrait;
+    use UriMiddlewareTrait;
 
     /**
      * Base URI
