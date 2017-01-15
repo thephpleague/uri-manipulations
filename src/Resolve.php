@@ -43,7 +43,10 @@ class Resolve implements UriMiddlewareInterface
      */
     public function __construct($base_uri)
     {
-        $this->assertUriObject($base_uri);
+        if  (!$base_uri instanceof UriInterface && !$base_uri instanceof Uri) {
+            throw Exception::fromInvalidUri($base_uri);
+        }
+
         $this->base_uri = $base_uri;
     }
 

@@ -44,12 +44,12 @@ class Exception extends InvalidArgumentException
     /**
      * New instance from invalid URI
      *
-     * @param mixed  $uri       invalid uri
      * @param string $interface required interface
+     * @param mixed  $uri       invalid uri
      *
      * @return self
      */
-    public static function fromInvalidInterface($uri, $interface)
+    public static function fromInvalidInterface(string $interface, $uri)
     {
         return new self(sprintf(
             'The returned URI must be a "%s"; received "%s"',

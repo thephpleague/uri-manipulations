@@ -42,7 +42,6 @@ class Relativize implements UriMiddlewareInterface
      */
     public function __construct($base_uri)
     {
-        $this->assertUriObject($base_uri);
         $this->base_uri = $this->hostToAscii($base_uri);
     }
 

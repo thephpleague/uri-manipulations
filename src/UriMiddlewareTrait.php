@@ -58,21 +58,24 @@ trait UriMiddlewareTrait
      *
      * @param Uri|UriInterface $uri
      *
-     * @throws Exception If the submitted URI is invalid
+     * @throws Exception If the submitted or the URI object is invalid
      *
      * @return Uri|UriInterface
      */
     public function process($uri)
     {
-        $class_name = $this->assertUriObject($uri);
+        $interface = $this->getUriInterface($uri);
         $new_uri = $this->execute($uri);
-        $this->assertReturnedUriObject($new_uri, $class_name);
+        if ($new_uri instanceof $interface) {
+            return $new_uri;
+            
+        }
 
-        return $new_uri;
+        throw Exception::fromInvalidInterface($interface, $new_uri);
     }
 
     /**
-     * Assert the submitted object is a UriInterface object
+     * Returns the URI object interface
      *
      * @param Uri|UriInterface $uri
      *
@@ -80,7 +83,7 @@ trait UriMiddlewareTrait
      *
      * @return string
      */
-    protected function assertUriObject($uri)
+    protected function getUriInterface($uri)
     {
         if ($uri instanceof UriInterface) {
             return UriInterface::class;
@@ -104,21 +107,6 @@ trait UriMiddlewareTrait
      * @return Uri|UriInterface
      */
     abstract protected function execute($uri);
-
-    /**
-     * Assert the returned URI object is valid
-     *
-     * @param Uri|UriInterface $uri
-     * @param string           $interface
-     *
-     * @throws Exception if the submitted URI object is invalid
-     */
-    protected function assertReturnedUriObject($uri, $interface)
-    {
-        if (!is_object($uri) || !$uri instanceof $interface) {
-            throw Exception::fromInvalidInterface($uri, $interface);
-        }
-    }
 
     /**
      * validate a string
