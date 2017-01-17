@@ -23,11 +23,12 @@ use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
 
 /**
- * Common methods shared between middleware
+ * Common methods shared between URI middlewares
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 trait UriMiddlewareTrait
 {
@@ -68,7 +69,6 @@ trait UriMiddlewareTrait
         $new_uri = $this->execute($uri);
         if ($new_uri instanceof $interface) {
             return $new_uri;
-            
         }
 
         throw Exception::fromInvalidInterface($interface, $new_uri);
@@ -88,7 +88,7 @@ trait UriMiddlewareTrait
         if ($uri instanceof UriInterface) {
             return UriInterface::class;
         }
-        
+
         if ($uri instanceof Uri) {
             return Uri::class;
         }

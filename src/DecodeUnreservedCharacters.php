@@ -17,7 +17,7 @@ namespace League\Uri\Modifiers;
 /**
  * A class to Decode URI parts unreserved characters
  *
- * @package League.uri
+ * @package League\Uri
  * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since   4.2.0
  */

@@ -20,9 +20,10 @@ use Psr\Http\Message\UriInterface;
 /**
  * URI Middleware Interface
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 interface UriMiddlewareInterface
 {

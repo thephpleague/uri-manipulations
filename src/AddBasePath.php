@@ -19,15 +19,16 @@ use League\Uri\Components\HierarchicalPath;
 /**
  * Add a base path the URI path
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class AddBasePath implements UriMiddlewareInterface
 {
     use PathMiddlewareTrait;
     use UriMiddlewareTrait;
-    
+
     /**
      * A HierarchicalPath object
      *

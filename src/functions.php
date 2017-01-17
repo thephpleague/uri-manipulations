@@ -36,7 +36,10 @@ use Psr\Http\Message\UriInterface;
  * @link https://tools.ietf.org/html/rfc3986#section-4.3
  * @link https://tools.ietf.org/html/rfc3986#section-4.4
  *
- * @since 4.2.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  *
  * @param Uri|UriInterface      $uri      The uri to get reference info from
  * @param Uri|UriInterface|null $base_uri The base uri to use to get same document reference info

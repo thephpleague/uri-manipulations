@@ -17,15 +17,16 @@ namespace League\Uri\Modifiers;
 /**
  * Path component extension modifier
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class Dirname implements UriMiddlewareInterface
 {
     use PathMiddlewareTrait;
     use UriMiddlewareTrait;
-    
+
     /**
      * The dirname to use for URI modification
      *

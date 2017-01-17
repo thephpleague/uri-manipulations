@@ -17,9 +17,10 @@ namespace League\Uri\Modifiers;
 /**
  * Abstract Class to modify the Path component
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 trait PathMiddlewareTrait
 {

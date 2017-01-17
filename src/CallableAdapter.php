@@ -15,13 +15,13 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * A class to ease applying multiple modification
- * on a URI object based on the pipeline pattern
- * This class is based on league.pipeline
+ * An Adapter Class to convert a callable into
+ * an UriMiddlewareInterface implementing object
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class CallableAdapter implements UriMiddlewareInterface
 {

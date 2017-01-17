@@ -19,35 +19,19 @@ namespace League\Uri\Modifiers;
  * on a URI object based on the pipeline pattern
  * This class is based on league.pipeline
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class Pipeline implements UriMiddlewareInterface
 {
     use UriMiddlewareTrait;
 
     /**
-     * @var callable[]
+     * @var UriMiddlewareInterface[]
      */
     protected $modifiers;
-
-    /**
-     * New instance
-     *
-     * @param callable[] $callables
-     */
-    public static function createFromCallable($callables = [])
-    {
-        $pipeline = new static();
-        $pipeline->modifiers = (function (callable ...$callables) {
-            return array_map(function (callable $value) {
-                return new CallableAdapter($value);
-            }, $callables);
-        })(...$callables);
-
-        return $pipeline;
-    }
 
     /**
      * New instance

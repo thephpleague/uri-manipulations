@@ -101,6 +101,12 @@ class UriManipulatorTest extends TestCase
         $modifier->process($ftp);
     }
 
+    public function testResolveThrowExceptionOnConstructor()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Resolve('ftp//a/b/c/d;p');
+    }
+
     /**
      * @dataProvider relativizeProvider
      */

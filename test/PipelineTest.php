@@ -4,7 +4,6 @@ namespace LeagueTest\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri\Modifiers\CallableAdapter;
-use League\Uri\Modifiers\Exception;
 use League\Uri\Modifiers\Pipeline;
 use League\Uri\Modifiers\RemoveDotSegments;
 use League\Uri\Schemes\Http;
@@ -50,14 +49,14 @@ class PipelineTest extends TestCase
         $this->assertEquals($pipeline->process($uri), $uri);
     }
 
-    public function testInvokeThrowRuntimeException()
+    public function testCallableAdapterTriggerException()
     {
-        $this->expectException(Exception::class);
-        $modifier = function (Http $uri) {
+        $this->expectException(InvalidArgumentException::class);
+        $uri = Http::createFromString('http://example.com');
+        $pipeline = (new Pipeline())->pipe(new CallableAdapter(function ($uri) {
             return true;
-        };
+        }));
 
-        $uri = Http::createFromString('http://www.example.com');
-        Pipeline::createFromCallable([$modifier])->process($uri);
+        $pipeline->process($uri);
     }
 }

@@ -21,9 +21,10 @@ use Psr\Http\Message\UriInterface;
  * Resolve an URI according to a base URI using
  * RFC3986 rules
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class Resolve implements UriMiddlewareInterface
 {
@@ -43,7 +44,7 @@ class Resolve implements UriMiddlewareInterface
      */
     public function __construct($base_uri)
     {
-        if  (!$base_uri instanceof UriInterface && !$base_uri instanceof Uri) {
+        if (!$base_uri instanceof UriInterface && !$base_uri instanceof Uri) {
             throw Exception::fromInvalidUri($base_uri);
         }
 

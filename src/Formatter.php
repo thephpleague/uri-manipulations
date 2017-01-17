@@ -28,9 +28,10 @@ use Psr\Http\Message\UriInterface;
 /**
  * A class to manipulate URI and URI components output
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class Formatter implements EncodingInterface
 {
@@ -72,10 +73,10 @@ class Formatter implements EncodingInterface
         static $enc_type_list;
         if (null === $enc_type_list) {
             $enc_type_list = [
-                EncodingInterface::RFC1738_ENCODING => 1,
-                EncodingInterface::RFC3986_ENCODING => 1,
-                EncodingInterface::RFC3987_ENCODING => 1,
-                EncodingInterface::NO_ENCODING => 1,
+                self::RFC1738_ENCODING => 1,
+                self::RFC3986_ENCODING => 1,
+                self::RFC3987_ENCODING => 1,
+                self::NO_ENCODING => 1,
             ];
         }
 
@@ -167,25 +168,29 @@ class Formatter implements EncodingInterface
      */
     protected function formatUri($uri): string
     {
+        $authority = null;
+
         $scheme = $uri->getScheme();
-        if ('' !== $scheme) {
-            $scheme .= ':';
+        if ('' != $scheme) {
+            $scheme = $scheme.':';
         }
 
-        $user_info = (new UserInfo())->withContent($uri->getUserInfo())->getContent($this->enc_type);
-        if ('' !== $user_info) {
-            $user_info .= '@';
+        $user_info = $uri->getUserInfo();
+        if ('' != $user_info) {
+            $authority .= (new UserInfo())->withContent($user_info)->getContent($this->enc_type).'@';
         }
 
-        $host = (new Host($uri->getHost()))->getContent($this->enc_type);
+        $host = $uri->getHost();
+        if ('' != $host) {
+            $authority .= (new Host($host))->getContent($this->enc_type);
+        }
 
         $port = $uri->getPort();
-        if ('' != $port) {
-            $port = ':'.$port;
+        if (null !== $port) {
+            $authority .= ':'.$port;
         }
 
-        $authority = $user_info.$host.$port;
-        if ('' != $authority) {
+        if (null !== $authority) {
             $authority = '//'.$authority;
         }
 
@@ -194,14 +199,14 @@ class Formatter implements EncodingInterface
             $path = '/'.$path;
         }
 
-        $query = Query::build(Query::parse($uri->getQuery()), $this->query_separator, $this->enc_type);
-        if ($this->preserve_query || '' != $query) {
-            $query = '?'.$query;
+        $query = $uri->getQuery();
+        if ('' != $query || $this->preserve_query) {
+            $query = '?'.Query::build(Query::parse((string) $query), $this->query_separator, $this->enc_type);
         }
 
-        $fragment = (new Fragment($uri->getFragment()))->getContent($this->enc_type);
-        if ($this->preserve_fragment || '' != $fragment) {
-            $fragment = '#'.$fragment;
+        $fragment = $uri->getFragment();
+        if ('' != $fragment || $this->preserve_fragment) {
+            $fragment = '#'.(new Fragment($fragment))->getContent($this->enc_type);
         }
 
         return $scheme.$authority.$path.$query.$fragment;

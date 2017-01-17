@@ -17,15 +17,16 @@ namespace League\Uri\Modifiers;
 /**
  * Data Uri Paramaters Manipulator
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class DataUriParameters implements UriMiddlewareInterface
 {
     use PathMiddlewareTrait;
     use UriMiddlewareTrait;
-    
+
     /**
      * The parameters to add
      *

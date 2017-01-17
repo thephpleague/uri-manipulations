@@ -17,9 +17,10 @@ namespace League\Uri\Modifiers;
 /**
  * Convert to ascii the URI host
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class HostToAscii implements UriMiddlewareInterface
 {

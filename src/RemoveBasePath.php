@@ -19,15 +19,16 @@ use League\Uri\Components\HierarchicalPath;
 /**
  * Removes the basepath from the URI path
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class RemoveBasePath implements UriMiddlewareInterface
 {
     use PathMiddlewareTrait;
     use UriMiddlewareTrait;
-    
+
     /**
      * A HierarchicalPath object
      *

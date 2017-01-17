@@ -14,14 +14,15 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Components\ComponentInterface;
+use League\Uri\Components\EncodingInterface;
 
 /**
  * Convert to unicode the URI host
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class HostToUnicode implements UriMiddlewareInterface
 {
@@ -37,6 +38,6 @@ class HostToUnicode implements UriMiddlewareInterface
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->getContent(ComponentInterface::RFC3987_ENCODING);
+        return (string) $this->filterHost($str)->getContent(EncodingInterface::RFC3987_ENCODING);
     }
 }

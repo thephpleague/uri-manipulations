@@ -17,9 +17,10 @@ namespace League\Uri\Modifiers;
 /**
  * Add or Update the Query string from the URI object
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class MergeQuery implements UriMiddlewareInterface
 {

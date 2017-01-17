@@ -17,9 +17,10 @@ namespace League\Uri\Modifiers;
 /**
  * Replace a label from a Host
  *
- * @package League.uri
- * @author  Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since   1.0.0
+ * @package    League\Uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @since      1.0.0
  */
 class ReplaceLabel implements UriMiddlewareInterface
 {
