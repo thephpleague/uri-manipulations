@@ -35,6 +35,10 @@ trait UriMiddlewareTrait
     /**
      * Process and return an Uri
      *
+     * DEPRECATION WARNING! This method will be removed in the next major point release
+     *
+     * @deprecated deprecated since version 1.0.1
+     *
      * @param Uri|UriInterface $uri
      *
      * @throws Exception If the submitted URI is invalid

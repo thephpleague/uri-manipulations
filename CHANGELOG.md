@@ -2,6 +2,25 @@
 
 All Notable changes to `uri-manipulations` will be documented in this file
 
+
+## 1.0.1 - 2017-02-6
+
+### Added
+
+- None
+
+### Fixed
+
+- None
+
+### Deprecated `__invoke` calls on all middlewares
+
+- None
+
+### Removed
+
+- None
+
 ## 1.0.0 - 2017-01-17
 
 ### Added
