@@ -35,10 +35,7 @@ class Exception extends InvalidArgumentException
      */
     public static function fromInvalidUri($uri)
     {
-        return new self(sprintf(
-            'Expected data to be a valid URI object; received "%s"',
-            is_object($uri) ? get_class($uri) : gettype($uri)
-        ));
+        return new self(sprintf('Expected data to be a valid URI object; received "%s"', is_object($uri) ? get_class($uri) : gettype($uri)));
     }
 
     /**
@@ -51,10 +48,6 @@ class Exception extends InvalidArgumentException
      */
     public static function fromInvalidInterface(string $interface, $uri)
     {
-        return new self(sprintf(
-            'The returned URI must be a "%s"; received "%s"',
-            $interface,
-            is_object($uri) ? get_class($uri) : gettype($uri)
-        ));
+        return new self(sprintf('The returned URI must be a "%s"; received "%s"', $interface, is_object($uri) ? get_class($uri) : gettype($uri)));
     }
 }

@@ -1,29 +1,12 @@
 <?php
 
-namespace LeagueTest\Uri\Modifiers;
+namespace LeagueTest\Uri;
 
-use GuzzleHttp\Psr7\Uri as GuzzleUri;
+use GuzzleHttp\Psr7;
 use InvalidArgumentException;
+use League\Uri;
 use League\Uri\Components\DataPath;
 use League\Uri\Components\Path;
-use League\Uri\Modifiers\AddBasePath;
-use League\Uri\Modifiers\AddLeadingSlash;
-use League\Uri\Modifiers\AddTrailingSlash;
-use League\Uri\Modifiers\AppendSegment;
-use League\Uri\Modifiers\Basename;
-use League\Uri\Modifiers\DataUriParameters;
-use League\Uri\Modifiers\DataUriToAscii;
-use League\Uri\Modifiers\DataUriToBinary;
-use League\Uri\Modifiers\Dirname;
-use League\Uri\Modifiers\Extension;
-use League\Uri\Modifiers\PrependSegment;
-use League\Uri\Modifiers\RemoveBasePath;
-use League\Uri\Modifiers\RemoveDotSegments;
-use League\Uri\Modifiers\RemoveEmptySegments;
-use League\Uri\Modifiers\RemoveLeadingSlash;
-use League\Uri\Modifiers\RemoveSegments;
-use League\Uri\Modifiers\RemoveTrailingSlash;
-use League\Uri\Modifiers\ReplaceSegment;
 use League\Uri\Schemes\Data;
 use League\Uri\Schemes\Http;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  * @group path
  * @group modifier
  */
-class PathManipulatorTest extends TestCase
+class PathModifierTest extends TestCase
 {
     /**
      * @var Http
@@ -47,27 +30,31 @@ class PathManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\path_to_binary
+     * @covers \League\Uri\Modifiers\DataUriToBinary
+     *
      * @dataProvider fileProvider
      *
-     * @param DataUri $binary
-     * @param DataUri $ascii
+     * @param Data $binary
+     * @param Data $ascii
      */
-    public function testToBinary($binary, $ascii)
+    public function testToBinary(Data $binary, Data $ascii)
     {
-        $modifier = new DataUriToBinary();
-        $this->assertSame((string) $binary, (string) $modifier->process($ascii));
+        $this->assertSame((string) $binary, (string) Uri\path_to_binary($ascii));
     }
 
     /**
+     * @covers \League\Uri\path_to_ascii
+     * @covers \League\Uri\Modifiers\DataUriToAscii
+     *
      * @dataProvider fileProvider
      *
      * @param DataUri $binary
      * @param DataUri $ascii
      */
-    public function testToAscii($binary, $ascii)
+    public function testToAscii(Data $binary, Data $ascii)
     {
-        $modifier = new DataUriToAscii();
-        $this->assertSame((string) $ascii, (string) $modifier->process($binary));
+        $this->assertSame((string) $ascii, (string) Uri\path_to_ascii($binary));
     }
 
     public function fileProvider()
@@ -87,14 +74,26 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\replace_data_uri_parameters
+     * @covers \League\Uri\Modifiers\DataUriParameters
+     * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
+     */
     public function testDataUriWithParameters()
     {
-        $modifier = new DataUriParameters('coco=chanel');
         $uri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
-        $this->assertSame('text/plain;coco=chanel,Bonjour%20le%20monde!', (string) $modifier->process($uri)->getPath());
+        $this->assertSame(
+            'text/plain;coco=chanel,Bonjour%20le%20monde!',
+            (string)Uri\replace_data_uri_parameters($uri, 'coco=chanel')->getPath()
+        );
     }
 
     /**
+     * @covers \League\Uri\append_path
+     * @covers \League\Uri\Modifiers\AppendSegment
+     * @covers \League\Uri\Modifiers\PathMiddlewareTrait<extended>
+     * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
+     *
      * @dataProvider validPathProvider
      *
      * @param string $segment
@@ -103,20 +102,28 @@ class PathManipulatorTest extends TestCase
      * @param string $prepend
      * @param string $replace
      */
-    public function testAppendProcess($segment, $key, $append, $prepend, $replace)
+    public function testAppendProcess(string $segment, int $key, string $append, string $prepend, string $replace)
     {
-        $modifier = new AppendSegment($segment);
-        $this->assertSame($append, $modifier->process($this->uri)->getPath());
+        $this->assertSame($append, Uri\append_path($this->uri, $segment)->getPath());
     }
 
     /**
+     * @covers \League\Uri\append_path
+     * @covers \League\Uri\Modifiers\AppendSegment
+     * @covers \League\Uri\Modifiers\PathMiddlewareTrait<extended>
+     * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
+     *
      * @dataProvider validAppendPathProvider
+     *
+     * @param string $uri
+     * @param string $segment
+     * @param string $expected
      */
-    public function testAppendProcessWithRelativePath($uri, $segment, $expected)
+    public function testAppendProcessWithRelativePath(string $uri, string $segment, string $expected)
     {
-        $modifier = new AppendSegment($segment);
-        $this->assertSame($expected, (string) $modifier->process(Http::createFromString($uri)));
+        $this->assertSame($expected, (string) Uri\append_path(Http::createFromString($uri), $segment));
     }
+
     public function validAppendPathProvider()
     {
         return [
@@ -144,12 +151,18 @@ class PathManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\replace_basename
+     * @covers \League\Uri\Modifiers\Basename
+     *
      * @dataProvider validBasenameProvider
+     *
+     * @param string $path
+     * @param string $uri
+     * @param string $expected
      */
-    public function testBasename($path, $uri, $expected)
+    public function testBasename(string $path, string $uri, string $expected)
     {
-        $modifier = new Basename($path);
-        $this->assertSame($expected, (string) $modifier->process(new GuzzleUri($uri)));
+        $this->assertSame($expected, (string) Uri\replace_basename(Psr7\uri_for($uri), $path));
     }
 
     public function validBasenameProvider()
@@ -162,19 +175,29 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\replace_basename
+     * @covers \League\Uri\Modifiers\Basename
+     */
     public function testBasenameThrowException()
     {
         $this->expectException(InvalidArgumentException::class);
-        new Basename('foo/baz');
+        Uri\replace_basename(Psr7\uri_for('http://example.com'), 'foo/baz');
     }
 
     /**
+     * @covers \League\Uri\replace_dirname
+     * @covers \League\Uri\Modifiers\Dirname
+     *
      * @dataProvider validDirnameProvider
+     *
+     * @param string $path
+     * @param string $uri
+     * @param string $expected
      */
-    public function testDirname($path, $uri, $expected)
+    public function testDirname(string $path, string $uri, string $expected)
     {
-        $modifier = new Dirname($path);
-        $this->assertSame($expected, (string) $modifier->process(new GuzzleUri($uri)));
+        $this->assertSame($expected, (string) Uri\replace_dirname(Psr7\uri_for($uri), $path));
     }
 
     public function validDirnameProvider()
@@ -188,6 +211,9 @@ class PathManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\prepend_path
+     * @covers \League\Uri\Modifiers\PrependSegment
+     *
      * @dataProvider validPathProvider
      *
      * @param string $segment
@@ -196,13 +222,15 @@ class PathManipulatorTest extends TestCase
      * @param string $prepend
      * @param string $replace
      */
-    public function testPrependProcess($segment, $key, $append, $prepend, $replace)
+    public function testPrependProcess(string $segment, int $key, string $append, string $prepend, string $replace)
     {
-        $modifier = new PrependSegment($segment);
-        $this->assertSame($prepend, $modifier->process($this->uri)->getPath());
+        $this->assertSame($prepend, Uri\prepend_path($this->uri, $segment)->getPath());
     }
 
     /**
+     * @covers \League\Uri\replace_segment
+     * @covers \League\Uri\Modifiers\ReplaceSegment
+     *
      * @dataProvider validPathProvider
      *
      * @param string $segment
@@ -211,10 +239,9 @@ class PathManipulatorTest extends TestCase
      * @param string $prepend
      * @param string $replace
      */
-    public function testReplaceSegmentProcess($segment, $key, $append, $prepend, $replace)
+    public function testReplaceSegmentProcess(string $segment, int $key, string $append, string $prepend, string $replace)
     {
-        $modifier = new ReplaceSegment($key, $segment);
-        $this->assertSame($replace, $modifier->process($this->uri)->getPath());
+        $this->assertSame($replace, Uri\replace_segment($this->uri, $key, $segment)->getPath());
     }
 
     public function validPathProvider()
@@ -226,12 +253,17 @@ class PathManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\add_basepath
+     * @covers \League\Uri\Modifiers\AddBasePath
+     *
      * @dataProvider addBasePathProvider
+     *
+     * @param string $basepath
+     * @param string $expected
      */
-    public function testAddBasePath($basepath, $expected)
+    public function testAddBasePath(string $basepath, string $expected)
     {
-        $modifier = new AddBasePath($basepath);
-        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
+        $this->assertSame($expected, Uri\add_basepath($this->uri, $basepath)->getPath());
     }
 
     public function addBasePathProvider()
@@ -244,20 +276,28 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\add_basepath
+     * @covers \League\Uri\Modifiers\AddBasePath
+     */
     public function testAddBasePathWithRelativePath()
     {
         $uri = Http::createFromString('base/path');
-        $modifier = new AddBasePath('/base/path');
-        $this->assertSame('/base/path', $modifier->process($uri)->getPath());
+        $this->assertSame('/base/path', Uri\add_basepath($uri, '/base/path')->getPath());
     }
 
     /**
+     * @covers \League\Uri\remove_basepath
+     * @covers \League\Uri\Modifiers\RemoveBasePath
+     *
      * @dataProvider removeBasePathProvider
+     *
+     * @param string $basepath
+     * @param string $expected
      */
-    public function testRemoveBasePath($basepath, $expected)
+    public function testRemoveBasePath(string $basepath, string $expected)
     {
-        $modifier = new RemoveBasePath($basepath);
-        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
+        $this->assertSame($expected, Uri\remove_basepath($this->uri, $basepath)->getPath());
     }
 
     public function removeBasePathProvider()
@@ -270,24 +310,28 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\remove_basepath
+     * @covers \League\Uri\Modifiers\RemoveBasePath
+     */
     public function testRemoveBasePathWithRelativePath()
     {
         $uri = Http::createFromString('base/path');
-        $modifier = new RemoveBasePath('/base/path');
-        $this->assertSame('/', $modifier->process($uri)->getPath());
+        $this->assertSame('/', Uri\remove_basepath($uri, '/base/path')->getPath());
     }
 
     /**
+     * @covers \League\Uri\remove_segments
+     * @covers \League\Uri\Modifiers\RemoveSegments
+     *
      * @dataProvider validWithoutSegmentsProvider
      *
      * @param array  $keys
      * @param string $expected
      */
-    public function testWithoutSegments($keys, $expected)
+    public function testWithoutSegments(array $keys, string $expected)
     {
-        $modifier = new RemoveSegments($keys);
-
-        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
+        $this->assertSame($expected, Uri\remove_segments($this->uri, $keys)->getPath());
     }
 
     public function validWithoutSegmentsProvider()
@@ -298,12 +342,17 @@ class PathManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\remove_segments
+     * @covers \League\Uri\Modifiers\RemoveSegments
+     *
      * @dataProvider invalidRemoveSegmentsParameters
+     *
+     * @param array $params
      */
-    public function testRemoveSegmentsFailedConstructor($params)
+    public function testRemoveSegmentsFailedConstructor(array $params)
     {
         $this->expectException(InvalidArgumentException::class);
-        new RemoveSegments($params);
+        Uri\remove_segments($this->uri, $params);
     }
 
     public function invalidRemoveSegmentsParameters()
@@ -313,42 +362,53 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\remove_dot_segments
+     * @covers \League\Uri\Modifiers\RemoveDotSegments
+     */
     public function testWithoutDotSegmentsProcess()
     {
         $uri = Http::createFromString(
             'http://www.example.com/path/../to/the/./sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
-        $modifier = new RemoveDotSegments();
-        $this->assertSame('/to/the/sky.php', $modifier->process($uri)->getPath());
+        $this->assertSame('/to/the/sky.php', Uri\remove_dot_segments($uri)->getPath());
     }
 
+    /**
+     * @covers \League\Uri\remove_empty_segments
+     * @covers \League\Uri\Modifiers\RemoveEmptySegments
+     */
     public function testWithoutEmptySegmentsProcess()
     {
         $uri = Http::createFromString(
             'http://www.example.com/path///to/the//sky.php?kingkong=toto&foo=bar+baz#doc3'
         );
-        $modifier = new RemoveEmptySegments();
-        $this->assertSame('/path/to/the/sky.php', $modifier->process($uri)->getPath());
-    }
-
-    public function testWithoutTrailingSlashProcess()
-    {
-        $uri = Http::createFromString('http://www.example.com/');
-        $modifier = new RemoveTrailingSlash();
-        $this->assertSame('', $modifier->process($uri)->getPath());
+        $this->assertSame('/path/to/the/sky.php', Uri\remove_empty_segments($uri)->getPath());
     }
 
     /**
+     * @covers \League\Uri\remove_trailing_slash
+     * @covers \League\Uri\Modifiers\RemoveTrailingSlash
+     */
+    public function testWithoutTrailingSlashProcess()
+    {
+        $uri = Http::createFromString('http://www.example.com/');
+        $this->assertSame('', Uri\remove_trailing_slash($uri)->getPath());
+    }
+
+    /**
+     * @covers \League\Uri\replace_extension
+     * @covers \League\Uri\Modifiers\Extension
+     * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
+     *
      * @dataProvider validExtensionProvider
      *
      * @param string $extension
      * @param string $expected
      */
-    public function testExtensionProcess($extension, $expected)
+    public function testExtensionProcess(string $extension, string $expected)
     {
-        $modifier = new Extension($extension);
-
-        $this->assertSame($expected, $modifier->process($this->uri)->getPath());
+        $this->assertSame($expected, Uri\replace_extension($this->uri, $extension)->getPath());
     }
 
     public function validExtensionProvider()
@@ -359,86 +419,56 @@ class PathManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\add_trailing_slash
+     * @covers \League\Uri\Modifiers\AddTrailingSlash
+     */
     public function testWithTrailingSlashProcess()
     {
-        $modifier = new AddTrailingSlash();
-        $this->assertSame('/path/to/the/sky.php/', $modifier->process($this->uri)->getPath());
+        $this->assertSame('/path/to/the/sky.php/', Uri\add_trailing_slash($this->uri)->getPath());
     }
 
+    /**
+     * @covers \League\Uri\remove_leading_slash
+     * @covers \League\Uri\Modifiers\RemoveLeadingSlash
+     */
     public function testWithoutLeadingSlashProcess()
     {
-        $modifier = new RemoveLeadingSlash();
         $uri = Http::createFromString('/foo/bar?q=b#h');
 
-        $this->assertSame('foo/bar?q=b#h', $modifier->process($uri)->__toString());
+        $this->assertSame('foo/bar?q=b#h', (string) Uri\remove_leading_slash($uri));
     }
 
+    /**
+     * @covers \League\Uri\add_leading_slash
+     * @covers \League\Uri\Modifiers\AddLeadingSlash
+     */
     public function testWithLeadingSlashProcess()
     {
-        $modifier = new AddLeadingSlash();
         $uri = Http::createFromString('foo/bar?q=b#h');
 
-        $this->assertSame('/foo/bar?q=b#h', $modifier->process($uri)->__toString());
+        $this->assertSame('/foo/bar?q=b#h', (string) Uri\add_leading_slash($uri));
     }
 
-    public function testAppendProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new AppendSegment(''))->process('http://www.example.com');
-    }
-
-
-    public function testPrependProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new PrependSegment(''))->process('http://www.example.com');
-    }
-
-    public function testWithoutDotSegmentsProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new RemoveDotSegments())->process('http://www.example.com');
-    }
-
+    /**
+     * @covers \League\Uri\replace_segment
+     * @covers \League\Uri\Modifiers\ReplaceSegment
+     * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
+     */
     public function testReplaceSegmentConstructorFailed2()
     {
         $this->expectException(InvalidArgumentException::class);
-        new ReplaceSegment(2, "whyno\0t");
+        Uri\replace_segment($this->uri, 2, "whyno\0t");
     }
 
-    public function testWithoutLeadingSlashProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new RemoveLeadingSlash())->process('http://www.example.com');
-    }
-
-    public function testWithLeadingSlashProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new AddLeadingSlash())->process('http://www.example.com');
-    }
-
-    public function testWithoutTrailingSlashProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new AddTrailingSlash())->process('http://www.example.com');
-    }
-
-    public function testWithTrailingSlashProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new AddTrailingSlash())->process('http://www.example.com');
-    }
-
+    /**
+     * @covers \League\Uri\replace_extension
+     * @covers \League\Uri\Modifiers\Extension
+     * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
+     */
     public function testExtensionProcessFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        new Extension('to/to');
-    }
-
-    public function testWithoutEmptySegmentsProcessFailed()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        (new RemoveEmptySegments())->process('http://www.example.com');
+        Uri\replace_extension($this->uri, 'to/to');
     }
 }

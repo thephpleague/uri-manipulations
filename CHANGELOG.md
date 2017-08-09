@@ -1,7 +1,70 @@
 # Changelog
 
-All Notable changes to `uri-manipulations` will be documented in this file
+- All Notable changes to `uri-manipulations` will be documented in this file
 
+
+## 1.1.0 - TBD
+
+### Added
+
+The following functions are added to ease URI manipulations
+
+- `Uri\add_basepath`
+- `Uri\add_leading_slash`
+- `Uri\add_root_label`
+- `Uri\add_trailing_slash`
+- `Uri\append_host`
+- `Uri\append_path`
+- `Uri\append_query`
+- `Uri\host_to_ascii`
+- `Uri\host_to_unicode`
+- `Uri\is_absolute`
+- `Uri\is_absolute_path`
+- `Uri\is_network_path`
+- `Uri\is_relative_path`
+- `Uri\is_same_document`
+- `Uri\merge_query`
+- `Uri\normalize`
+- `Uri\parse_query`
+- `Uri\path_to_ascii`
+- `Uri\path_to_binary`
+- `Uri\prepend_host`
+- `Uri\prepend_path`
+- `Uri\relativize`
+- `Uri\remove_basepath`
+- `Uri\remove_dot_segments`
+- `Uri\remove_empty_segments`
+- `Uri\remove_labels`
+- `Uri\remove_leading_slash`
+- `Uri\remove_query_values`
+- `Uri\remove_root_label`
+- `Uri\remove_trailing_slash`
+- `Uri\remove_segments`
+- `Uri\remove_zone_id`
+- `Uri\replace_basename`
+- `Uri\replace_data_uri_parameters`
+- `Uri\replace_dirname`
+- `Uri\replace_extension`
+- `Uri\replace_label`
+- `Uri\replace_registrabledomain`
+- `Uri\replace_segment`
+- `Uri\replace_subdomain`
+- `Uri\resolve`
+- `Uri\sort_query_keys`
+
+`Uri\Modifier\Formatter` class has a new `format` method which is a alias of `__invoke` to ease usage.
+
+### Fixed
+
+- None
+
+### Deprecated
+
+- None
+
+### Removed
+
+- None
 
 ## 1.0.1 - 2017-02-6
 
@@ -13,9 +76,9 @@ All Notable changes to `uri-manipulations` will be documented in this file
 
 - None
 
-### Deprecated `__invoke` calls on all middlewares
+### Deprecated
 
-- None
+-  `__invoke` calls on all middlewares
 
 ### Removed
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace LeagueTest\Uri\Modifiers;
+namespace LeagueTest\Uri;
 
 use InvalidArgumentException;
+use League\Uri;
 use League\Uri\Schemes\Http;
 use PHPUnit\Framework\TestCase;
-use function League\Uri\Modifiers\uri_reference;
 
 /**
  * @group functions
@@ -14,10 +14,28 @@ class FunctionsTest extends TestCase
 {
     /**
      * @dataProvider uriProvider
+     *
+     * @covers \League\Uri\Modifiers\uri_reference
+     * @covers \League\Uri\is_absolute
+     * @covers \League\Uri\is_absolute_path
+     * @covers \League\Uri\is_network_path
+     * @covers \League\Uri\is_relative_path
+     * @covers \League\Uri\is_same_document
+     *
+     * @param mixed  $uri
+     * @param mixed  $base_uri
+     * @param bool[] $infos
      */
-    public function testStat($uri, $base_uri, $infos)
+    public function testStat($uri, $base_uri, array $infos)
     {
-        $this->assertSame($infos, uri_reference($uri, $base_uri));
+        $this->assertSame($infos, Uri\Modifiers\uri_reference($uri, $base_uri));
+        if (null !== $base_uri) {
+            $this->assertSame($infos['same_document'], Uri\is_same_document($uri, $base_uri));
+        }
+        $this->assertSame($infos['relative_path'], Uri\is_relative_path($uri));
+        $this->assertSame($infos['absolute_path'], Uri\is_absolute_path($uri));
+        $this->assertSame($infos['absolute_uri'], Uri\is_absolute($uri));
+        $this->assertSame($infos['network_path'], Uri\is_network_path($uri));
     }
 
     public function uriProvider()
@@ -83,11 +101,17 @@ class FunctionsTest extends TestCase
 
     /**
      * @dataProvider failedUriProvider
+     *
+     * @covers \League\Uri\Modifiers\uri_reference
+     * @covers \League\Uri\is_same_document
+     *
+     * @param mixed $uri
+     * @param mixed $base_uri
      */
     public function testStatThrowsInvalidArgumentException($uri, $base_uri)
     {
         $this->expectException(InvalidArgumentException::class);
-        uri_reference($uri, $base_uri);
+        Uri\is_same_document($uri, $base_uri);
     }
 
     public function failedUriProvider()
