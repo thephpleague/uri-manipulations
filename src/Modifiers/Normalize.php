@@ -49,13 +49,11 @@ class Normalize implements UriMiddlewareInterface
     protected function getDefaultManipulators(): Pipeline
     {
         static $defaults;
-        if (null === $defaults) {
-            $defaults = new Pipeline([
-                new HostToAscii(),
-                new KsortQuery(),
-                new DecodeUnreservedCharacters(),
-            ]);
-        }
+        $defaults = $default ?? new Pipeline([
+            new HostToAscii(),
+            new KsortQuery(),
+            new DecodeUnreservedCharacters(),
+        ]);
 
         return $defaults;
     }

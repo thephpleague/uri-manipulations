@@ -128,7 +128,7 @@ class Formatter implements EncodingInterface
     }
 
     /**
-     * Format an object
+     * Format an Uri object
      *
      * Format an object according to the formatter properties.
      * The object must implement one of the following interface:
@@ -160,6 +160,21 @@ class Formatter implements EncodingInterface
     }
 
     /**
+     * Format an Uri object
+     *
+     * @see __invoke()
+     *
+     * @param Component|Uri|UriInterface $input
+     *
+     * @return string
+     */
+    public function format($input)
+    {
+        return $this->__invoke($input);
+    }
+
+
+    /**
      * Format an Uri according to the Formatter properties
      *
      * @param Uri|UriInterface $uri
@@ -168,26 +183,23 @@ class Formatter implements EncodingInterface
      */
     protected function formatUri($uri): string
     {
-        $authority = null;
-
         $scheme = $uri->getScheme();
         if ('' != $scheme) {
             $scheme = $scheme.':';
         }
 
-        $user_info = $uri->getUserInfo();
-        if ('' != $user_info) {
-            $authority .= (new UserInfo())->withContent($user_info)->getContent($this->enc_type).'@';
-        }
-
+        $authority = null;
         $host = $uri->getHost();
         if ('' != $host) {
+            $user_info = $uri->getUserInfo();
+            if ('' != $user_info) {
+                $authority .= (new UserInfo())->withContent($user_info)->getContent($this->enc_type).'@';
+            }
             $authority .= (new Host($host))->getContent($this->enc_type);
-        }
-
-        $port = $uri->getPort();
-        if (null !== $port) {
-            $authority .= ':'.$port;
+            $port = $uri->getPort();
+            if (null !== $port) {
+                $authority .= ':'.$port;
+            }
         }
 
         if (null !== $authority) {
@@ -195,7 +207,7 @@ class Formatter implements EncodingInterface
         }
 
         $path = (new Path($uri->getPath()))->getContent($this->enc_type);
-        if ('' != $authority && '' != $path && '/' != $path[0]) {
+        if (!in_array('', [$authority, $path]) && '/' != $path[0]) {
             $path = '/'.$path;
         }
 

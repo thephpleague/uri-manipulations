@@ -1,11 +1,10 @@
 <?php
 
-namespace LeagueTest\Uri\Modifiers;
+namespace LeagueTest\Uri;
 
 use InvalidArgumentException;
-use League\Uri\Modifiers\Normalize;
-use League\Uri\Modifiers\Relativize;
-use League\Uri\Modifiers\Resolve;
+use League\Uri;
+use League\Uri\Interfaces\Uri as LeagueUriInterface;
 use League\Uri\Schemes\Data;
 use League\Uri\Schemes\Ftp;
 use League\Uri\Schemes\Http;
@@ -16,23 +15,25 @@ use PHPUnit\Framework\TestCase;
  * @group modifier
  * @group uri-modifier
  */
-class UriManipulatorTest extends TestCase
+class UriModifierTest extends TestCase
 {
     const BASE_URI = 'http://a/b/c/d;p?q';
 
     /**
+     * @covers \League\Uri\resolve
+     * @covers \League\Uri\Modifiers\Resolve
+     *
      * @dataProvider resolveProvider
-     * @param $uri
-     * @param $relative
-     * @param $expected
+     *
+     * @param string $uri
+     * @param string $relative
+     * @param string $expected
      */
-    public function testResolve($uri, $relative, $expected)
+    public function testResolve(string $uri, string $relative, string $expected)
     {
         $uri      = Http::createFromString($uri);
         $relative = Http::createFromString($relative);
-        $modifier = new Resolve($uri);
-
-        $this->assertSame($expected, (string) $modifier->process($relative));
+        $this->assertSame($expected, (string) Uri\resolve($relative, $uri));
     }
 
     public function resolveProvider()
@@ -84,39 +85,54 @@ class UriManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\resolve
+     * @covers \League\Uri\Modifiers\Resolve
+     */
     public function testResolveUri()
     {
         $http = Http::createFromString('http://example.com/path/to/file');
         $dataUri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
-        $modifier = new Resolve($http);
-        $this->assertSame($dataUri, $modifier->process($dataUri));
+        $this->assertSame($dataUri, Uri\resolve($dataUri, $http));
     }
 
+    /**
+     * @covers \League\Uri\resolve
+     * @covers \League\Uri\Modifiers\Resolve
+     */
     public function testResolveLetThrowResolvedUriException()
     {
         $this->expectException(InvalidArgumentException::class);
         $http = Http::createFromString('http://example.com/path/to/file');
         $ftp = Ftp::createFromString('ftp//a/b/c/d;p');
-        $modifier = new Resolve($http);
-        $modifier->process($ftp);
-    }
-
-    public function testResolveThrowExceptionOnConstructor()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Resolve('ftp//a/b/c/d;p');
+        Uri\resolve($ftp, $http);
     }
 
     /**
-     * @dataProvider relativizeProvider
+     * @covers \League\Uri\resolve
+     * @covers \League\Uri\Modifiers\Resolve
      */
-    public function testRelativize($uri, $resolved, $expected)
+    public function testResolveThrowExceptionOnConstructor()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Uri\resolve('ftp//a/b/c/d;p', 'toto');
+    }
+
+    /**
+     * @covers \League\Uri\relativize
+     * @covers \League\Uri\Modifiers\Relativize
+     *
+     * @dataProvider relativizeProvider
+     *
+     * @param string $uri
+     * @param string $resolved
+     * @param string $expected
+     */
+    public function testRelativize(string $uri, string $resolved, string $expected)
     {
         $uri      = Http::createFromString($uri);
         $resolved = Http::createFromString($resolved);
-        $modifier = new Relativize($uri);
-
-        $this->assertSame($expected, (string) $modifier->process($resolved));
+        $this->assertSame($expected, (string) Uri\relativize($resolved, $uri));
     }
 
     public function relativizeProvider()
@@ -163,21 +179,29 @@ class UriManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\relativize
+     * @covers \League\Uri\resolve
+     * @covers \League\Uri\Modifiers\Relativize
+     * @covers \League\Uri\Modifiers\Resolve
+     *
      * @dataProvider relativizeAndResolveProvider
+     *
+     * @param string $baseUri
+     * @param string $uri
+     * @param string $expectedRelativize
+     * @param string $expectedResolved
      */
     public function testRelativizeAndResolve(
-        $baseUri,
-        $uri,
-        $expectedRelativize,
-        $expectedResolved
+        string $baseUri,
+        string $uri,
+        string $expectedRelativize,
+        string $expectedResolved
     ) {
         $baseUri = Http::createFromString($baseUri);
-        $resolver = new Resolve($baseUri);
-        $relativizer = new Relativize($baseUri);
         $uri = Http::createFromString($uri);
 
-        $relativeUri = $relativizer->process($uri);
-        $resolvedUri = $resolver->process($relativeUri);
+        $relativeUri = Uri\relativize($uri, $baseUri);
+        $resolvedUri = Uri\resolve($relativeUri, $baseUri);
 
         $this->assertSame($expectedRelativize, (string) $relativeUri);
         $this->assertSame($expectedResolved, (string) $resolvedUri);
@@ -202,19 +226,19 @@ class UriManipulatorTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\normalize
+     * @covers \League\Uri\Modifiers\Normalize
+     * @covers \League\Uri\Modifiers\DecodeUnreservedCharacters
+     *
      * @dataProvider sameValueAsProvider
      *
-     * @param Http $uri1
-     * @param Ftp  $uri2
-     * @param bool $expected
+     * @param LeagueUriInterface $uri1
+     * @param LeagueUriInterface $uri2
+     * @param bool               $expected
      */
-    public function testSameValueAs($uri1, $uri2, $expected)
+    public function testSameValueAs($uri1, $uri2, bool $expected)
     {
-        $modifier = new Normalize();
-        $this->assertSame(
-            $expected,
-            $modifier->process($uri1)->__toString() === $modifier->process($uri2)->__toString()
-        );
+        $this->assertSame($expected, (string) Uri\normalize($uri1) == (string) Uri\normalize($uri2));
     }
 
     public function sameValueAsProvider()
@@ -253,10 +277,17 @@ class UriManipulatorTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \League\Uri\normalize
+     * @covers \League\Uri\Modifiers\Normalize
+     * @covers \League\Uri\Modifiers\DecodeUnreservedCharacters
+     */
     public function testNormalizeDoesNotAlterPathEncoding()
     {
         $rawUrl = 'HtTp://vonNN.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem';
-        $uri = (string) (new Normalize())->process(Http::createFromString($rawUrl));
-        $this->assertSame('http://vonnn.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem', $uri);
+        $this->assertSame(
+            'http://vonnn.com/ipsam-nulla-adipisci-laboriosam-dignissimos-accusamus-eum-voluptatem',
+            (string) Uri\normalize(Http::createFromString($rawUrl))
+        );
     }
 }
