@@ -45,6 +45,7 @@ function add_basepath($uri, string $path)
 function add_leading_slash($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\AddLeadingSlash();
 
     return $modifier->process($uri);
@@ -62,6 +63,7 @@ function add_leading_slash($uri)
 function add_root_label($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\AddRootLabel();
 
     return $modifier->process($uri);
@@ -138,6 +140,7 @@ function append_path($uri, string $path)
 function host_to_ascii($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\HostToAscii();
 
     return $modifier->process($uri);
@@ -155,6 +158,7 @@ function host_to_ascii($uri)
 function host_to_unicode($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\HostToUnicode();
 
     return $modifier->process($uri);
@@ -254,21 +258,10 @@ function merge_query($uri, string $query)
 function normalize($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\Normalize();
 
     return $modifier->process($uri);
-}
-
-/**
- * Parse the query string like parse_str without mangling the results
- *
- * @param string $query
- * @param string $separator
- * @param int    $enc_type
- */
-function parse_query(string $query, string $separator = '&', int $enc_type = PHP_QUERY_RFC3986)
-{
-    return Query::extract($query, $separator, $enc_type);
 }
 
 /**
@@ -283,6 +276,7 @@ function parse_query(string $query, string $separator = '&', int $enc_type = PHP
 function path_to_ascii($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\DataUriToAscii();
 
     return $modifier->process($uri);
@@ -300,6 +294,7 @@ function path_to_ascii($uri)
 function path_to_binary($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\DataUriToBinary();
 
     return $modifier->process($uri);
@@ -377,6 +372,7 @@ function remove_basepath($uri, string $path)
 function remove_dot_segments($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\RemoveDotSegments();
 
     return $modifier->process($uri);
@@ -394,6 +390,7 @@ function remove_dot_segments($uri)
 function remove_empty_segments($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\RemoveEmptySegments();
 
     return $modifier->process($uri);
@@ -426,6 +423,7 @@ function remove_labels($uri, array $keys)
 function remove_leading_slash($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\RemoveLeadingSlash();
 
     return $modifier->process($uri);
@@ -458,6 +456,7 @@ function remove_query_values($uri, array $keys)
 function remove_root_label($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\RemoveRootLabel();
 
     return $modifier->process($uri);
@@ -475,6 +474,7 @@ function remove_root_label($uri)
 function remove_trailing_slash($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\RemoveTrailingSlash();
 
     return $modifier->process($uri);
@@ -507,6 +507,7 @@ function remove_segments($uri, array $keys)
 function remove_zone_id($uri)
 {
     static $modifier;
+
     $modifier = $modifier ?? new Modifiers\RemoveZoneIdentifier();
 
     return $modifier->process($uri);
