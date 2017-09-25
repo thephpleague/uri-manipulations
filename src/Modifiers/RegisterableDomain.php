@@ -6,9 +6,9 @@
  * @subpackage League\Uri\Modifiers
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2016 Ignace Nyamagana Butera
- * @license    https://github.com/thephpleague/uri-components/blob/master/LICENSE (MIT License)
- * @version    1.0.0
- * @link       https://github.com/thephpleague/uri-components
+ * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
+ * @version    1.1.0
+ * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
 

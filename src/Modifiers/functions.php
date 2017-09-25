@@ -14,10 +14,22 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
-use League\Uri\Interfaces\Uri;
+use League\Uri;
+use League\Uri\Interfaces\Uri as LeagueUri;
 use Psr\Http\Message\UriInterface;
 
 /**
+ *
+ * DEPRECATION WARNING! This method will be removed in the next major point release
+ *
+ * @deprecated deprecated since version 1.1.0
+ *
+ * @see \League\Uri\is_absolute
+ * @see \League\Uri\is_network_path
+ * @see \League\Uri\is_absolute_path
+ * @see \League\Uri\is_relative_path
+ * @see \League\Uri\is_same_document
+ *
  * A function to give information about URI Reference
  *
  * This function returns an associative array representing the URI Reference information:
@@ -41,8 +53,8 @@ use Psr\Http\Message\UriInterface;
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since      1.0.0
  *
- * @param Uri|UriInterface      $uri      The uri to get reference info from
- * @param Uri|UriInterface|null $base_uri The base uri to use to get same document reference info
+ * @param LeagueUri|UriInterface      $uri      The uri to get reference info from
+ * @param LeagueUri|UriInterface|null $base_uri The base uri to use to get same document reference info
  *
  * @throws InvalidArgumentException if the submitted Uri is invalid
  *
@@ -50,20 +62,6 @@ use Psr\Http\Message\UriInterface;
  */
 function uri_reference($uri, $base_uri = null): array
 {
-    if (!$uri instanceof Uri && !$uri instanceof UriInterface) {
-        throw new InvalidArgumentException(sprintf(
-            'Expected uri to be a valid URI object; received "%s"',
-            is_object($uri) ? get_class($uri) : gettype($uri)
-        ));
-    }
-
-    if (null !== $base_uri && (!$base_uri instanceof Uri && !$base_uri instanceof UriInterface)) {
-        throw new InvalidArgumentException(sprintf(
-            'Expected base URI to be a valid URI object; received "%s"',
-            is_object($base_uri) ? get_class($base_uri) : gettype($base_uri)
-        ));
-    }
-
     $infos = [
         'absolute_uri' => false,
         'network_path' => false,
@@ -72,15 +70,11 @@ function uri_reference($uri, $base_uri = null): array
         'same_document' => false,
     ];
 
-    static $normalizer;
-    if (null === $normalizer) {
-        $normalizer = new Normalize();
-    }
+    $uri = Uri\normalize($uri)->withFragment('');
 
     if (null !== $base_uri) {
-        $uri_string = (string) $normalizer->process($uri)->withFragment('');
-        $base_uri_string = (string) $normalizer->process($base_uri)->withFragment('');
-        $infos['same_document'] = $uri_string === $base_uri_string;
+        $base_uri_string = (string) Uri\normalize($base_uri)->withFragment('');
+        $infos['same_document'] = (string) $uri === $base_uri_string;
     }
 
     if ('' !== $uri->getScheme()) {

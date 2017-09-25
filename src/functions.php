@@ -2,21 +2,20 @@
 /**
  * League.Uri (http://uri.thephpleague.com)
  *
- * @package   League.uri
- * @author    Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @copyright 2016 Ignace Nyamagana Butera
- * @license   https://github.com/thephpleague/uri/blob/master/LICENSE (MIT License)
- * @version   4.2.0
- * @link      https://github.com/thephpleague/uri/
+ * @package    League.uri
+ * @subpackage League\Uri\Modifiers
+ * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ * @copyright  2017 Ignace Nyamagana Butera
+ * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
+ * @version    1.1.0
+ * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
 
 namespace League\Uri;
 
-use League\Uri\Components\Query;
 use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
-use function League\Uri\Modifiers\uri_reference;
 
 /**
  * Add a new basepath to the URI path
@@ -99,21 +98,6 @@ function append_host($uri, string $host)
 }
 
 /**
- * Add the new query data to the existing URI query
- *
- * @see Modifiers\AppendQuery::modifyQuery()
- *
- * @param Uri|UriInterface $uri
- * @param string           $query
- *
- * @return Uri|UriInterface
- */
-function append_query($uri, string $query)
-{
-    return (new Modifiers\AppendQuery($query))->process($uri);
-}
-
-/**
  * Append an new segment or a new path to the URI path
  *
  * @see Modifiers\AppendSegment::modifyPath()
@@ -126,6 +110,21 @@ function append_query($uri, string $query)
 function append_path($uri, string $path)
 {
     return (new Modifiers\AppendSegment($path))->process($uri);
+}
+
+/**
+ * Add the new query data to the existing URI query
+ *
+ * @see Modifiers\AppendQuery::modifyQuery()
+ *
+ * @param Uri|UriInterface $uri
+ * @param string           $query
+ *
+ * @return Uri|UriInterface
+ */
+function append_query($uri, string $query)
+{
+    return (new Modifiers\AppendQuery($query))->process($uri);
 }
 
 /**
@@ -173,13 +172,11 @@ function host_to_unicode($uri)
  */
 function is_absolute($uri): bool
 {
-    return uri_reference($uri)['absolute_uri'];
+    return '' !== normalize($uri)->getScheme();
 }
 
 /**
  * Tell whether the URI represents an absolute path
- *
- * @see Modifiers\uri_reference()
  *
  * @param Uri|UriInterface $uri
  *
@@ -187,13 +184,15 @@ function is_absolute($uri): bool
  */
 function is_absolute_path($uri): bool
 {
-    return uri_reference($uri)['absolute_path'];
+    $uri = normalize($uri);
+
+    return '' === $uri->getScheme()
+        && '' === $uri->getAuthority()
+        && '/' === substr($uri->getPath(), 0, 1);
 }
 
 /**
  * Tell whether the URI represents a network path
- *
- * @see Modifiers\uri_reference()
  *
  * @param Uri|UriInterface $uri
  *
@@ -201,13 +200,14 @@ function is_absolute_path($uri): bool
  */
 function is_network_path($uri): bool
 {
-    return uri_reference($uri)['network_path'];
+    $uri = normalize($uri);
+
+    return '' === $uri->getScheme()
+        && '' !== $uri->getAuthority();
 }
 
 /**
  * Tell whether the URI represents a relative path
- *
- * @see Modifiers\uri_reference()
  *
  * @param Uri|UriInterface $uri
  *
@@ -215,13 +215,15 @@ function is_network_path($uri): bool
  */
 function is_relative_path($uri): bool
 {
-    return uri_reference($uri)['relative_path'];
+    $uri = normalize($uri);
+
+    return '' === $uri->getScheme()
+        && '' === $uri->getAuthority()
+        && '/' !== substr($uri->getPath(), 0, 1);
 }
 
 /**
  * Tell whether both URI refers to the same document
- *
- * @see Modifiers\uri_reference()
  *
  * @param Uri|UriInterface $uri
  * @param Uri|UriInterface $base_uri
@@ -230,7 +232,8 @@ function is_relative_path($uri): bool
  */
 function is_same_document($uri, $base_uri): bool
 {
-    return uri_reference($uri, $base_uri)['same_document'];
+    return normalize($uri)->withFragment('')->__toString()
+        === normalize($base_uri)->withFragment('')->__toString();
 }
 
 /**
