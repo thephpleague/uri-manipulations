@@ -34,7 +34,7 @@ The following functions are added to ease URI manipulations
 - `League\Uri\remove_empty_segments`
 - `League\Uri\remove_labels`
 - `League\Uri\remove_leading_slash`
-- `League\Uri\remove_query_values`
+- `League\Uri\remove_query_pairs`
 - `League\Uri\remove_root_label`
 - `League\Uri\remove_trailing_slash`
 - `League\Uri\remove_segments`

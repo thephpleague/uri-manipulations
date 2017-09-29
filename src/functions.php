@@ -442,7 +442,7 @@ function remove_leading_slash($uri)
  *
  * @return Uri|UriInterface
  */
-function remove_query_values($uri, array $keys)
+function remove_query_pairs($uri, array $keys)
 {
     return (new Modifiers\RemoveQueryKeys($keys))->process($uri);
 }

@@ -56,20 +56,19 @@ class Resolve implements UriMiddlewareInterface
      */
     protected function execute($uri)
     {
-        $meta = uri_reference($uri);
         $target_path = $uri->getPath();
-        if ($meta['absolute_uri']) {
+        if ('' !== $uri->getScheme()) {
             return $uri
                 ->withPath((string) $this->filterPath($target_path)->withoutDotSegments());
         }
 
-        if ($meta['network_path']) {
+        if ('' !== $uri->getAuthority()) {
             return $uri
                 ->withScheme($this->base_uri->getScheme())
                 ->withPath((string) $this->filterPath($target_path)->withoutDotSegments());
         }
 
-        $user_info = explode(':', $this->base_uri->getUserInfo(), 2);
+        list($user, $pass) = explode(':', $this->base_uri->getUserInfo(), 2) + ['', null];
         $components = $this->resolvePathAndQuery($target_path, $uri->getQuery());
 
         return $uri
@@ -77,7 +76,7 @@ class Resolve implements UriMiddlewareInterface
             ->withQuery($components['query'])
             ->withHost($this->base_uri->getHost())
             ->withPort($this->base_uri->getPort())
-            ->withUserInfo((string) array_shift($user_info), array_shift($user_info))
+            ->withUserInfo($user, $pass)
             ->withScheme($this->base_uri->getScheme());
     }
 

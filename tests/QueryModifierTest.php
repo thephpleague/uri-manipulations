@@ -105,7 +105,7 @@ class QueryModifierTest extends TestCase
     }
 
     /**
-     * @covers \League\Uri\remove_query_values
+     * @covers \League\Uri\remove_query_pairs
      * @covers \League\Uri\Modifiers\RemoveQueryKeys
      *
      * @dataProvider validWithoutQueryValuesProvider
@@ -115,7 +115,7 @@ class QueryModifierTest extends TestCase
      */
     public function testWithoutQueryValuesProcess(array $input, $expected)
     {
-        $this->assertSame($expected, Uri\remove_query_values($this->uri, $input)->getQuery());
+        $this->assertSame($expected, Uri\remove_query_pairs($this->uri, $input)->getQuery());
     }
 
     public function validWithoutQueryValuesProvider()

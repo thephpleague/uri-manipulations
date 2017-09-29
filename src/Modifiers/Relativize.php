@@ -15,6 +15,7 @@ namespace League\Uri\Modifiers;
 
 use League\Uri\Interfaces\Uri;
 use Psr\Http\Message\UriInterface;
+use function League\Uri\is_relative_path;
 
 /**
  * Resolve an URI according to a base URI using
@@ -103,7 +104,7 @@ class Relativize implements UriMiddlewareInterface
 
         return $this->base_uri->getScheme() === $payload->getScheme()
             && $this->base_uri->getAuthority() === $payload->getAuthority()
-            && !uri_reference($payload)['relative_path'];
+            && !is_relative_path($payload);
     }
 
     /**
