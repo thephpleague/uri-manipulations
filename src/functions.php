@@ -442,7 +442,7 @@ function remove_leading_slash($uri)
  *
  * @return Uri|UriInterface
  */
-function remove_query_pairs($uri, array $keys)
+function remove_pairs($uri, array $keys)
 {
     return (new Modifiers\RemoveQueryKeys($keys))->process($uri);
 }
@@ -663,7 +663,47 @@ function resolve($uri, $base_uri)
  *
  * @return Uri|UriInterface
  */
-function sort_query_keys($uri, $sort = SORT_REGULAR)
+function sort_query($uri, $sort = SORT_REGULAR)
 {
     return (new Modifiers\KsortQuery($sort))->process($uri);
+}
+
+/**
+ * Returns the RFC3986 string representation of the given URI object
+ *
+ * @param Uri|UriInterface $uri
+ *
+ * @return string
+ */
+function uri_to_rfc3986($uri)
+{
+    list($remaining_uri, $fragment) = explode('#', (string) $uri, 2) + ['', null];
+    list(, $query) = explode('?', $remaining_uri, 2) + ['', null];
+
+    $formatter = new Modifiers\Formatter();
+    $formatter->setEncoding(Modifiers\Formatter::RFC3986_ENCODING);
+    $formatter->preserveFragment(null !== $fragment);
+    $formatter->preserveQuery(null !== $query);
+
+    return $formatter($uri);
+}
+
+/**
+ * Returns the RFC3987 string representation of the given URI object
+ *
+ * @param Uri|UriInterface $uri
+ *
+ * @return string
+ */
+function uri_to_rfc3987($uri): string
+{
+    list($remaining_uri, $fragment) = explode('#', (string) $uri, 2) + ['', null];
+    list(, $query) = explode('?', $remaining_uri, 2) + ['', null];
+
+    $formatter = new Modifiers\Formatter();
+    $formatter->setEncoding(Modifiers\Formatter::RFC3987_ENCODING);
+    $formatter->preserveFragment(null !== $fragment);
+    $formatter->preserveQuery(null !== $query);
+
+    return $formatter($uri);
 }

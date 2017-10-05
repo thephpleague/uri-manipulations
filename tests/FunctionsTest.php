@@ -127,4 +127,52 @@ class FunctionsTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider dataUriStringProvider
+     *
+     * @covers \League\Uri\uri_to_rfc3986
+     * @covers \League\Uri\uri_to_rfc3987
+     *
+     * @param string $str
+     * @param string $rfc3986
+     * @param string $rfc3987
+     */
+    public function testUriConversion($str, $rfc3986, $rfc3987)
+    {
+        $uri = Uri\Schemes\Http::createFromString($str);
+        $this->assertSame($rfc3986, Uri\uri_to_rfc3986($uri));
+        $this->assertSame($rfc3987, Uri\uri_to_rfc3987($uri));
+    }
+
+    public function dataUriStringProvider()
+    {
+        return [
+            'mixed content' => [
+                'http://xn--bb-bjab.be/toto/тестовый_путь/',
+                'http://xn--bb-bjab.be/toto/%D1%82%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%B9_%D0%BF%D1%83%D1%82%D1%8C/',
+                'http://bébé.be/toto/тестовый_путь/',
+            ],
+            'host punycoded' => [
+                'https://ουτοπία.δπθ.gr',
+                'https://xn--kxae4bafwg.xn--pxaix.gr',
+                'https://ουτοπία.δπθ.gr',
+            ],
+            'preserve both delimiters' => [
+                'https://example.com/?#',
+                'https://example.com/?#',
+                'https://example.com/?#',
+            ],
+            'preserve fragment delimiters' => [
+                'https://example.com/#',
+                'https://example.com/#',
+                'https://example.com/#',
+            ],
+            'preserve query delimiters' => [
+                'https://example.com/?',
+                'https://example.com/?',
+                'https://example.com/?',
+            ],
+        ];
+    }
 }

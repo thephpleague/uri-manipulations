@@ -2,7 +2,7 @@
 
 - All Notable changes to `uri-manipulations` will be documented in this file
 
-## 1.1.0 - 2017-09-25
+## 1.1.0 - TBD
 
 ### Added
 
@@ -34,7 +34,7 @@ The following functions are added to ease URI manipulations
 - `League\Uri\remove_empty_segments`
 - `League\Uri\remove_labels`
 - `League\Uri\remove_leading_slash`
-- `League\Uri\remove_query_pairs`
+- `League\Uri\remove_pairs`
 - `League\Uri\remove_root_label`
 - `League\Uri\remove_trailing_slash`
 - `League\Uri\remove_segments`
@@ -48,7 +48,9 @@ The following functions are added to ease URI manipulations
 - `League\Uri\replace_segment`
 - `League\Uri\replace_subdomain`
 - `League\Uri\resolve`
-- `League\Uri\sort_query_keys`
+- `League\Uri\sort_query`
+- `League\Uri\uri_to_rfc3986`
+- `League\Uri\uri_to_rfc3987`
 
 `League\Uri\Modifiers\Formatter` class has a new `format` method which is a alias of `__invoke` to ease usage.
 

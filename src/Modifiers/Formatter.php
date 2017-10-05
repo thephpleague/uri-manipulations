@@ -173,7 +173,6 @@ class Formatter implements EncodingInterface
         return $this->__invoke($input);
     }
 
-
     /**
      * Format an Uri according to the Formatter properties
      *

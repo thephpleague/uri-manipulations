@@ -74,7 +74,7 @@ class QueryModifierTest extends TestCase
     }
 
     /**
-     * @covers \League\Uri\sort_query_keys
+     * @covers \League\Uri\sort_query
      * @covers \League\Uri\Modifiers\KsortQuery
      * @covers \League\Uri\Modifiers\UriMiddlewareTrait<extended>
      *
@@ -85,7 +85,7 @@ class QueryModifierTest extends TestCase
      */
     public function testKsortQuery($sort, $expected)
     {
-        $this->assertSame($expected, Uri\sort_query_keys($this->uri, $sort)->getQuery());
+        $this->assertSame($expected, Uri\sort_query($this->uri, $sort)->getQuery());
     }
 
     public function validQueryKsortProvider()
@@ -101,11 +101,11 @@ class QueryModifierTest extends TestCase
     public function testKsortQueryFailed()
     {
         $this->expectException(InvalidArgumentException::class);
-        Uri\sort_query_keys($this->uri, ['data']);
+        Uri\sort_query($this->uri, ['data']);
     }
 
     /**
-     * @covers \League\Uri\remove_query_pairs
+     * @covers \League\Uri\remove_pairs
      * @covers \League\Uri\Modifiers\RemoveQueryKeys
      *
      * @dataProvider validWithoutQueryValuesProvider
@@ -115,7 +115,7 @@ class QueryModifierTest extends TestCase
      */
     public function testWithoutQueryValuesProcess(array $input, $expected)
     {
-        $this->assertSame($expected, Uri\remove_query_pairs($this->uri, $input)->getQuery());
+        $this->assertSame($expected, Uri\remove_pairs($this->uri, $input)->getQuery());
     }
 
     public function validWithoutQueryValuesProvider()
