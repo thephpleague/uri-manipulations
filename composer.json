@@ -28,11 +28,13 @@
         "forum": "https://groups.google.com/forum/#!forum/thephpleague",
         "issues": "https://github.com/thephpleague/uri/issues"
     },
+    "minimun-stability" : "dev",
     "require": {
-        "php" : ">=7.0",
-        "psr/http-message": "^1.0",
+        "jeremykendall/php-domain-parser": "4.0.3-alpha",
         "league/uri-interfaces": "^1.0",
-        "league/uri-components": "^1.0"
+        "league/uri-components": "^1.1",
+        "php" : ">=7.0",
+        "psr/http-message": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
