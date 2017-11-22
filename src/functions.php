@@ -7,7 +7,7 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2017 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.1.0
+ * @version    1.2.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
@@ -306,7 +306,7 @@ function path_to_binary($uri)
 /**
  * Prepend a label or a host to the current URI host
  *
- * @see Modifiers\AppendLabel::modifyHost()
+ * @see Modifiers\PrependLabel::modifyHost()
  *
  * @param Uri|UriInterface $uri
  * @param string           $host
@@ -486,7 +486,7 @@ function remove_trailing_slash($uri)
 /**
  * Remove path segments from the URI path according to their offsets
  *
- * @see Modifiers\PrependSegment::modifyPath()
+ * @see Modifiers\RemoveSegments::modifyPath()
  *
  * @param Uri|UriInterface $uri
  * @param int[]            $keys
@@ -564,7 +564,7 @@ function replace_dirname($uri, string $path)
 /**
  * Replace the URI path basename extension
  *
- * @see Modifiers\Dirname::modifyPath()
+ * @see Modifiers\Extension::modifyPath()
  *
  * @param Uri|UriInterface $uri
  * @param string           $extension

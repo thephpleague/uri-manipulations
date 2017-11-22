@@ -2,6 +2,24 @@
 
 - All Notable changes to `uri-manipulations` will be documented in this file
 
+## 1.2.0 - 2017-11-22
+
+### Added
+
+- None
+
+### Fixed
+
+- Update League Uri Components version
+
+### Deprecated
+
+- None
+
+### Removed
+
+- Nonce
+
 ## 1.1.0 - 2017-10-25
 
 ### Added
