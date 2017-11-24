@@ -15,17 +15,34 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 /**
- * Remove empty segments from the URI path
+ * Remove some keys from the Query string
  *
  * @package    League\Uri
  * @subpackage League\Uri\Modifiers
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since      1.0.0
+ * @since      1.3.0
  */
-class RemoveEmptySegments implements UriMiddlewareInterface
+class RemoveQueryParams implements UriMiddlewareInterface
 {
-    use PathMiddlewareTrait;
+    use QueryMiddlewareTrait;
     use UriMiddlewareTrait;
+
+    /**
+     * The list of keys to remove
+     *
+     * @var array
+     */
+    protected $keys = [];
+
+    /**
+     * New instance
+     *
+     * @param string[] $keys
+     */
+    public function __construct(array $keys)
+    {
+        $this->keys = array_map([$this, 'filterString'], $keys);
+    }
 
     /**
      * Modify a URI part
@@ -34,8 +51,8 @@ class RemoveEmptySegments implements UriMiddlewareInterface
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath(string $str): string
+    protected function modifyQuery(string $str): string
     {
-        return (string) $this->filterPath($str)->withoutEmptySegments();
+        return (string) $this->filterQuery($str)->withoutParams($this->keys);
     }
 }

@@ -2,6 +2,25 @@
 
 - All Notable changes to `uri-manipulations` will be documented in this file
 
+## 1.3.0 - 2017-11-24
+
+### Added
+
+- `League\Uri\Modifiers\RemoveQueryParams`
+- `League\Uri\remove_params`
+
+### Fixed
+
+- Update League Uri Components version
+
+### Deprecated
+
+- None
+
+### Removed
+
+- Nonce
+
 ## 1.2.0 - 2017-11-22
 
 ### Added

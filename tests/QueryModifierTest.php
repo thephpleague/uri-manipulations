@@ -122,6 +122,42 @@ class QueryModifierTest extends TestCase
     {
         return [
             [['1'], 'kingkong=toto&foo=bar%20baz'],
+            [['kingkong'], 'foo=bar%20baz'],
+        ];
+    }
+
+    /**
+     * @covers \League\Uri\remove_params
+     * @covers \League\Uri\Modifiers\RemoveQueryParams
+     *
+     * @dataProvider removeParamsProvider
+     * @param string $uri
+     * @param array  $input
+     * @param string $expected
+     */
+    public function testWithoutQueryParams(string $uri, array $input, string $expected)
+    {
+        $this->assertSame($expected, Uri\remove_params(Uri\create($uri), $input)->getQuery());
+    }
+
+    public function removeParamsProvider()
+    {
+        return [
+            [
+                'uri' => 'http://example.com',
+                'input' => ['foo'],
+                'expected' => '',
+            ],
+            [
+                'uri' => 'http://example.com?foo=bar&bar=baz',
+                'input' => ['foo'],
+                'expected' => 'bar=baz',
+            ],
+            [
+                'uri' => 'http://example.com?fo.o=bar&fo_o=baz',
+                'input' => ['fo_o'],
+                'expected' => 'fo.o=bar',
+            ],
         ];
     }
 }
