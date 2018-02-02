@@ -198,6 +198,15 @@ class HostModifierTest extends TestCase
     }
 
     /**
+     * @covers \League\Uri\replace_publicsuffix
+     * @covers \League\Uri\Modifiers\PublicSuffix
+     */
+    public function testPublicSuffix()
+    {
+        $this->assertSame('www.example.fr', (string) Uri\replace_publicsuffix($this->uri, 'fr')->getHost());
+    }
+
+    /**
      * @covers \League\Uri\add_root_label
      * @covers \League\Uri\Modifiers\AddRootLabel
      */
@@ -213,6 +222,16 @@ class HostModifierTest extends TestCase
     public function testRemoveRootLabel()
     {
         $this->assertSame('www.example.com', (string) Uri\remove_root_label($this->uri)->getHost());
+    }
+
+    /**
+     * @covers \League\Uri\replace_publicsuffix
+     * @covers \League\Uri\Modifiers\PublicSuffix
+     */
+    public function testPublicSuffixFailed()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Uri\replace_publicsuffix($this->uri, 'example.com.');
     }
 
     /**

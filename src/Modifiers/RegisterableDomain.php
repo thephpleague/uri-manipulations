@@ -7,12 +7,14 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2016 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.3.0
+ * @version    1.4.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
+
+use League\Uri\PublicSuffix\Rules;
 
 /**
  * Modify the registerable domain part of the URI host
@@ -35,14 +37,21 @@ class RegisterableDomain implements UriMiddlewareInterface
     protected $label;
 
     /**
+     * @var Rules|null
+     */
+    protected $resolver;
+
+    /**
      * New instance
      *
-     * @param string $label the data to be used
+     * @param string     $label    the data to be used
+     * @param null|Rules $resolver
      *
      */
-    public function __construct(string $label)
+    public function __construct(string $label, Rules $resolver = null)
     {
-        $label = $this->filterHost($label);
+        $this->resolver = $resolver;
+        $label = $this->filterHost($label, $this->resolver);
         if ($label->isAbsolute()) {
             throw new Exception('The submitted registerable domain can not be a fully qualified domaine name');
         }
@@ -59,6 +68,6 @@ class RegisterableDomain implements UriMiddlewareInterface
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str)->withRegisterableDomain($this->label);
+        return (string) $this->filterHost($str, $this->resolver)->withRegisterableDomain($this->label);
     }
 }

@@ -14,34 +14,49 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
+use League\Uri\PublicSuffix\Rules;
+
 /**
- * Append a segment to the URI path
+ * Modify the public suffix part of the URI host
  *
  * @package    League\Uri
  * @subpackage League\Uri\Modifiers
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
- * @since      1.0.0
+ * @since      1.4.0
  */
-class AppendSegment implements UriMiddlewareInterface
+class PublicSuffix implements UriMiddlewareInterface
 {
-    use PathMiddlewareTrait;
+    use HostMiddlewareTrait;
     use UriMiddlewareTrait;
 
     /**
-     * The path to append
+     * A Host object
      *
      * @var string
      */
-    protected $segment;
+    protected $label;
+
+    /**
+     * @var Rules|null
+     */
+    protected $resolver;
 
     /**
      * New instance
      *
-     * @param string $segment
+     * @param string     $label    the data to be used
+     * @param null|Rules $resolver
+     *
      */
-    public function __construct(string $segment)
+    public function __construct(string $label, Rules $resolver = null)
     {
-        $this->segment = $this->filterSegment($segment)->getContent();
+        $this->resolver = $resolver;
+        $label = $this->filterHost($label, $this->resolver);
+        if ($label->isAbsolute()) {
+            throw new Exception('The submitted public suffix can not be a fully qualified domaine name');
+        }
+
+        $this->label = (string) $label;
     }
 
     /**
@@ -51,8 +66,8 @@ class AppendSegment implements UriMiddlewareInterface
      *
      * @return string the modified URI part string representation
      */
-    protected function modifyPath(string $str): string
+    protected function modifyHost(string $str): string
     {
-        return (string) $this->filterSegment($str)->append($this->segment);
+        return (string) $this->filterHost($str, $this->resolver)->withPublicSuffix($this->label);
     }
 }

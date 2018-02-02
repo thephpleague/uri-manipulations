@@ -7,7 +7,7 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2017 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.3.0
+ * @version    1.4.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace League\Uri;
 
 use League\Uri\Interfaces\Uri;
+use League\Uri\PublicSuffix\Rules;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -608,18 +609,35 @@ function replace_label($uri, int $offset, string $host)
 }
 
 /**
+ * Replace the host public suffix part
+ *
+ * @see Modifiers\PublicSuffix::modifyHost()
+ *
+ * @param Uri|UriInterface $uri
+ * @param string           $host
+ * @param null|Rules       $resolver
+ *
+ * @return Uri|UriInterface
+ */
+function replace_publicsuffix($uri, string $host, Rules $resolver = null)
+{
+    return (new Modifiers\PublicSuffix($host, $resolver))->process($uri);
+}
+
+/**
  * Replace the host registrabledomain
  *
  * @see Modifiers\RegisterableDomain::modifyHost()
  *
  * @param Uri|UriInterface $uri
  * @param string           $host
+ * @param null|Rules       $resolver
  *
  * @return Uri|UriInterface
  */
-function replace_registrabledomain($uri, string $host)
+function replace_registrabledomain($uri, string $host, Rules $resolver = null)
 {
-    return (new Modifiers\RegisterableDomain($host))->process($uri);
+    return (new Modifiers\RegisterableDomain($host, $resolver))->process($uri);
 }
 
 /**
@@ -645,12 +663,13 @@ function replace_segment($uri, int $offset, string $path)
  *
  * @param Uri|UriInterface $uri
  * @param string           $host
+ * @param null|Rules       $resolver
  *
  * @return Uri|UriInterface
  */
-function replace_subdomain($uri, string $host)
+function replace_subdomain($uri, string $host, Rules $resolver = null)
 {
-    return (new Modifiers\Subdomain($host))->process($uri);
+    return (new Modifiers\Subdomain($host, $resolver))->process($uri);
 }
 
 /**

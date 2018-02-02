@@ -7,7 +7,7 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2016 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.3.0
+ * @version    1.4.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 
@@ -19,6 +19,7 @@ use League\Uri\Components\Host;
 use League\Uri\Components\Path;
 use League\Uri\Components\Query;
 use League\Uri\Interfaces\Uri;
+use League\Uri\PublicSuffix\Rules;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -133,13 +134,14 @@ trait UriMiddlewareTrait
     /**
      * Filter and validate the host string
      *
-     * @param string $label the data to validate
+     * @param string     $label    the data to validate
+     * @param null|Rules $resolver
      *
      * @return Host
      */
-    protected function filterHost(string $label): Host
+    protected function filterHost(string $label, Rules $resolver = null): Host
     {
-        return new Host($this->filterString($label));
+        return new Host($this->filterString($label), $resolver);
     }
 
     /**

@@ -7,7 +7,7 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2016 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.3.0
+ * @version    1.4.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
+use League\Uri;
 use League\Uri\Components\ComponentInterface;
 use League\Uri\Components\EncodingInterface;
 use League\Uri\Components\Fragment;
@@ -22,7 +23,7 @@ use League\Uri\Components\Host;
 use League\Uri\Components\Path;
 use League\Uri\Components\Query;
 use League\Uri\Components\UserInfo;
-use League\Uri\Interfaces\Uri;
+use League\Uri\Interfaces\Uri as LeagueUriInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -145,14 +146,14 @@ class Formatter implements EncodingInterface
     public function __invoke($input)
     {
         if ($input instanceof Query) {
-            return Query::build($input->getPairs(), $this->query_separator, $this->enc_type);
+            return Uri\build_query($input->getPairs(), $this->query_separator, $this->enc_type);
         }
 
         if ($input instanceof ComponentInterface) {
             return $input->getContent($this->enc_type);
         }
 
-        if ($input instanceof Uri || $input instanceof UriInterface) {
+        if ($input instanceof LeagueUriInterface || $input instanceof UriInterface) {
             return $this->formatUri($input);
         }
 
@@ -212,7 +213,7 @@ class Formatter implements EncodingInterface
 
         $query = $uri->getQuery();
         if ('' != $query || $this->preserve_query) {
-            $query = '?'.Query::build(Query::parse((string) $query), $this->query_separator, $this->enc_type);
+            $query = '?'.Uri\build_query(Uri\parse_query((string) $query), $this->query_separator, $this->enc_type);
         }
 
         $fragment = $uri->getFragment();

@@ -30,7 +30,7 @@
     },
     "minimun-stability" : "dev",
     "require": {
-        "league/uri-components": "^1.4.1",
+        "league/uri-components": "^1.7.0",
         "league/uri-interfaces": "^1.0",
         "php" : ">=7.0",
         "psr/http-message": "^1.0"

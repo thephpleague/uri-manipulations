@@ -2,6 +2,28 @@
 
 - All Notable changes to `uri-manipulations` will be documented in this file
 
+## 1.4.0 - TDB
+
+### Added
+
+- `League\Uri\Modifiers\PublicSuffix`
+- `League\Uri\replace_publicsuffix`
+
+### Fixed
+
+- `League\Uri\replace_registrabledomain` now can take a optional `League\Uri\PublicSuffix\Rules` object
+- `League\Uri\replace_subdomain` now can take a optional `League\Uri\PublicSuffix\Rules` object
+- `League\Uri\Modifiers\RegisterableDomain` constructor now can take a optional `League\Uri\PublicSuffix\Rules` object
+- `League\Uri\Modifiers\SubDomain` constructor now can take a optional `League\Uri\PublicSuffix\Rules` object
+
+### Deprecated
+
+- None
+
+### Removed
+
+- None
+
 ## 1.3.0 - 2017-11-24
 
 ### Added
@@ -19,7 +41,7 @@
 
 ### Removed
 
-- Nonce
+- None
 
 ## 1.2.0 - 2017-11-22
 
