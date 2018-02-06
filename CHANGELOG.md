@@ -2,7 +2,7 @@
 
 - All Notable changes to `uri-manipulations` will be documented in this file
 
-## 1.4.0 - TDB
+## 1.4.0 - 2018-02-06
 
 ### Added
 
@@ -15,6 +15,7 @@
 - `League\Uri\replace_subdomain` now can take a optional `League\Uri\PublicSuffix\Rules` object
 - `League\Uri\Modifiers\RegisterableDomain` constructor now can take a optional `League\Uri\PublicSuffix\Rules` object
 - `League\Uri\Modifiers\SubDomain` constructor now can take a optional `League\Uri\PublicSuffix\Rules` object
+- the library now requires `League\Uri\Components` 1.7.x
 
 ### Deprecated
 
