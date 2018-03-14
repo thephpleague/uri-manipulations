@@ -16,7 +16,6 @@ System Requirements
 You need:
 
 - **PHP >= 7.0**  but the latest stable version of PHP is recommended
-- the `mbstring` extension
 - the `intl` extension
 
 Dependencies
@@ -42,7 +41,13 @@ Full documentation can be found at [uri.thephpleague.com](http://uri.thephpleagu
 Testing
 -------
 
-`League URI Manipulation` has a [PHPUnit](https://phpunit.de) test suite and a coding style compliance test suite using [PHP CS Fixer](http://cs.sensiolabs.org/). To run the tests, run the following command from the project folder.
+`League Uri Manipulations` has a :
+
+- a [PHPUnit](https://phpunit.de) test suite
+- a coding style compliance test suite using [PHP CS Fixer](http://cs.sensiolabs.org/).
+- a code analysis compliance test suite using [PHPStan](https://github.com/phpstan/phpstan).
+
+To run the tests, run the following command from the project folder.
 
 ``` bash
 $ composer test

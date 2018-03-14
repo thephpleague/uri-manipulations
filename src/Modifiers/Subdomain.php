@@ -7,7 +7,7 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2016 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.4.0
+ * @version    1.5.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
@@ -68,6 +68,6 @@ class Subdomain implements UriMiddlewareInterface
      */
     protected function modifyHost(string $str): string
     {
-        return (string) $this->filterHost($str, $this->resolver)->withSubdomain($this->label);
+        return (string) $this->filterHost($str, $this->resolver)->withSubDomain($this->label);
     }
 }

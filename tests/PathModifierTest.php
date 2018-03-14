@@ -49,8 +49,8 @@ class PathModifierTest extends TestCase
      *
      * @dataProvider fileProvider
      *
-     * @param DataUri $binary
-     * @param DataUri $ascii
+     * @param Data $binary
+     * @param Data $ascii
      */
     public function testToAscii(Data $binary, Data $ascii)
     {
@@ -84,7 +84,7 @@ class PathModifierTest extends TestCase
         $uri = Data::createFromString('data:text/plain;charset=us-ascii,Bonjour%20le%20monde!');
         $this->assertSame(
             'text/plain;coco=chanel,Bonjour%20le%20monde!',
-            (string)Uri\replace_data_uri_parameters($uri, 'coco=chanel')->getPath()
+            Uri\replace_data_uri_parameters($uri, 'coco=chanel')->getPath()
         );
     }
 

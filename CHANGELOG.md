@@ -2,6 +2,27 @@
 
 - All Notable changes to `uri-manipulations` will be documented in this file
 
+## 1.5.0 - 2018-03-14
+
+### Added
+
+- None
+
+### Fixed
+
+- `League\Uri\Modifiers\Formatter::format` with Opaque URI.
+- the library now requires `League\Uri\Components` 1.8.x
+- Using PHPStan
+- bug fix issue [#3](https://github.com/thephpleague/uri-manipulations/issues/3)
+
+### Deprecated
+
+- None
+
+### Removed
+
+- `mbstring` extension requirement
+
 ## 1.4.0 - 2018-02-06
 
 ### Added

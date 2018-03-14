@@ -121,7 +121,7 @@ class HostModifierTest extends TestCase
         $uri = Http::createFromString('http://[fe80::1234%25eth0-1]/path/to/the/sky.php');
         $this->assertSame(
             'http://[fe80::1234]/path/to/the/sky.php',
-            (string) (string) Uri\remove_zone_id($uri)
+            (string) Uri\remove_zone_id($uri)
         );
     }
 
@@ -153,7 +153,7 @@ class HostModifierTest extends TestCase
      */
     public function testRemoveLabels()
     {
-        $this->assertSame('example.com', (string) Uri\remove_labels($this->uri, [2])->getHost());
+        $this->assertSame('example.com', Uri\remove_labels($this->uri, [2])->getHost());
     }
 
     /**
@@ -164,7 +164,7 @@ class HostModifierTest extends TestCase
      *
      * @dataProvider invalidRemoveLabelsParameters
      *
-     * @param mixed $params
+     * @param array $params
      */
     public function testRemoveLabelsFailedConstructor(array $params)
     {
@@ -185,7 +185,7 @@ class HostModifierTest extends TestCase
      */
     public function testSubdomain()
     {
-        $this->assertSame('shop.example.com', (string) Uri\replace_subdomain($this->uri, 'shop')->getHost());
+        $this->assertSame('shop.example.com', Uri\replace_subdomain($this->uri, 'shop')->getHost());
     }
 
     /**
@@ -194,7 +194,7 @@ class HostModifierTest extends TestCase
      */
     public function testRegisterableDomain()
     {
-        $this->assertSame('www.ulb.ac.be', (string) Uri\replace_registrabledomain($this->uri, 'ulb.ac.be')->getHost());
+        $this->assertSame('www.ulb.ac.be', Uri\replace_registrabledomain($this->uri, 'ulb.ac.be')->getHost());
     }
 
     /**
@@ -203,7 +203,7 @@ class HostModifierTest extends TestCase
      */
     public function testPublicSuffix()
     {
-        $this->assertSame('www.example.fr', (string) Uri\replace_publicsuffix($this->uri, 'fr')->getHost());
+        $this->assertSame('www.example.fr', Uri\replace_publicsuffix($this->uri, 'fr')->getHost());
     }
 
     /**
@@ -212,7 +212,7 @@ class HostModifierTest extends TestCase
      */
     public function testAddRootLabel()
     {
-        $this->assertSame('www.example.com.', (string) Uri\add_root_label($this->uri)->getHost());
+        $this->assertSame('www.example.com.', Uri\add_root_label($this->uri)->getHost());
     }
 
     /**
@@ -221,7 +221,7 @@ class HostModifierTest extends TestCase
      */
     public function testRemoveRootLabel()
     {
-        $this->assertSame('www.example.com', (string) Uri\remove_root_label($this->uri)->getHost());
+        $this->assertSame('www.example.com', Uri\remove_root_label($this->uri)->getHost());
     }
 
     /**

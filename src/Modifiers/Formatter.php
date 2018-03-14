@@ -7,7 +7,7 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2016 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.4.0
+ * @version    1.5.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
@@ -139,7 +139,7 @@ class Formatter implements EncodingInterface
      * <li>Psr\Http\Message\UriInterface
      * </ul>
      *
-     * @param Component|Uri|UriInterface $input
+     * @param mixed $input
      *
      * @return string
      */
@@ -165,7 +165,7 @@ class Formatter implements EncodingInterface
      *
      * @see __invoke()
      *
-     * @param Component|Uri|UriInterface $input
+     * @param mixed $input
      *
      * @return string
      */
@@ -177,7 +177,7 @@ class Formatter implements EncodingInterface
     /**
      * Format an Uri according to the Formatter properties
      *
-     * @param Uri|UriInterface $uri
+     * @param LeagueUriInterface|UriInterface $uri
      *
      * @return string
      */
@@ -207,13 +207,13 @@ class Formatter implements EncodingInterface
         }
 
         $path = (new Path($uri->getPath()))->getContent($this->enc_type);
-        if (!in_array('', [$authority, $path]) && '/' != $path[0]) {
+        if (null !== $authority && '' !== $path && '/' !== $path[0]) {
             $path = '/'.$path;
         }
 
         $query = $uri->getQuery();
         if ('' != $query || $this->preserve_query) {
-            $query = '?'.Uri\build_query(Uri\parse_query((string) $query), $this->query_separator, $this->enc_type);
+            $query = '?'.Uri\build_query(Uri\parse_query($query), $this->query_separator, $this->enc_type);
         }
 
         $fragment = $uri->getFragment();

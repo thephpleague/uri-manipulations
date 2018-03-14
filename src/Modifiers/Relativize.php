@@ -160,7 +160,7 @@ class Relativize implements UriMiddlewareInterface
     {
         if ('' === $path) {
             $base_path = $this->base_uri->getPath();
-            return in_array($base_path, ['', '/']) ? $base_path : './';
+            return in_array($base_path, ['', '/'], true) ? $base_path : './';
         }
 
         if (false === ($colon_pos = strpos($path, ':'))) {

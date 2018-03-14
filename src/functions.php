@@ -7,14 +7,14 @@
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @copyright  2017 Ignace Nyamagana Butera
  * @license    https://github.com/thephpleague/uri-manipulations/blob/master/LICENSE (MIT License)
- * @version    1.4.0
+ * @version    1.5.0
  * @link       https://github.com/thephpleague/uri-manipulations
  */
 declare(strict_types=1);
 
 namespace League\Uri;
 
-use League\Uri\Interfaces\Uri;
+use League\Uri\Interfaces\Uri as LeagueUriInterface;
 use League\Uri\PublicSuffix\Rules;
 use Psr\Http\Message\UriInterface;
 
@@ -23,10 +23,10 @@ use Psr\Http\Message\UriInterface;
  *
  * @see Modifiers\AddBasePath::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function add_basepath($uri, string $path)
 {
@@ -38,9 +38,9 @@ function add_basepath($uri, string $path)
  *
  * @see Modifiers\AddLeadingSlash::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function add_leading_slash($uri)
 {
@@ -56,9 +56,9 @@ function add_leading_slash($uri)
  *
  * @see Modifiers\AddRootLabel::modifyHost()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function add_root_label($uri)
 {
@@ -74,9 +74,9 @@ function add_root_label($uri)
  *
  * @see Modifiers\AddTrailingSlash::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function add_trailing_slash($uri)
 {
@@ -88,10 +88,10 @@ function add_trailing_slash($uri)
  *
  * @see Modifiers\AppendLabel::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param string           $host
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $host
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function append_host($uri, string $host)
 {
@@ -103,10 +103,10 @@ function append_host($uri, string $host)
  *
  * @see Modifiers\AppendSegment::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function append_path($uri, string $path)
 {
@@ -118,10 +118,10 @@ function append_path($uri, string $path)
  *
  * @see Modifiers\AppendQuery::modifyQuery()
  *
- * @param Uri|UriInterface $uri
- * @param string           $query
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $query
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function append_query($uri, string $query)
 {
@@ -133,9 +133,9 @@ function append_query($uri, string $query)
  *
  * @see Modifiers\HostToAscii::modifyHost()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function host_to_ascii($uri)
 {
@@ -151,9 +151,9 @@ function host_to_ascii($uri)
  *
  * @see Modifiers\HostToUnicode::modifyHost()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function host_to_unicode($uri)
 {
@@ -167,7 +167,7 @@ function host_to_unicode($uri)
 /**
  * Tell whether the URI represents an absolute URI
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
  * @return bool
  */
@@ -179,7 +179,7 @@ function is_absolute($uri): bool
 /**
  * Tell whether the URI represents an absolute path
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
  * @return bool
  */
@@ -195,7 +195,7 @@ function is_absolute_path($uri): bool
 /**
  * Tell whether the URI represents a network path
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
  * @return bool
  */
@@ -210,7 +210,7 @@ function is_network_path($uri): bool
 /**
  * Tell whether the URI represents a relative path
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
  * @return bool
  */
@@ -226,8 +226,8 @@ function is_relative_path($uri): bool
 /**
  * Tell whether both URI refers to the same document
  *
- * @param Uri|UriInterface $uri
- * @param Uri|UriInterface $base_uri
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $base_uri
  *
  * @return bool
  */
@@ -242,10 +242,10 @@ function is_same_document($uri, $base_uri): bool
  *
  * @see Modifiers\MergeQuery::modifyQuery()
  *
- * @param Uri|UriInterface $uri
- * @param string           $query
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $query
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function merge_query($uri, string $query)
 {
@@ -255,9 +255,9 @@ function merge_query($uri, string $query)
 /**
  * Normalize an URI for comparison
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function normalize($uri)
 {
@@ -273,9 +273,9 @@ function normalize($uri)
  *
  * @see Modifiers\DataUriToAscii::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function path_to_ascii($uri)
 {
@@ -291,9 +291,9 @@ function path_to_ascii($uri)
  *
  * @see Modifiers\DataUriToBinary::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function path_to_binary($uri)
 {
@@ -309,10 +309,10 @@ function path_to_binary($uri)
  *
  * @see Modifiers\PrependLabel::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param string           $host
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $host
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function prepend_host($uri, string $host)
 {
@@ -324,10 +324,10 @@ function prepend_host($uri, string $host)
  *
  * @see Modifiers\PrependSegment::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function prepend_path($uri, string $path)
 {
@@ -339,10 +339,10 @@ function prepend_path($uri, string $path)
  *
  * @see Modifiers\Relativize::process()
  *
- * @param Uri|UriInterface $uri
- * @param Uri|UriInterface $base_uri
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $base_uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function relativize($uri, $base_uri)
 {
@@ -354,10 +354,10 @@ function relativize($uri, $base_uri)
  *
  * @see Modifiers\RemoveBasePath::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_basepath($uri, string $path)
 {
@@ -369,9 +369,9 @@ function remove_basepath($uri, string $path)
  *
  * @see Modifiers\RemoveDotSegments::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_dot_segments($uri)
 {
@@ -387,9 +387,9 @@ function remove_dot_segments($uri)
  *
  * @see Modifiers\RemoveEmptySegments::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_empty_segments($uri)
 {
@@ -405,10 +405,10 @@ function remove_empty_segments($uri)
  *
  * @see Modifiers\RemoveLabels::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param int[]            $keys
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param int[]                           $keys
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_labels($uri, array $keys)
 {
@@ -420,9 +420,9 @@ function remove_labels($uri, array $keys)
  *
  * @see Modifiers\RemoveLeadingSlash::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_leading_slash($uri)
 {
@@ -438,10 +438,10 @@ function remove_leading_slash($uri)
  *
  * @see Modifiers\RemoveQueryParams::modifyQuery()
  *
- * @param Uri|UriInterface $uri
- * @param string[]         $keys
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string[]                        $keys
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_params($uri, array $keys)
 {
@@ -453,10 +453,10 @@ function remove_params($uri, array $keys)
  *
  * @see Modifiers\RemoveQueryKeys::modifyQuery()
  *
- * @param Uri|UriInterface $uri
- * @param string[]         $keys
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string[]                        $keys
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_pairs($uri, array $keys)
 {
@@ -468,9 +468,9 @@ function remove_pairs($uri, array $keys)
  *
  * @see Modifiers\RemoveRootLabel::modifyHost()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_root_label($uri)
 {
@@ -486,9 +486,9 @@ function remove_root_label($uri)
  *
  * @see Modifiers\RemoveTrailingSlash::modifyPath()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_trailing_slash($uri)
 {
@@ -504,10 +504,10 @@ function remove_trailing_slash($uri)
  *
  * @see Modifiers\RemoveSegments::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param int[]            $keys
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param int[]                           $keys
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_segments($uri, array $keys)
 {
@@ -519,9 +519,9 @@ function remove_segments($uri, array $keys)
  *
  * @see Modifiers\RemoveZoneIdentifier::modifyHost()
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function remove_zone_id($uri)
 {
@@ -537,10 +537,10 @@ function remove_zone_id($uri)
  *
  * @see Modifiers\Basename::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_basename($uri, string $path)
 {
@@ -552,10 +552,10 @@ function replace_basename($uri, string $path)
  *
  * @see Modifiers\DataUriParameters::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $parameters
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $parameters
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_data_uri_parameters($uri, string $parameters)
 {
@@ -567,10 +567,10 @@ function replace_data_uri_parameters($uri, string $parameters)
  *
  * @see Modifiers\Dirname::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_dirname($uri, string $path)
 {
@@ -582,10 +582,10 @@ function replace_dirname($uri, string $path)
  *
  * @see Modifiers\Extension::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param string           $extension
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $extension
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_extension($uri, string $extension)
 {
@@ -597,11 +597,11 @@ function replace_extension($uri, string $extension)
  *
  * @see Modifiers\ReplaceLabel::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param int              $offset
- * @param string           $host
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param int                             $offset
+ * @param string                          $host
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_label($uri, int $offset, string $host)
 {
@@ -613,11 +613,11 @@ function replace_label($uri, int $offset, string $host)
  *
  * @see Modifiers\PublicSuffix::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param string           $host
- * @param null|Rules       $resolver
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $host
+ * @param null|Rules                      $resolver
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_publicsuffix($uri, string $host, Rules $resolver = null)
 {
@@ -629,11 +629,11 @@ function replace_publicsuffix($uri, string $host, Rules $resolver = null)
  *
  * @see Modifiers\RegisterableDomain::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param string           $host
- * @param null|Rules       $resolver
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $host
+ * @param null|Rules                      $resolver
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_registrabledomain($uri, string $host, Rules $resolver = null)
 {
@@ -645,11 +645,11 @@ function replace_registrabledomain($uri, string $host, Rules $resolver = null)
  *
  * @see Modifiers\PrependSegment::modifyPath()
  *
- * @param Uri|UriInterface $uri
- * @param int              $offset
- * @param string           $path
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param int                             $offset
+ * @param string                          $path
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_segment($uri, int $offset, string $path)
 {
@@ -661,11 +661,11 @@ function replace_segment($uri, int $offset, string $path)
  *
  * @see Modifiers\Subdomain::modifyHost()
  *
- * @param Uri|UriInterface $uri
- * @param string           $host
- * @param null|Rules       $resolver
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param string                          $host
+ * @param null|Rules                      $resolver
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function replace_subdomain($uri, string $host, Rules $resolver = null)
 {
@@ -677,10 +677,10 @@ function replace_subdomain($uri, string $host, Rules $resolver = null)
  *
  * @see Modifiers\Resolve::process()
  *
- * @param Uri|UriInterface $uri
- * @param Uri|UriInterface $base_uri
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $base_uri
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function resolve($uri, $base_uri)
 {
@@ -692,10 +692,10 @@ function resolve($uri, $base_uri)
  *
  * @see Modifiers\KsortQuery::modifyQuery()
  *
- * @param Uri|UriInterface $uri
- * @param int|callable     $sort The algorithm used to sort the query keys
+ * @param LeagueUriInterface|UriInterface $uri
+ * @param int|callable                    $sort The algorithm used to sort the query keys
  *
- * @return Uri|UriInterface
+ * @return LeagueUriInterface|UriInterface
  */
 function sort_query($uri, $sort = SORT_REGULAR)
 {
@@ -705,7 +705,7 @@ function sort_query($uri, $sort = SORT_REGULAR)
 /**
  * Returns the RFC3986 string representation of the given URI object
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
  * @return string
  */
@@ -725,7 +725,7 @@ function uri_to_rfc3986($uri)
 /**
  * Returns the RFC3987 string representation of the given URI object
  *
- * @param Uri|UriInterface $uri
+ * @param LeagueUriInterface|UriInterface $uri
  *
  * @return string
  */
