@@ -14,8 +14,9 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Interfaces\Uri;
-use Psr\Http\Message\UriInterface;
+use League\Uri\Interfaces\Uri as DeprecatedLeagueUriInterface;
+use League\Uri\UriInterface;
+use Psr\Http\Message\UriInterface as Psr7UriInterface;
 
 /**
  * Resolve an URI according to a base URI using
@@ -33,18 +34,22 @@ class Resolve implements UriMiddlewareInterface
     /**
      * The list of keys to remove
      *
-     * @var Uri|UriInterface
+     * @var DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface
      */
     protected $base_uri;
 
     /**
      * New instance
      *
-     * @param Uri|UriInterface $base_uri
+     * @param mixed $base_uri
      */
     public function __construct($base_uri)
     {
-        if (!$base_uri instanceof UriInterface && !$base_uri instanceof Uri) {
+        if (
+            !$base_uri instanceof UriInterface &&
+            !$base_uri instanceof Psr7UriInterface &&
+            !$base_uri instanceof DeprecatedLeagueUriInterface
+        ) {
             throw Exception::fromInvalidUri($base_uri);
         }
 
@@ -52,7 +57,7 @@ class Resolve implements UriMiddlewareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function execute($uri)
     {

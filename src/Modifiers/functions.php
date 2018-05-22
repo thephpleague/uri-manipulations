@@ -15,8 +15,9 @@ namespace League\Uri\Modifiers;
 
 use InvalidArgumentException;
 use League\Uri;
-use League\Uri\Interfaces\Uri as LeagueUri;
-use Psr\Http\Message\UriInterface;
+use League\Uri\Interfaces\Uri as DeprecatedLeagueUriInterface;
+use League\Uri\UriInterface;
+use Psr\Http\Message\UriInterface as Psr7UriInterface;
 
 /**
  *
@@ -53,8 +54,8 @@ use Psr\Http\Message\UriInterface;
  * @author     Ignace Nyamagana Butera <nyamsprod@gmail.com>
  * @since      1.0.0
  *
- * @param LeagueUri|UriInterface      $uri      The uri to get reference info from
- * @param LeagueUri|UriInterface|null $base_uri The base uri to use to get same document reference info
+ * @param DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface      $uri      The uri to get reference info from
+ * @param DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface|null $base_uri The base uri to use to get same document reference info
  *
  * @throws InvalidArgumentException if the submitted Uri is invalid
  *

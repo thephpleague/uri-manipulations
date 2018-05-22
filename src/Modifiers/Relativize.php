@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Interfaces\Uri;
-use Psr\Http\Message\UriInterface;
+use League\Uri\Interfaces\Uri as DeprecatedLeagueUriInterface;
+use League\Uri\UriInterface;
+use Psr\Http\Message\UriInterface as Psr7UriInterface;
 use function League\Uri\is_relative_path;
 
 /**
@@ -33,14 +34,14 @@ class Relativize implements UriMiddlewareInterface
     /**
      * Base URI
      *
-     * @var Uri|UriInterface
+     * @var DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface
      */
     protected $base_uri;
 
     /**
      * New instance
      *
-     * @param Uri|UriInterface $base_uri
+     * @param mixed $base_uri
      */
     public function __construct($base_uri)
     {
@@ -50,9 +51,9 @@ class Relativize implements UriMiddlewareInterface
     /**
      * Convert the Uri host component to its ascii version
      *
-     * @param Uri|UriInterface $uri
+     * @param mixed $uri
      *
-     * @return Uri|UriInterface
+     * @return DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface
      */
     protected function hostToAscii($uri)
     {
@@ -94,7 +95,7 @@ class Relativize implements UriMiddlewareInterface
     /**
      * Tell whether the submitted URI object can be relativize
      *
-     * @param Uri|UriInterface $payload
+     * @param mixed $payload
      *
      * @return bool
      */

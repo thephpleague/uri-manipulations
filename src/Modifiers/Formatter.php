@@ -23,8 +23,9 @@ use League\Uri\Components\Host;
 use League\Uri\Components\Path;
 use League\Uri\Components\Query;
 use League\Uri\Components\UserInfo;
-use League\Uri\Interfaces\Uri as LeagueUriInterface;
-use Psr\Http\Message\UriInterface;
+use League\Uri\Interfaces\Uri as DeprecatedLeagueUriInterface;
+use League\Uri\UriInterface;
+use Psr\Http\Message\UriInterface as Psr7UriInterface;
 
 /**
  * A class to manipulate URI and URI components output
@@ -134,9 +135,10 @@ class Formatter implements EncodingInterface
      * Format an object according to the formatter properties.
      * The object must implement one of the following interface:
      * <ul>
-     * <li>League\Uri\Interfaces\Uri
-     * <li>League\Uri\Interfaces\UriPartInterface
-     * <li>Psr\Http\Message\UriInterface
+     * <li>DeprecatedLeagueUriInterface
+     * <li>League\Uri\Components\ComponentInterface
+     * <li>League\Uri\UriInterface
+     * <li>Psr7UriInterface
      * </ul>
      *
      * @param mixed $input
@@ -153,7 +155,10 @@ class Formatter implements EncodingInterface
             return $input->getContent($this->enc_type);
         }
 
-        if ($input instanceof LeagueUriInterface || $input instanceof UriInterface) {
+        if ($input instanceof DeprecatedLeagueUriInterface
+            || $input instanceof Psr7UriInterface
+            || $input instanceof UriInterface
+        ) {
             return $this->formatUri($input);
         }
 
@@ -177,7 +182,7 @@ class Formatter implements EncodingInterface
     /**
      * Format an Uri according to the Formatter properties
      *
-     * @param LeagueUriInterface|UriInterface $uri
+     * @param DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface $uri
      *
      * @return string
      */

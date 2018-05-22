@@ -13,8 +13,9 @@
 
 namespace League\Uri\Modifiers;
 
-use League\Uri\Interfaces\Uri;
-use Psr\Http\Message\UriInterface;
+use League\Uri\Interfaces\Uri as DeprecatedLeagueUriInterface;
+use League\Uri\UriInterface;
+use Psr\Http\Message\UriInterface as Psr7UriInterface;
 
 /**
  * URI Middleware Interface
@@ -35,11 +36,11 @@ interface UriMiddlewareInterface
      * This method MUST be transparent when dealing with error and exceptions.
      * It MUST not alter of silence them apart from validating its own parameters.
      *
-     * @param Uri|UriInterface $uri
+     * @param DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface $uri
      *
      * @throws Exception If the submitted URI is invalid
      *
-     * @return Uri|UriInterface
+     * @return DeprecatedLeagueUriInterface|Psr7UriInterface|UriInterface
      */
     public function process($uri);
 }
