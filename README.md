@@ -1,6 +1,13 @@
 URI manipulations
 =======
 
+# This package is EOL since 2019-10-18
+
+**You should instead use:**
+
+- **[The latest League URI package](https://github.com/thephpleague/uri/releases).**
+- **[The latest League URI components package](https://github.com/thephpleague/uri-components/releases).**
+
 [![Build Status](https://img.shields.io/travis/thephpleague/uri-manipulations/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/uri-manipulations)
 [![Latest Version](https://img.shields.io/github/release/thephpleague/uri-manipulations.svg?style=flat-square)](https://github.com/thephpleague/uri-manipulations/releases)
 
